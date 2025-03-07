@@ -1,7 +1,15 @@
 package dk.sdu.smp4.main;
 
-public class Main {
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class Main extends Application {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        launch(Main.class);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        System.out.println("Hello Bitch");
     }
 }
