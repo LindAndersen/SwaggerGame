@@ -14,7 +14,6 @@
     <module>CommonEnemy</module>
     <module>AISpider</module>
     <module>CommonLightSource</module>
-    <module>CommonPlayerLight</module>
   </modules>
   <properties>
     <java>java</java>
