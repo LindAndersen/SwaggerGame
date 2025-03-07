@@ -8,6 +8,7 @@
   <modules>
     <module>Core</module>
     <module>CommonPlayer</module>
+    <module>Common</module>
   </modules>
   <properties>
     <java>java</java>
