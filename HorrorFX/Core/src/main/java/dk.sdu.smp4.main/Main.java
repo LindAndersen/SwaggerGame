@@ -76,7 +76,7 @@ public class Main extends Application {
             polygons.put(entity, polygon);
             gameWindow.getChildren().add(polygon);
         }
-
+        render();
         window.setScene(scene);
         window.setTitle("HorrorFX");
         window.show();
