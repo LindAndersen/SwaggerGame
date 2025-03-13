@@ -7,7 +7,6 @@
   <name>HorrorFX</name>
   <modules>
     <module>Core</module>
-    <module>CommonPlayer</module>
     <module>Common</module>
     <module>Player</module>
     <module>CommonInteractable</module>
