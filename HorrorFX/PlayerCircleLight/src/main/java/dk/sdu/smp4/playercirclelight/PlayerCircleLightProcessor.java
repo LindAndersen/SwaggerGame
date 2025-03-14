@@ -10,7 +10,7 @@ public class PlayerCircleLightProcessor implements IPlayerLightProcessor {
     @Override
     public void processPlayerLight(Entity player, GameData gameData, World world) {
 
-        for(Entity lightEntity : world.getEntities(CommonPlayerLight.class)) {
+        for(Entity lightEntity : world.getEntities(CircleLight.class)) {
             lightEntity.setX(player.getX());
             lightEntity.setY(player.getY());
             lightEntity.setRadius(player.getRadius()*3);

@@ -3,20 +3,15 @@ package dk.sdu.smp4.playercirclelight;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.commonplayerlight.data.CommonPlayerLight;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
-import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerCircleLightPlugin implements IPlayerLightPlugin {
 
     @Override
     public void createPlayerLight(Entity player, GameData gameData, World world) {
-        Entity lightEntity = new CommonPlayerLight();
+        Entity lightEntity = new CircleLight();
 
-        lightEntity.setPaint(Color.GREEN);
         lightEntity.setX(player.getX());
         lightEntity.setY(player.getY());
         lightEntity.setRadius(player.getRadius()*3);
