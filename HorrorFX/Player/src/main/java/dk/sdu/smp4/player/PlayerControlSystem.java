@@ -5,6 +5,13 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
+import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
+
+import java.util.Collection;
+import java.util.ServiceLoader;
+
+import static java.util.stream.Collectors.toList;
 
 public class PlayerControlSystem implements IEntityProcessingService {
     @Override
@@ -43,6 +50,14 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
 
+            for (IPlayerLightProcessor spi : getEntityPlayerLights())
+            {
+                spi.processPlayerLight(player, gameData, world);
+            }
         }
+    }
+
+    private Collection<? extends IPlayerLightProcessor> getEntityPlayerLights() {
+        return ServiceLoader.load(IPlayerLightProcessor.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }
