@@ -12,35 +12,45 @@ public class PlayerConeLightProcessor implements IPlayerLightProcessor {
     @Override
     public void processPlayerLight(Entity player, GameData gameData, World world) {
         for (Entity lightEntity : world.getEntities(ConeLight.class)) {
-            // Update position and rotation
+            // Set the position of the cone light (tip at player's position)
             lightEntity.setX(player.getX());
             lightEntity.setY(player.getY());
-            lightEntity.setRotation(player.getRotation());
 
-            // Recalculate the cone polygon based on the new position & rotation
+            // Get the player's rotation in radians
+            double playerDirection = Math.toRadians(player.getRotation());
+
+            // List to hold the coordinates for the cone
             List<Double> conePoints = new ArrayList<>();
 
-            // Tip of the cone at (0,0) relative to the light entity
-            conePoints.add(0.0);
-            conePoints.add(0.0);
+            // Add the tip of the cone (this will be at the player's position)
+            conePoints.add(0.0);  // X coordinate of the tip (relative to light entity)
+            conePoints.add(0.0);  // Y coordinate of the tip (relative to light entity)
 
+            // Cone parameters
             double angleWidth = 30; // Spread of the cone
-            int numBasePoints = 40; // Smoother base
-            double playerDirection = Math.toRadians(player.getRotation()); // Convert to radians
+            int numBasePoints = 40; // Number of points for the cone's base
             double baseRadius = player.getRadius() * 6; // Dynamic base size
 
-            // Define base arc angles centered around player's direction
-            double startAngle = playerDirection - Math.toRadians(angleWidth / 2);
-            double endAngle = playerDirection + Math.toRadians(angleWidth / 2);
+            // Define the start and end angles for the base
+            double startAngle = -Math.toRadians(angleWidth / 2); // Start of cone arc
+            double endAngle = Math.toRadians(angleWidth / 2);    // End of cone arc
 
+            // Calculate the base points (relative to the player's position)
             for (int i = 0; i <= numBasePoints; i++) {
+                // Calculate base point angle
                 double angle = startAngle + (endAngle - startAngle) * i / numBasePoints;
 
-                // Points are now relative to (0,0) so they rotate correctly
+                // Calculate base points without rotation (relative to the player's position)
                 double x = Math.cos(angle) * baseRadius;
                 double y = Math.sin(angle) * baseRadius;
-                conePoints.add(x);
-                conePoints.add(y);
+
+                // Apply the player's rotation to each point (rotate around the player's position)
+                double rotatedX = x * Math.cos(playerDirection) - y * Math.sin(playerDirection);
+                double rotatedY = x * Math.sin(playerDirection) + y * Math.cos(playerDirection);
+
+                // Add rotated points to the list
+                conePoints.add(rotatedX);
+                conePoints.add(rotatedY);
             }
 
             // Convert List to array and set polygon coordinates
@@ -49,6 +59,7 @@ public class PlayerConeLightProcessor implements IPlayerLightProcessor {
                 coordinates[i] = conePoints.get(i);
             }
 
+            // Set the cone's polygon coordinates
             lightEntity.setPolygonCoordinates(coordinates);
         }
     }
