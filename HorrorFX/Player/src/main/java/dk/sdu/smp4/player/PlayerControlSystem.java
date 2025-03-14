@@ -10,17 +10,38 @@ public class PlayerControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         for (Entity player : world.getEntities(Player.class)) {
+
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                player.setRotation(player.getRotation() - 5);
+                if (player.getRotation() != 180){
+                    player.setRotation(180);
+                }
+                if (!player.getBlockedDirection(1)){
+                    player.setX(player.getX()-1);
+                }
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                player.setRotation(player.getRotation() + 5);
+                if (player.getRotation() != 0) {
+                    player.setRotation(0);
+                }
+                if (!player.getBlockedDirection(2)){
+                    player.setX(player.getX()+1);
+                }
             }
-            if (gameData.getKeys().isDown(GameKeys.UP)) {
-                double changeX = Math.cos(Math.toRadians(player.getRotation()));
-                double changeY = Math.sin(Math.toRadians(player.getRotation()));
-                player.setX(player.getX() + changeX);
-                player.setY(player.getY() + changeY);
+            if (gameData.getKeys().isDown(GameKeys.UP)){
+                if (player.getRotation() != 270){
+                    player.setRotation(270);
+                }
+                if (!player.getBlockedDirection(0)){
+                    player.setY(player.getY()-1);
+                }
+            }
+            if (gameData.getKeys().isDown(GameKeys.DOWN)){
+                if (player.getRotation() != 90){
+                    player.setRotation(90);
+                }
+                if (!player.getBlockedDirection(3)){
+                    player.setY(player.getY()+1);
+                }
             }
             //if(gameData.getKeys().isDown(GameKeys.SPACE)) {
 

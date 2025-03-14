@@ -2,6 +2,7 @@ package dk.sdu.smp4.main;
 
 import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.Services.IGamePluginService;
+import dk.sdu.smp4.common.Services.IPostEntityProcessor;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
@@ -50,6 +51,10 @@ public class Main extends Application {
             if (event.getCode().equals(KeyCode.SPACE)) {
                 gameData.getKeys().setKey(GameKeys.SPACE, true);
             }
+            if (event.getCode().equals(KeyCode.DOWN)) {
+                gameData.getKeys().setKey(GameKeys.DOWN, true);
+            }
+
         });
         scene.setOnKeyReleased(event -> {
             if (event.getCode().equals(KeyCode.LEFT)) {
@@ -63,6 +68,9 @@ public class Main extends Application {
             }
             if (event.getCode().equals(KeyCode.SPACE)) {
                 gameData.getKeys().setKey(GameKeys.SPACE, false);
+            }
+            if (event.getCode().equals(KeyCode.DOWN)) {
+                gameData.getKeys().setKey(GameKeys.DOWN, false);
             }
 
         });
@@ -98,6 +106,9 @@ public class Main extends Application {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
+        for (IPostEntityProcessor postEntityProcessor : getPostEntityProcessor()){ //Should probably be refactored
+            postEntityProcessor.process(gameData, world);
+        }
     }
 
     private void draw() {
@@ -130,5 +141,9 @@ public class Main extends Application {
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
         return ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends IPostEntityProcessor> getPostEntityProcessor(){
+        return ServiceLoader.load(IPostEntityProcessor.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }
