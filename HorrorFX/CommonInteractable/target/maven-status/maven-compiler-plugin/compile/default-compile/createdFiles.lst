@@ -1,1 +1,3 @@
-dk\sdu\smp4\common\interactable\CommonInteractable.class
+module-info.class
+dk/sdu/smp4/common/interactable/Data/CommonInteractable.class
+dk/sdu/smp4/common/interactable/Services/IQuestInteractable.class

@@ -1,1 +1,4 @@
-dk\sdu\smp4\player\Player.class
+dk/sdu/smp4/player/PlayerPlugin.class
+dk/sdu/smp4/player/PlayerControlSystem.class
+module-info.class
+dk/sdu/smp4/player/Player.class

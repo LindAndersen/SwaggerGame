@@ -7,13 +7,13 @@
   <name>HorrorFX</name>
   <modules>
     <module>Core</module>
-    <module>CommonPlayer</module>
     <module>Common</module>
     <module>Player</module>
     <module>CommonInteractable</module>
     <module>CommonEnemy</module>
     <module>AISpider</module>
     <module>CommonLightSource</module>
+    <module>Door</module>
   </modules>
   <properties>
     <java>java</java>

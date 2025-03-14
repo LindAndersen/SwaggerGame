@@ -6,8 +6,6 @@
         <artifactId>HorrorFX</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
-    <groupId>dk.sdu.smp4.aispider</groupId>
     <artifactId>AISpider</artifactId>
     <packaging>jar</packaging>
 
