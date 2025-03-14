@@ -7,7 +7,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>dk.sdu.smp4.common.interactable</groupId>
     <artifactId>CommonInteractable</artifactId>
     <packaging>jar</packaging>
 
@@ -19,6 +18,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

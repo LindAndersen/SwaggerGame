@@ -1,0 +1,3 @@
+module CommonInteractable {
+    requires Common;
+}
