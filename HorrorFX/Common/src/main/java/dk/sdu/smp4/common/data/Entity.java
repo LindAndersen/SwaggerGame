@@ -2,6 +2,7 @@ package dk.sdu.smp4.common.data;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.transform.Affine;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -15,8 +16,12 @@ public class Entity implements Serializable {
     private double y;
     private double rotation;
     private float radius;
-    private Paint paint = Color.BLACK;
-            
+    private Paint paint;
+
+    public Entity()
+    {
+        paint = Color.BLACK;
+    }
 
     public String getID() {
         return ID.toString();

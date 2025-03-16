@@ -6,6 +6,6 @@ import javafx.scene.paint.Color;
 public class CommonPlayerLight extends Entity {
     public CommonPlayerLight()
     {
-        setPaint(Color.GREEN);
+        setPaint(Color.GREEN.deriveColor(1,1,1,0.3));
     }
 }
