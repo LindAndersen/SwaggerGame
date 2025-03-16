@@ -2,7 +2,7 @@ package dk.sdu.smp4.main;
 
 import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.Services.IGamePluginService;
-import dk.sdu.smp4.common.Services.IPostEntityProcessor;
+import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
@@ -106,7 +106,7 @@ public class Main extends Application {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
-        for (IPostEntityProcessor postEntityProcessor : getPostEntityProcessor()){ //Should probably be refactored
+        for (IPostEntityProcessingService postEntityProcessor : getPostEntityProcessor()){ //Should probably be refactored
             postEntityProcessor.process(gameData, world);
         }
     }
@@ -143,7 +143,7 @@ public class Main extends Application {
         return ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 
-    private Collection<? extends IPostEntityProcessor> getPostEntityProcessor(){
-        return ServiceLoader.load(IPostEntityProcessor.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    private Collection<? extends IPostEntityProcessingService> getPostEntityProcessor(){
+        return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }

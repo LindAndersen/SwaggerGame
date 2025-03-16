@@ -1,11 +1,13 @@
 package dk.sdu.smp4.collisionSystem;
 
-import dk.sdu.smp4.common.Services.IPostEntityProcessor;
+import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 
-public class CollisionDetector implements IPostEntityProcessor {
+public class CollisionDetector implements IPostEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         for (Entity entity1 : world.getEntities()){
@@ -14,50 +16,32 @@ public class CollisionDetector implements IPostEntityProcessor {
                     continue;
                 }
 
-                int collisionSide = getCollisionSide(entity1, entity2);
-                if (collisionSide >= 0){
-                    entity2.setBlockedDirection(3-collisionSide, true);
-                    entity1.setBlockedDirection(collisionSide, true);
-                } else {
-                    for (int i = 0; i < 4; i++) {
-                        entity2.setBlockedDirection(i, false);
-                        entity1.setBlockedDirection(i, false);
-                    }
+                if (this.collides(entity1, entity2)) {
+                    entity1.collide(world, entity2);
+                    entity2.collide(world, entity1);
                 }
             }
         }
     }
 
-    public int getCollisionSide(Entity e1, Entity e2) {
-        float halfSize1 = e1.getRadius();
-        float halfSize2 = e2.getRadius();
+    private Polygon getTranslatedPolygon(Entity entity){
+        double[] coords = entity.getPolygonCoordinates();
+        Polygon polygon = new Polygon();
 
-        double dx = e1.getX() - e2.getX();
-        double dy = e1.getY() - e2.getY();
-
-        float combinedHalfWidth = halfSize1 + halfSize2;
-        float combinedHalfHeight = halfSize1 + halfSize2;
-
-        if (Math.abs(dx) < combinedHalfWidth && Math.abs(dy) < combinedHalfHeight) {
-            double overlapX = combinedHalfWidth - Math.abs(dx);
-            double overlapY = combinedHalfHeight - Math.abs(dy);
-
-            if (overlapX < overlapY) {
-                if (dx > 0) {
-                    return Entity.LEFT;
-                } else {
-                    return Entity.RIGHT;
-                }
-            } else {
-                if (dy > 0) {
-                    return Entity.UP;
-                } else {
-                    return Entity.DOWN;
-                }
-            }
+        for (int i = 0; i < coords.length; i+=2) {
+            double x = coords[i] + entity.getX();
+            double y = coords[i+1] + entity.getY();
+            polygon.getPoints().addAll(x, y);
         }
 
-        return -1;
+        return polygon;
+    }
+
+    public Boolean collides(Entity entity1, Entity entity2) {
+        Polygon poly1 = getTranslatedPolygon(entity1);
+        Polygon poly2 = getTranslatedPolygon(entity2);
+        Shape intersection = Shape.intersect(poly1, poly2);
+        return intersection.getBoundsInLocal().getWidth() > 0 && intersection.getBoundsInLocal().getHeight() > 0;
     }
 
 

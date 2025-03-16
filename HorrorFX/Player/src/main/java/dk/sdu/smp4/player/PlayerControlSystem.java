@@ -7,41 +7,38 @@ import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
 
 public class PlayerControlSystem implements IEntityProcessingService {
+
+
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity player : world.getEntities(Player.class)) {
+        for (Entity entity : world.getEntities(Player.class)) {
+            Player player = (Player) entity;
+            player.setCurrentCoords(player.getX(), player.getY());
 
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 if (player.getRotation() != 180){
                     player.setRotation(180);
                 }
-                if (!player.getBlockedDirection(1)){
-                    player.setX(player.getX()-1);
-                }
+                player.setX(player.getX()-1);
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 if (player.getRotation() != 0) {
                     player.setRotation(0);
                 }
-                if (!player.getBlockedDirection(2)){
-                    player.setX(player.getX()+1);
-                }
+                player.setX(player.getX()+1);
             }
             if (gameData.getKeys().isDown(GameKeys.UP)){
                 if (player.getRotation() != 270){
                     player.setRotation(270);
                 }
-                if (!player.getBlockedDirection(0)){
-                    player.setY(player.getY()-1);
-                }
+                player.setY(player.getY()-1);
+
             }
             if (gameData.getKeys().isDown(GameKeys.DOWN)){
                 if (player.getRotation() != 90){
                     player.setRotation(90);
                 }
-                if (!player.getBlockedDirection(3)){
-                    player.setY(player.getY()+1);
-                }
+                player.setY(player.getY()+1);
             }
             //if(gameData.getKeys().isDown(GameKeys.SPACE)) {
 

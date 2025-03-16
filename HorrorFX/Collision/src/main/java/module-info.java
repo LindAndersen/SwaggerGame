@@ -1,7 +1,8 @@
 import dk.sdu.smp4.collisionSystem.CollisionDetector;
-import dk.sdu.smp4.common.Services.IPostEntityProcessor;
+import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
 
 module Collision {
     requires Common;
-    provides IPostEntityProcessor with CollisionDetector;
+    requires javafx.graphics;
+    provides IPostEntityProcessingService with CollisionDetector;
 }

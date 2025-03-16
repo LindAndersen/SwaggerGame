@@ -6,7 +6,7 @@ import javafx.scene.paint.Paint;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class Entity implements Serializable {
+public abstract class Entity implements Serializable {
 
     private final UUID ID = UUID.randomUUID();
     
@@ -16,28 +16,10 @@ public class Entity implements Serializable {
     private double rotation;
     private float radius;
     private Paint paint = Color.BLACK;
-    public static final int UP = 0;
-    public static final int LEFT = 1;
-    public static final int RIGHT = 2;
-    public static final int DOWN = 3;
-    private boolean[] blockedDirections;
-
-    public void setBlockedDirection(int direction, boolean value){
-        if (blockedDirections == null){
-            blockedDirections = new boolean[4];
-        }
-        this.blockedDirections[direction] = value;
-    }
-
-    public boolean getBlockedDirection(int direction){
-        return blockedDirections[direction];
-    }
-            
 
     public String getID() {
         return ID.toString();
     }
-
 
     public void setPolygonCoordinates(double... coordinates ) {
         this.polygonCoordinates = coordinates;
@@ -87,5 +69,8 @@ public class Entity implements Serializable {
 
     public void setPaint(Color yellow) {
         this.paint = yellow;
+    }
+
+    public void collide(World world, Entity entity) {
     }
 }
