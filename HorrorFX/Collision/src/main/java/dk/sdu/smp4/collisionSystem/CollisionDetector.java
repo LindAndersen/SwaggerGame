@@ -1,6 +1,7 @@
 package dk.sdu.smp4.collisionSystem;
 
 import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
+import dk.sdu.smp4.common.data.DynamicEntity;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
@@ -16,7 +17,7 @@ public class CollisionDetector implements IPostEntityProcessingService {
                     continue;
                 }
 
-                if (this.collides(entity1, entity2)) {
+                if (this.collides(entity1, entity2) && (entity1 instanceof DynamicEntity || entity2 instanceof DynamicEntity)) {
                     entity1.collide(world, entity2);
                     entity2.collide(world, entity1);
                 }

@@ -13,7 +13,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         for (Entity entity : world.getEntities(Player.class)) {
             Player player = (Player) entity;
-            player.setCurrentCoords(player.getX(), player.getY());
+            player.setPreviousX(player.getX());
+            player.setPreviousY(player.getY());
 
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 if (player.getRotation() != 180){
