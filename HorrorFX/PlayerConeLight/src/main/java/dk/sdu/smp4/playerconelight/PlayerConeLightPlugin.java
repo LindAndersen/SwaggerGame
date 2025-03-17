@@ -13,7 +13,6 @@ public class PlayerConeLightPlugin implements IPlayerLightPlugin {
     public void createPlayerLight(Entity player, GameData gameData, World world) {
         Entity lightEntity = new ConeLight();
 
-        System.out.println("Player coords ("+player.getX()+","+player.getY()+")");
         lightEntity.setX(player.getX());
         lightEntity.setY(player.getY());
         lightEntity.setRadius(player.getRadius()*30);

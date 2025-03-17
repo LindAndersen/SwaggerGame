@@ -15,6 +15,7 @@ public class PlayerConeLightProcessor implements IPlayerLightProcessor {
             lightEntity.setX(player.getX());
             lightEntity.setY(player.getY());
             lightEntity.setRotation(player.getRotation());
+            lightEntity.setShouldRotateAlternative(true);
         }
     }
 }

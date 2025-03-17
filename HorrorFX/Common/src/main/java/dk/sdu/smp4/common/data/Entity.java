@@ -17,10 +17,13 @@ public class Entity implements Serializable {
     private double rotation;
     private float radius;
     private Paint paint;
+    private boolean shouldRotateAlternative;
 
     public Entity()
     {
         paint = Color.BLACK;
+        shouldRotateAlternative = false;
+
     }
 
     public String getID() {
@@ -76,5 +79,13 @@ public class Entity implements Serializable {
 
     public void setPaint(Color yellow) {
         this.paint = yellow;
+    }
+
+    public boolean isShouldRotateAlternative() {
+        return shouldRotateAlternative;
+    }
+
+    public void setShouldRotateAlternative(boolean shouldRotateAlternative) {
+        this.shouldRotateAlternative = shouldRotateAlternative;
     }
 }
