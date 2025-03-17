@@ -21,29 +21,32 @@ public class PlayerControlSystem implements IEntityProcessingService {
                     player.setRotation(180);
                 }
                 player.setX(player.getX()-1);
+                player.setPreviousX(player.getX()+1.00001);
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 if (player.getRotation() != 0) {
                     player.setRotation(0);
                 }
                 player.setX(player.getX()+1);
+                player.setPreviousX(player.getX()-1.00001);
             }
             if (gameData.getKeys().isDown(GameKeys.UP)){
                 if (player.getRotation() != 270){
                     player.setRotation(270);
                 }
                 player.setY(player.getY()-1);
-
+                player.setPreviousY(player.getY()+1.00001);
             }
             if (gameData.getKeys().isDown(GameKeys.DOWN)){
                 if (player.getRotation() != 90){
                     player.setRotation(90);
                 }
                 player.setY(player.getY()+1);
+                player.setPreviousY(player.getY()-1.00001);
             }
-            //if(gameData.getKeys().isDown(GameKeys.SPACE)) {
-
-            //}
+            if(gameData.getKeys().isDown(GameKeys.SPACE)) {
+                System.out.println("pew");
+            }
 
             if (player.getX() < 0) {
                 player.setX(1);

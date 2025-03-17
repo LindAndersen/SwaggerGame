@@ -11,7 +11,7 @@ import java.util.Random;
  * Hello world!
  *
  */
-public class StructurePlugin implements IGamePluginService
+public class WallPlugin implements IGamePluginService
 {
     @Override
     public void start(GameData gameData, World world) {

@@ -21,10 +21,11 @@ public class PlayerPlugin implements IGamePluginService {
     private Entity CreatePlayer(GameData gameData) {
 
         Entity player = new Player();
-        player.setPolygonCoordinates(-5,-5,10,0,-5,5);
+        player.setPolygonCoordinates(-8, -8, 8, -8, 8, 8, -8, 8);
         player.setX(gameData.getDisplayHeight() /2);
         player.setY(gameData.getDisplayWidth() /2);
         player.setRadius(8);
+        player.setPaint("blue");
         return player;
     }
 }

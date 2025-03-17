@@ -10,19 +10,15 @@ public class Structure extends StaticEntity {
     public void collide(World world, Entity entity) {
         DynamicEntity player = (DynamicEntity) entity;
         // Check collision with sides (left/right)
-        if ((player.getX() == this.getX() + this.getRadius() || player.getX() == this.getX() - this.getRadius())
-                && (player.getY() < this.getY() + this.getRadius() && player.getY() > this.getY() - this.getRadius())) {
-            player.setX(player.getPreviousX()); // Reset X to prevent movement into structure side
+        if ((player.getPreviousX() - player.getRadius() <= this.getX() + this.getRadius() || player.getPreviousX() + player.getRadius() >= this.getX() - this.getRadius())
+                && (player.getPreviousY() - player.getRadius() <= this.getY() + this.getRadius() && player.getPreviousY() + player.getRadius() >= this.getY() - this.getRadius())) {
+            player.setX(player.getPreviousX());
         }
 
         // Check collision with top/bottom
-        if ((player.getY() == this.getY() + this.getRadius() || player.getY() == this.getY() - this.getRadius())
-                && (player.getX() < this.getX() + this.getRadius() && player.getX() > this.getX() - this.getRadius())) {
-            player.setY(player.getPreviousY()); // Reset Y to prevent movement into structure top/bottom
+        if ((player.getPreviousY() - player.getRadius() <= this.getY() + this.getRadius() || player.getPreviousY() + player.getRadius() >= this.getY() - this.getRadius())
+                && (player.getPreviousX() - player.getRadius() <= this.getX() + this.getRadius() && player.getPreviousX() + player.getRadius() >= this.getX() - this.getRadius())) {
+            player.setY(player.getPreviousY());
         }
     }
-
-
-
-
 }

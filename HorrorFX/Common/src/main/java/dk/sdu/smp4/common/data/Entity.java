@@ -67,8 +67,8 @@ public abstract class Entity implements Serializable {
         return paint;
     }
 
-    public void setPaint(Color yellow) {
-        this.paint = yellow;
+    public void setPaint(String color) {
+        this.paint = Color.web(color);
     }
 
     public void collide(World world, Entity entity) {
