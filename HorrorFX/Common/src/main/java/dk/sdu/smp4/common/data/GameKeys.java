@@ -11,7 +11,9 @@ public class GameKeys {
     public static final int RIGHT = 2;
     public static final int DOWN = 3;
     public static final int SPACE = 4;
-    public static final int E = 5;
+    public static double mouseY;
+    public static double mouseX;
+    public static final int INTERACT = 5;
 
     public GameKeys() {
         keys = new boolean[NUM_KEYS];
@@ -22,6 +24,11 @@ public class GameKeys {
         for (int i = 0; i < NUM_KEYS; i++) {
             pkeys[i] = keys[i];
         }
+    }
+
+    public static void setMousePosition(double x, double y){
+        mouseX = x;
+        mouseY = y;
     }
 
     public void setKey(int k, boolean b) {

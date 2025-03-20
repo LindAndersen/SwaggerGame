@@ -23,82 +23,38 @@ public class PlayerControlSystem implements IEntityProcessingService {
             player.setPreviousX(player.getX());
             player.setPreviousY(player.getY());
 
-            //UP-LEFT
-            if (gameData.getKeys().isDown(GameKeys.LEFT) && gameData.getKeys().isDown(GameKeys.UP)){
-                if (player.getRotation() != 225){
-                    player.setRotation(225);
-                }
-            }
+            player.setRotation(Math.toDegrees(Math.atan2(GameKeys.mouseY- player.getY(), GameKeys.mouseX - player.getX())));
 
-            //DOWN-LEFT
-            if (gameData.getKeys().isDown(GameKeys.LEFT) && gameData.getKeys().isDown(GameKeys.DOWN)){
-                if (player.getRotation() != 135){
-                    player.setRotation(135);
-                }
-            }
-
-            //DOWN-RIGHT
-            if (gameData.getKeys().isDown(GameKeys.DOWN) && gameData.getKeys().isDown(GameKeys.RIGHT)){
-                if (player.getRotation() != 45){
-                    player.setRotation(45);
-                }
-            }
-
-            //UP-RIGHT
-            if (gameData.getKeys().isDown(GameKeys.RIGHT) && gameData.getKeys().isDown(GameKeys.UP)){
-                if (player.getRotation() != 315){
-                    player.setRotation(315);
-                }
-            }
 
             //LEFT
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                if (!gameData.getKeys().isDown(GameKeys.DOWN) && !gameData.getKeys().isDown(GameKeys.UP)){
-                    if (player.getRotation() != 180){
-                        player.setRotation(180);
-                    }
-                }
                 player.setX(player.getX()-1);
                 player.setPreviousX(player.getX()+1.00001);
             }
 
             //RIGHT
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                if (!gameData.getKeys().isDown(GameKeys.UP) && !gameData.getKeys().isDown(GameKeys.DOWN)){
-                    if (player.getRotation() != 0) {
-                        player.setRotation(0);
-                    }
-                }
                 player.setX(player.getX()+1);
                 player.setPreviousX(player.getX()-1.00001);
             }
 
             //UP
             if (gameData.getKeys().isDown(GameKeys.UP)){
-                if (!gameData.getKeys().isDown(GameKeys.LEFT) && !gameData.getKeys().isDown(GameKeys.RIGHT)){
-                    if (player.getRotation() != 270){
-                        player.setRotation(270);
-                    }
-                }
                 player.setY(player.getY()-1);
                 player.setPreviousY(player.getY()+1.00001);
             }
 
             //DOWN
             if (gameData.getKeys().isDown(GameKeys.DOWN)){
-                if (!gameData.getKeys().isDown(GameKeys.LEFT) && !gameData.getKeys().isDown(GameKeys.RIGHT)){
-                    if (player.getRotation() != 90){
-                        player.setRotation(90);
-                    }
-                }
                 player.setY(player.getY()+1);
                 player.setPreviousY(player.getY()-1.00001);
             }
+
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {
                 System.out.println("Toggle flashlight");
             }
 
-            if(gameData.getKeys().isDown(GameKeys.E)) {
+            if(gameData.getKeys().isDown(GameKeys.INTERACT)) {
                 for(IQuestInteractable interactable : getEntityQuestInteractables())
                 {
                     interactable.interact(player, gameData, world);
