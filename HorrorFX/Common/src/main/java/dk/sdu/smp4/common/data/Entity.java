@@ -2,7 +2,6 @@ package dk.sdu.smp4.common.data;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.transform.Affine;
 
 import java.io.Serializable;
 import java.util.UUID;
