@@ -4,6 +4,12 @@ import dk.sdu.smp4.common.Services.IGamePluginService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
+
+import java.util.Collection;
+import java.util.ServiceLoader;
+
+import static java.util.stream.Collectors.toList;
 
 public class PlayerPlugin implements IGamePluginService {
     private Entity player;
@@ -11,6 +17,10 @@ public class PlayerPlugin implements IGamePluginService {
     public void start(GameData gameData, World world) {
         player = CreatePlayer(gameData);
         world.addEntity(player);
+
+        for(IPlayerLightPlugin lightPlugin : getEntityPlayerLights()) {
+            lightPlugin.createPlayerLight(player, gameData, world);
+        }
     }
 
     @Override
@@ -27,5 +37,9 @@ public class PlayerPlugin implements IGamePluginService {
         player.setRadius(8);
         player.setPaint("blue");
         return player;
+    }
+
+    private Collection<? extends IPlayerLightPlugin> getEntityPlayerLights() {
+        return ServiceLoader.load(IPlayerLightPlugin.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }

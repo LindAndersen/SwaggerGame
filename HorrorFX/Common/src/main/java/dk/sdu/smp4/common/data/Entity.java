@@ -2,6 +2,7 @@ package dk.sdu.smp4.common.data;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.transform.Affine;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -15,7 +16,15 @@ public abstract class Entity implements Serializable {
     private double y;
     private double rotation;
     private float radius;
-    private Paint paint = Color.BLACK;
+    private Paint paint;
+    private boolean shouldRotateAlternative;
+
+    public Entity()
+    {
+        paint = Color.BLACK;
+        shouldRotateAlternative = false;
+
+    }
 
     public String getID() {
         return ID.toString();
@@ -72,5 +81,13 @@ public abstract class Entity implements Serializable {
     }
 
     public void collide(World world, Entity entity) {
+    }
+
+    public boolean isShouldRotateAlternative() {
+        return shouldRotateAlternative;
+    }
+
+    public void setShouldRotateAlternative(boolean shouldRotateAlternative) {
+        this.shouldRotateAlternative = shouldRotateAlternative;
     }
 }
