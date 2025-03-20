@@ -13,6 +13,7 @@
     <module>CommonEnemy</module>
     <module>AISpider</module>
     <module>CommonLightSource</module>
+    <module>QuestItem</module>
     <module>Collision</module>
     <module>Structure</module>
     <module>PlayerCircleLight</module>
