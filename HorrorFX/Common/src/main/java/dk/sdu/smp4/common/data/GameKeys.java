@@ -11,9 +11,10 @@ public class GameKeys {
     public static final int RIGHT = 2;
     public static final int DOWN = 3;
     public static final int SPACE = 4;
+    public static final int INTERACT = 5;
     public static double mouseY;
     public static double mouseX;
-    public static final int INTERACT = 5;
+    public static boolean mouseMoved;
 
     public GameKeys() {
         keys = new boolean[NUM_KEYS];
@@ -31,6 +32,13 @@ public class GameKeys {
         mouseY = y;
     }
 
+    public void setMouseMoved(boolean b){
+        mouseMoved = b;
+    }
+
+    public boolean isMouseMoved(){
+        return mouseMoved;
+    }
     public void setKey(int k, boolean b) {
         keys[k] = b;
     }
