@@ -5,7 +5,7 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
+import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
 
 import java.util.Collection;
@@ -95,7 +95,14 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setPreviousY(player.getY()-1.00001);
             }
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {
-                System.out.println("pew");
+                System.out.println("Toggle flashlight");
+            }
+
+            if(gameData.getKeys().isDown(GameKeys.E)) {
+                for(IQuestInteractable interactable : getEntityQuestInteractables())
+                {
+                    interactable.interact(player, gameData, world);
+                }
             }
 
             if (player.getX() < 0) {
@@ -124,5 +131,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     private Collection<? extends IPlayerLightProcessor> getEntityPlayerLights() {
         return ServiceLoader.load(IPlayerLightProcessor.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends IQuestInteractable> getEntityQuestInteractables() {
+        return ServiceLoader.load(IQuestInteractable.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }
