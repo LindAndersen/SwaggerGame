@@ -13,7 +13,12 @@
     <module>CommonEnemy</module>
     <module>AISpider</module>
     <module>CommonLightSource</module>
-      <module>QuestItem</module>
+    <module>QuestItem</module>
+    <module>Collision</module>
+    <module>Structure</module>
+    <module>PlayerCircleLight</module>
+    <module>CommonPlayerLight</module>
+    <module>PlayerConeLight</module>
   </modules>
   <properties>
     <java>java</java>
