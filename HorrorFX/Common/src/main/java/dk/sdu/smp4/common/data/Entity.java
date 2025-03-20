@@ -80,6 +80,11 @@ public abstract class Entity implements Serializable {
         this.paint = Color.web(color);
     }
 
+    public void setPaint(Color color)
+    {
+        this.paint = color;
+    }
+
     public void collide(World world, Entity entity) {
     }
 
