@@ -35,12 +35,14 @@ public class QuestItemInteractionSystem implements IEntityProcessingService {
         // 2. Check if player presses Space
 
         if(distancePlayerToQuest < 10 && gameData.getKeys().isDown(GameKeys.SPACE)){
-            System.out.println("Player is within distance");
+            System.out.println("Yoink");
             world.removeEntity(questNote);
+
+        // 3. Display popup, when pressing space.
         }
 
 
-        // 3. Display popup, when pressing space.
+
 
 
     }
