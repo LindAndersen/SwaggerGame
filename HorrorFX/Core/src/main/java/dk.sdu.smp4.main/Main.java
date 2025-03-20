@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 import java.util.Collection;
@@ -116,9 +117,17 @@ public class Main extends Application {
                 polygons.put(entity, polygon);
                 gameWindow.getChildren().add(polygon);
             }
+
+            polygon.getTransforms().clear();
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
-            polygon.setRotate(entity.getRotation());
+            if (entity.isShouldRotateAlternative())
+            {
+                polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
+            } else
+            {
+                polygon.setRotate(entity.getRotation());
+            }
             polygon.setFill(entity.getPaint());
         }
 
