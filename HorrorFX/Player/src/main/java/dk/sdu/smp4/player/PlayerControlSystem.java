@@ -14,24 +14,46 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 public class PlayerControlSystem implements IEntityProcessingService {
+
+
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity player : world.getEntities(Player.class)) {
+        for (Entity entity : world.getEntities(Player.class)) {
+            Player player = (Player) entity;
+            player.setPreviousX(player.getX());
+            player.setPreviousY(player.getY());
+
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                player.setRotation(player.getRotation() - 5);
+                if (player.getRotation() != 180){
+                    player.setRotation(180);
+                }
+                player.setX(player.getX()-1);
+                player.setPreviousX(player.getX()+1.00001);
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                player.setRotation(player.getRotation() + 5);
+                if (player.getRotation() != 0) {
+                    player.setRotation(0);
+                }
+                player.setX(player.getX()+1);
+                player.setPreviousX(player.getX()-1.00001);
             }
-            if (gameData.getKeys().isDown(GameKeys.UP)) {
-                double changeX = Math.cos(Math.toRadians(player.getRotation()));
-                double changeY = Math.sin(Math.toRadians(player.getRotation()));
-                player.setX(player.getX() + changeX);
-                player.setY(player.getY() + changeY);
+            if (gameData.getKeys().isDown(GameKeys.UP)){
+                if (player.getRotation() != 270){
+                    player.setRotation(270);
+                }
+                player.setY(player.getY()-1);
+                player.setPreviousY(player.getY()+1.00001);
             }
-            //if(gameData.getKeys().isDown(GameKeys.SPACE)) {
-
-            //}
+            if (gameData.getKeys().isDown(GameKeys.DOWN)){
+                if (player.getRotation() != 90){
+                    player.setRotation(90);
+                }
+                player.setY(player.getY()+1);
+                player.setPreviousY(player.getY()-1.00001);
+            }
+            if(gameData.getKeys().isDown(GameKeys.SPACE)) {
+                System.out.println("pew");
+            }
 
             if (player.getX() < 0) {
                 player.setX(1);

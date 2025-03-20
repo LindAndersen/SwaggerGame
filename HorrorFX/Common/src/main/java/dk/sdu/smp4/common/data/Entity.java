@@ -7,7 +7,7 @@ import javafx.scene.transform.Affine;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class Entity implements Serializable {
+public abstract class Entity implements Serializable {
 
     private final UUID ID = UUID.randomUUID();
     
@@ -29,7 +29,6 @@ public class Entity implements Serializable {
     public String getID() {
         return ID.toString();
     }
-
 
     public void setPolygonCoordinates(double... coordinates ) {
         this.polygonCoordinates = coordinates;
@@ -77,8 +76,11 @@ public class Entity implements Serializable {
         return paint;
     }
 
-    public void setPaint(Color yellow) {
-        this.paint = yellow;
+    public void setPaint(String color) {
+        this.paint = Color.web(color);
+    }
+
+    public void collide(World world, Entity entity) {
     }
 
     public boolean isShouldRotateAlternative() {
