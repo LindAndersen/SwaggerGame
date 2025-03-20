@@ -31,10 +31,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>dk.sdu.smp4</groupId>
-            <artifactId>Player</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CommonInteractable</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
