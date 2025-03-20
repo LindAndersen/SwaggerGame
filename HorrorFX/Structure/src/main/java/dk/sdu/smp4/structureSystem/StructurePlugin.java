@@ -11,7 +11,7 @@ import java.util.Random;
  * Hello world!
  *
  */
-public class WallPlugin implements IGamePluginService
+public class StructurePlugin implements IGamePluginService
 {
     @Override
     public void start(GameData gameData, World world) {
@@ -30,6 +30,18 @@ public class WallPlugin implements IGamePluginService
         structure.setY(rnd.nextInt(500));
         structure.setRadius(structureSize);
         structure.setRotation(90);
+        return structure;
+    }
+
+    private Entity createStructure(GameData gameData, int height, int width, double x, double y){
+        Entity structure = new Structure();
+        structure.setPolygonCoordinates(width, -height,
+                -width, -height,
+                -width, height,
+                width, height);
+        structure.setX(x);
+        structure.setY(y);
+        structure.setRadius(2);
         return structure;
     }
 
