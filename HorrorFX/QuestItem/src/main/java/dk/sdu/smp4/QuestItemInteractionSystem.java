@@ -7,10 +7,12 @@ import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 
+import javax.swing.*;
+
 public class QuestItemInteractionSystem implements IQuestInteractable {
     @Override
     public void interact(Entity player, GameData gameData, World world) {
-        // 1. Check if player is within distance
+
         for(Entity questItem : world.getEntities(QuestItem.class))
         {
             if (isQuestItemWithinReach(player, questItem))
@@ -18,7 +20,8 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
                 System.out.println("Yoink");
                 world.removeEntity(questItem);
 
-                // 3. Display popup, when pressing space.
+                // 2. Display popup, when pressing E.
+                displayQuestPopup();
             }
         }
     }
@@ -29,12 +32,15 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
     }
 
     private boolean isQuestItemWithinReach(Entity questItem, Entity player)
-    {
+    {   // 1. Check if player is within distance
         double distancePlayerToQuest = Math.sqrt(Math.pow(questItem.getX() - player.getX(), 2) + Math.pow(questItem.getY() - player.getY(), 2));
 
-        // 2. Check if player presses Space
-
         return distancePlayerToQuest < 10;
+    }
+
+    private void displayQuestPopup() {
+        // Display a pop-up with quest details
+        JOptionPane.showMessageDialog(null, "Quest: Retrieve the ancient scroll from the haunted forest.");
     }
 }
 
