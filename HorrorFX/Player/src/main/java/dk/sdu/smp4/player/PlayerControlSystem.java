@@ -25,33 +25,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             player.setRotation(Math.toDegrees(Math.atan2(GameKeys.mouseY- player.getY(), GameKeys.mouseX - player.getX())));
 
-//            //UP-LEFT
-//            if (gameData.getKeys().isDown(GameKeys.LEFT) && gameData.getKeys().isDown(GameKeys.UP)){
-//                if (player.getRotation() != 225){
-//                    player.setRotation(225);
-//                }
-//            }
-//
-//            //DOWN-LEFT
-//            if (gameData.getKeys().isDown(GameKeys.LEFT) && gameData.getKeys().isDown(GameKeys.DOWN)){
-//                if (player.getRotation() != 135){
-//                    player.setRotation(135);
-//                }
-//            }
-//
-//            //DOWN-RIGHT
-//            if (gameData.getKeys().isDown(GameKeys.DOWN) && gameData.getKeys().isDown(GameKeys.RIGHT)){
-//                if (player.getRotation() != 45){
-//                    player.setRotation(45);
-//                }
-//            }
-//
-//            //UP-RIGHT
-//            if (gameData.getKeys().isDown(GameKeys.RIGHT) && gameData.getKeys().isDown(GameKeys.UP)){
-//                if (player.getRotation() != 315){
-//                    player.setRotation(315);
-//                }
-//            }
 
             //LEFT
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
@@ -81,7 +54,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 System.out.println("Toggle flashlight");
             }
 
-            if(gameData.getKeys().isDown(GameKeys.E)) {
+            if(gameData.getKeys().isDown(GameKeys.INTERACT)) {
                 for(IQuestInteractable interactable : getEntityQuestInteractables())
                 {
                     interactable.interact(player, gameData, world);

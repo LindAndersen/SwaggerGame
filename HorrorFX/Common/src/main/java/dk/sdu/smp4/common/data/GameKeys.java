@@ -13,7 +13,7 @@ public class GameKeys {
     public static final int SPACE = 4;
     public static double mouseY;
     public static double mouseX;
-    public static final int E = 5;
+    public static final int INTERACT = 5;
 
     public GameKeys() {
         keys = new boolean[NUM_KEYS];

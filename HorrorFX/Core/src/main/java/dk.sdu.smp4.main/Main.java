@@ -46,44 +46,44 @@ public class Main extends Application {
             GameKeys.setMousePosition(mouseX, mouseY);
         });
         scene.setOnKeyPressed(event -> {
-            if (event.getCode().equals(KeyCode.LEFT)) {
+            if (event.getCode().equals(KeyCode.A)) {
                 gameData.getKeys().setKey(GameKeys.LEFT, true);
             }
-            if (event.getCode().equals(KeyCode.RIGHT)) {
+            if (event.getCode().equals(KeyCode.D)) {
                 gameData.getKeys().setKey(GameKeys.RIGHT, true);
             }
-            if (event.getCode().equals(KeyCode.UP)) {
+            if (event.getCode().equals(KeyCode.W)) {
                 gameData.getKeys().setKey(GameKeys.UP, true);
             }
             if (event.getCode().equals(KeyCode.SPACE)) {
                 gameData.getKeys().setKey(GameKeys.SPACE, true);
             }
-            if (event.getCode().equals(KeyCode.DOWN)) {
+            if (event.getCode().equals(KeyCode.S)) {
                 gameData.getKeys().setKey(GameKeys.DOWN, true);
             }
             if (event.getCode().equals(KeyCode.E)) {
-                gameData.getKeys().setKey(GameKeys.E, true);
+                gameData.getKeys().setKey(GameKeys.INTERACT, true);
             }
 
         });
         scene.setOnKeyReleased(event -> {
-            if (event.getCode().equals(KeyCode.LEFT)) {
+            if (event.getCode().equals(KeyCode.A)) {
                 gameData.getKeys().setKey(GameKeys.LEFT, false);
             }
-            if (event.getCode().equals(KeyCode.RIGHT)) {
+            if (event.getCode().equals(KeyCode.D)) {
                 gameData.getKeys().setKey(GameKeys.RIGHT, false);
             }
-            if (event.getCode().equals(KeyCode.UP)) {
+            if (event.getCode().equals(KeyCode.W)) {
                 gameData.getKeys().setKey(GameKeys.UP, false);
             }
             if (event.getCode().equals(KeyCode.SPACE)) {
                 gameData.getKeys().setKey(GameKeys.SPACE, false);
             }
-            if (event.getCode().equals(KeyCode.DOWN)) {
+            if (event.getCode().equals(KeyCode.S)) {
                 gameData.getKeys().setKey(GameKeys.DOWN, false);
             }
             if (event.getCode().equals(KeyCode.E)) {
-                gameData.getKeys().setKey(GameKeys.E, false);
+                gameData.getKeys().setKey(GameKeys.INTERACT, false);
             }
 
         });
