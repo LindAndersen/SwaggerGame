@@ -11,6 +11,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
@@ -39,6 +40,11 @@ public class Main extends Application {
 
 
         Scene scene = new Scene(gameWindow);
+        scene.setOnMouseMoved((MouseEvent event) -> {
+            double mouseX = event.getSceneX();
+            double mouseY = event.getSceneY();
+            GameKeys.setMousePosition(mouseX, mouseY);
+        });
         scene.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.LEFT)) {
                 gameData.getKeys().setKey(GameKeys.LEFT, true);
