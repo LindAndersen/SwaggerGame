@@ -25,20 +25,6 @@ public class Structure extends StaticEntity {
                     player.setY(player.getPreviousY());
                 }
             }
-
-
-//            // Check collision with sides (left/right)
-//            if ((player.getPreviousX() - player.getRadius() <= this.getX() + this.getWidth()/2 || player.getPreviousX() + player.getRadius() >= this.getX() - this.getWidth()/2)
-//                    && (player.getPreviousY() - player.getRadius() <= this.getY() + this.getHeight()/2 && player.getPreviousY() + player.getRadius() >= this.getY() - this.getHeight()/2)) {
-//                player.setX(player.getPreviousX());
-//            }
-//
-//            // Check collision with top/bottom
-//            if ((player.getPreviousY() - player.getRadius() <= this.getY() + this.getHeight()/2 || player.getPreviousY() + player.getRadius() >= this.getY() - this.getHeight()/2)
-//                    && (player.getPreviousX() - player.getRadius() <= this.getX() + this.getWidth()/2 && player.getPreviousX() + player.getRadius() >= this.getX() - this.getWidth()/2)) {
-//                player.setY(player.getPreviousY());
-//            }
-//        }
         }
     }
 }

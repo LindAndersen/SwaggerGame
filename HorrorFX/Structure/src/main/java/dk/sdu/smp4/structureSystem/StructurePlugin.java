@@ -15,27 +15,31 @@ public class StructurePlugin implements IGamePluginService
 
     @Override
     public void start(GameData gameData, World world) {
-        for (int i = 0; i < 1; i++) {
-            structure = createStructure(gameData, 200, 100, 200, 400);
+        for (int i = 0; i < 10; i++) {
+            structure = createStructure(gameData);
             world.addEntity(structure);
         }
     }
 
     private StaticEntity createStructure(GameData gameData){
         Structure structure = new Structure();
+
         Random rnd = new Random();
-        int structureWidth = rnd.nextInt(50);
-        int structureHeight = rnd.nextInt(50);
+        int width = rnd.nextInt(50);
+        int height = rnd.nextInt(50);
+        double halfWidth = width / 2.0;
+        double halfHeight = height / 2.0;
+
         structure.setPolygonCoordinates(
-                structureWidth, -structureHeight,
-                -structureWidth, -structureHeight,
-                -structureWidth, structureHeight,
-                structureWidth, structureHeight
+                halfWidth, -halfHeight,
+                -halfWidth, -halfHeight,
+                -halfWidth, halfHeight,
+                halfWidth, halfHeight
         );
         structure.setX(rnd.nextInt(500));
         structure.setY(rnd.nextInt(500));
-        structure.setWidth(structureWidth);
-        structure.setHeight(structureHeight);
+        structure.setWidth(width);
+        structure.setHeight(height);
         structure.setSolid(true);
         structure.setRotation(90);
         return structure;
