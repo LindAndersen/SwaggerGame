@@ -64,7 +64,6 @@ public class Main extends Application {
             if (event.getCode().equals(KeyCode.E)) {
                 gameData.getKeys().setKey(GameKeys.INTERACT, true);
             }
-
         });
         scene.setOnKeyReleased(event -> {
             if (event.getCode().equals(KeyCode.A)) {
@@ -167,4 +166,5 @@ public class Main extends Application {
     private Collection<? extends IPostEntityProcessingService> getPostEntityProcessor(){
         return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
+
 }

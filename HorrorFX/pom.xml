@@ -19,6 +19,8 @@
     <module>PlayerCircleLight</module>
     <module>CommonPlayerLight</module>
     <module>PlayerConeLight</module>
+    <module>Door</module>
+    <module>Key</module>
     <module>Room</module>
   </modules>
   <properties>

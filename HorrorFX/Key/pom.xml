@@ -6,10 +6,11 @@
         <artifactId>HorrorFX</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>AISpider</artifactId>
+
+    <artifactId>Key</artifactId>
     <packaging>jar</packaging>
 
-    <name>AISpider</name>
+    <name>Key</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -31,8 +32,8 @@
         </dependency>
         <dependency>
             <groupId>dk.sdu.smp4</groupId>
-            <artifactId>Player</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <artifactId>CommonInteractable</artifactId>
+            <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
