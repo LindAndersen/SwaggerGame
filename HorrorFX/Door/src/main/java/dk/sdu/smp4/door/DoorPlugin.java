@@ -31,6 +31,7 @@ public class DoorPlugin implements IGamePluginService {
         door.setPolygonCoordinates(-10, -20, 10, -20, 10, 20, -10, 20);
         door.setX(randomX);
         door.setY(randomY);
+        door.setSolid(true);
         door.setPaint("brown");
         return door;
     }

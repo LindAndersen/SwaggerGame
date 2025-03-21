@@ -24,7 +24,8 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
         for (Entity entity : world.getEntities(enemy.class)) {
             enemy enemy = (enemy) entity;
-
+            enemy.setPreviousX(enemy.getX());
+            enemy.setPreviousY(enemy.getY());
             double dx = lastKnownPlayerX - enemy.getX();
             double dy = lastKnownPlayerY - enemy.getY();
             double distance = Math.sqrt(dx * dx + dy * dy);
