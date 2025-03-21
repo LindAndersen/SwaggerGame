@@ -1,8 +1,7 @@
 package dk.sdu.smp4.player;
 
 import dk.sdu.smp4.common.Services.IGamePluginService;
-import dk.sdu.smp4.common.data.DynamicEntity;
-import dk.sdu.smp4.common.data.Entity;
+import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
@@ -13,7 +12,7 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 public class PlayerPlugin implements IGamePluginService {
-    private DynamicEntity player;
+    private SoftEntity player;
     @Override
     public void start(GameData gameData, World world) {
         player = CreatePlayer(gameData);
@@ -29,9 +28,9 @@ public class PlayerPlugin implements IGamePluginService {
         world.removeEntity(player);
     }
 
-    private DynamicEntity CreatePlayer(GameData gameData) {
+    private SoftEntity CreatePlayer(GameData gameData) {
 
-        DynamicEntity player = new Player();
+        SoftEntity player = new Player();
         player.setPolygonCoordinates(-8, -8,  // back top-left
                 6, -8,  // near front top-right
                 12, 0,  // tip (front middle point)

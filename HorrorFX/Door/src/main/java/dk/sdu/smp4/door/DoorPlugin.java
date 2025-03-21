@@ -3,6 +3,7 @@ package dk.sdu.smp4.door;
 import dk.sdu.smp4.common.Services.IGamePluginService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
+import dk.sdu.smp4.common.data.HardEntity;
 import dk.sdu.smp4.common.data.World;
 
 import java.util.Random;
@@ -10,7 +11,7 @@ import java.util.Random;
 public class DoorPlugin implements IGamePluginService {
 
     private Random random = new Random();
-    private Entity door;
+    private HardEntity door;
     private int id;
     private boolean isOpen = false;
 
@@ -22,7 +23,7 @@ public class DoorPlugin implements IGamePluginService {
         world.addEntity(door);
     }
 
-    private Entity createDoor(GameData gameData){
+    private HardEntity createDoor(GameData gameData){
         door = new Door();
 
         float randomX = random.nextFloat() * gameData.getDisplayWidth();
@@ -31,6 +32,8 @@ public class DoorPlugin implements IGamePluginService {
         door.setPolygonCoordinates(-10, -20, 10, -20, 10, 20, -10, 20);
         door.setX(randomX);
         door.setY(randomY);
+        door.setWidth(20);
+        door.setHeight(40);
         door.setSolid(true);
         door.setPaint("brown");
         return door;

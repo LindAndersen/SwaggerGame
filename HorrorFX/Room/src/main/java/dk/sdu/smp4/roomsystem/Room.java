@@ -1,11 +1,6 @@
 package dk.sdu.smp4.roomsystem;
 
-import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.data.StaticEntity;
 import dk.sdu.smp4.structureSystem.Structure;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Room {
     Structure topWall, bottomWall, leftWall, rightWall;

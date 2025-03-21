@@ -1,7 +1,7 @@
 package dk.sdu.smp4.door;
 
-import dk.sdu.smp4.common.data.Entity;
+import dk.sdu.smp4.common.data.HardEntity;
 
 
-public class Door extends Entity {
+public class Door extends HardEntity {
 }

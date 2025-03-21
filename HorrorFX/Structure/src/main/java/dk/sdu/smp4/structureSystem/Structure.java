@@ -1,38 +1,6 @@
 package dk.sdu.smp4.structureSystem;
 
-import dk.sdu.smp4.common.data.DynamicEntity;
-import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.data.StaticEntity;
-import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.data.HardEntity;
 
-public class Structure extends StaticEntity {
-
-    public Structure(){
-    }
-
-    public Structure(double width, double height){
-        this.setWidth(width);
-        this.setHeight(height);
-    }
-
-    @Override
-    public void collide(World world, Entity entity) {
-        DynamicEntity player = (DynamicEntity) entity;
-        if (player.isSolid()) {
-
-            // Check collision with sides (left/right)
-            if (player.getPreviousX() - player.getRadius() <= this.getX() + this.getWidth() / 2 || player.getPreviousX() + player.getRadius() >= this.getX() - this.getWidth() / 2) {
-                if (player.getPreviousY() - player.getRadius() <= this.getY() + this.getHeight() / 2 && player.getPreviousY() + player.getRadius() >= this.getY() - this.getHeight() / 2) {
-                    player.setX(player.getPreviousX());
-                }
-            }
-
-            // Check collision with top/bottom
-            if (player.getPreviousY() - player.getRadius() <= this.getY() + this.getHeight() / 2 || player.getPreviousY() + player.getRadius() >= this.getY() - this.getHeight() / 2) {
-                if (player.getPreviousX() - player.getRadius() <= this.getX() + this.getWidth() / 2 && player.getPreviousX() + player.getRadius() >= this.getX() - this.getWidth() / 2) {
-                    player.setY(player.getPreviousY());
-                }
-            }
-        }
-    }
+public class Structure extends HardEntity {
 }
