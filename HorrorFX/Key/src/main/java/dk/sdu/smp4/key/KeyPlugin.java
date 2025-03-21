@@ -28,10 +28,6 @@ public class KeyPlugin implements IGamePluginService {
         key.setPolygonCoordinates(
                 -5, -20,  // Top left
                 5, -20,   // Top right
-                5, -15,   // Right notch
-                10, -15,  // Right notch
-                10, -10,  // Right notch
-                5, -10,   // Right notch
                 5, 0,     // Right side
                 10, 0,    // Right side
                 10, 5,    // Right side
@@ -49,6 +45,7 @@ public class KeyPlugin implements IGamePluginService {
                 );
         key.setX(randomX);
         key.setY(randomY);
+        key.setPaint("gold");
         return key;
     }
 
