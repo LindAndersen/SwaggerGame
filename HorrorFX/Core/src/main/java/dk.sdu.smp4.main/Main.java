@@ -167,4 +167,5 @@ public class Main extends Application {
     private Collection<? extends IPostEntityProcessingService> getPostEntityProcessor(){
         return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
+
 }
