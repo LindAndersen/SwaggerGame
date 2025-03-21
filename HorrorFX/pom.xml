@@ -19,6 +19,7 @@
     <module>PlayerCircleLight</module>
     <module>CommonPlayerLight</module>
     <module>PlayerConeLight</module>
+    <module>Room</module>
   </modules>
   <properties>
     <java>java</java>

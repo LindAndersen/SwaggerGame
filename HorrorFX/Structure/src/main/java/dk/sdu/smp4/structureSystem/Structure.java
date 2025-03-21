@@ -9,16 +9,36 @@ public class Structure extends StaticEntity {
     @Override
     public void collide(World world, Entity entity) {
         DynamicEntity player = (DynamicEntity) entity;
-        // Check collision with sides (left/right)
-        if ((player.getPreviousX() - player.getRadius() <= this.getX() + this.getRadius() || player.getPreviousX() + player.getRadius() >= this.getX() - this.getRadius())
-                && (player.getPreviousY() - player.getRadius() <= this.getY() + this.getRadius() && player.getPreviousY() + player.getRadius() >= this.getY() - this.getRadius())) {
-            player.setX(player.getPreviousX());
-        }
+        if (player.isSolid()) {
+            System.out.println();
 
-        // Check collision with top/bottom
-        if ((player.getPreviousY() - player.getRadius() <= this.getY() + this.getRadius() || player.getPreviousY() + player.getRadius() >= this.getY() - this.getRadius())
-                && (player.getPreviousX() - player.getRadius() <= this.getX() + this.getRadius() && player.getPreviousX() + player.getRadius() >= this.getX() - this.getRadius())) {
-            player.setY(player.getPreviousY());
+            // Check collision with sides (left/right)
+            if (player.getPreviousX() - player.getRadius() <= this.getX() + this.getWidth() / 2 || player.getPreviousX() + player.getRadius() >= this.getX() - this.getWidth() / 2) {
+                if (player.getPreviousY() - player.getRadius() <= this.getY() + this.getHeight() / 2 && player.getPreviousY() + player.getRadius() >= this.getY() - this.getHeight() / 2) {
+                    player.setX(player.getPreviousX());
+                }
+            }
+
+            // Check collision with top/bottom
+            if (player.getPreviousY() - player.getRadius() <= this.getY() + this.getHeight() / 2 || player.getPreviousY() + player.getRadius() >= this.getY() - this.getHeight() / 2) {
+                if (player.getPreviousX() - player.getRadius() <= this.getX() + this.getWidth() / 2 && player.getPreviousX() + player.getRadius() >= this.getX() - this.getWidth() / 2) {
+                    player.setY(player.getPreviousY());
+                }
+            }
+
+
+//            // Check collision with sides (left/right)
+//            if ((player.getPreviousX() - player.getRadius() <= this.getX() + this.getWidth()/2 || player.getPreviousX() + player.getRadius() >= this.getX() - this.getWidth()/2)
+//                    && (player.getPreviousY() - player.getRadius() <= this.getY() + this.getHeight()/2 && player.getPreviousY() + player.getRadius() >= this.getY() - this.getHeight()/2)) {
+//                player.setX(player.getPreviousX());
+//            }
+//
+//            // Check collision with top/bottom
+//            if ((player.getPreviousY() - player.getRadius() <= this.getY() + this.getHeight()/2 || player.getPreviousY() + player.getRadius() >= this.getY() - this.getHeight()/2)
+//                    && (player.getPreviousX() - player.getRadius() <= this.getX() + this.getWidth()/2 && player.getPreviousX() + player.getRadius() >= this.getX() - this.getWidth()/2)) {
+//                player.setY(player.getPreviousY());
+//            }
+//        }
         }
     }
 }
