@@ -1,10 +1,9 @@
-package dk.sdu.smp4;
+package dk.sdu.smp4.door;
 
 import dk.sdu.smp4.common.Services.IGamePluginService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.common.interactable.Data.CommonInteractable;
 
 import java.util.Random;
 
@@ -12,6 +11,8 @@ public class DoorPlugin implements IGamePluginService {
 
     private Random random = new Random();
     private Entity door;
+    private int id;
+    private boolean isOpen = false;
 
 
 
@@ -22,7 +23,7 @@ public class DoorPlugin implements IGamePluginService {
     }
 
     private Entity createDoor(GameData gameData){
-        Entity door = new Door();
+        door = new Door();
 
         float randomX = random.nextFloat() * gameData.getDisplayWidth();
         float randomY = random.nextFloat() * gameData.getDisplayHeight();
@@ -30,12 +31,12 @@ public class DoorPlugin implements IGamePluginService {
         door.setPolygonCoordinates(-10, -20, 10, -20, 10, 20, -10, 20);
         door.setX(randomX);
         door.setY(randomY);
-        door.setRadius(8);
         return door;
     }
 
     @Override
     public void stop(GameData gameData, World world) {
-        world.removeEntity(door);
+
+
     }
 }

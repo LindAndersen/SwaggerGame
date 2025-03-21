@@ -14,6 +14,7 @@
     <module>AISpider</module>
     <module>CommonLightSource</module>
     <module>Door</module>
+    <module>Key</module>
   </modules>
   <properties>
     <java>java</java>

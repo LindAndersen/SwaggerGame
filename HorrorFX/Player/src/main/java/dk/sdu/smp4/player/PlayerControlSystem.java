@@ -39,10 +39,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
             if (player.getY() > gameData.getDisplayHeight()) {
-                player.setY(gameData.getDisplayHeight()-1);
+                player.setY(gameData.getDisplayHeight() - 1);
             }
-
-
         }
     }
 }
