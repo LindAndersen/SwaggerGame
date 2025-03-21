@@ -11,7 +11,7 @@ import java.util.Random;
  */
 public class StructurePlugin implements IGamePluginService
 {
-    private StaticEntity structure;
+    private Structure structure;
 
     @Override
     public void start(GameData gameData, World world) {
@@ -21,7 +21,7 @@ public class StructurePlugin implements IGamePluginService
         }
     }
 
-    private StaticEntity createStructure(GameData gameData){
+    public Structure createStructure(GameData gameData){
         Structure structure = new Structure();
 
         Random rnd = new Random();
@@ -41,12 +41,11 @@ public class StructurePlugin implements IGamePluginService
         structure.setWidth(width);
         structure.setHeight(height);
         structure.setSolid(true);
-        structure.setRotation(90);
         return structure;
     }
 
-    private StaticEntity createStructure(GameData gameData, int height, int width, double x, double y){
-        StaticEntity structure = new Structure();
+    public static Structure createStructure(GameData gameData, int height, int width, double x, double y){
+        Structure structure = new Structure();
 
         double halfWidth = width / 2.0;
         double halfHeight = height / 2.0;
