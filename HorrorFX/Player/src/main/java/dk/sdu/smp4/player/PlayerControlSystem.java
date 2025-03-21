@@ -5,6 +5,8 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.events.EventBus;
+import dk.sdu.smp4.common.events.PlayerPositionEvent;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
 
@@ -78,11 +80,13 @@ public class PlayerControlSystem implements IEntityProcessingService {
             if (player.getY() > gameData.getDisplayHeight()) {
                 player.setY(gameData.getDisplayHeight() - 1);
             }
+            EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
 
             for (IPlayerLightProcessor spi : getEntityPlayerLights())
             {
                 spi.processPlayerLight(player, gameData, world);
             }
+
         }
     }
 
