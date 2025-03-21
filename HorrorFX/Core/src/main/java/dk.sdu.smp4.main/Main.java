@@ -64,7 +64,6 @@ public class Main extends Application {
             if (event.getCode().equals(KeyCode.E)) {
                 gameData.getKeys().setKey(GameKeys.INTERACT, true);
             }
-
         });
         scene.setOnKeyReleased(event -> {
             if (event.getCode().equals(KeyCode.A)) {

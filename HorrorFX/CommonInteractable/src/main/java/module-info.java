@@ -3,4 +3,3 @@ module CommonInteractable {
     exports dk.sdu.smp4.common.interactable.Services;
     exports dk.sdu.smp4.common.interactable.data;
 }
-

@@ -13,5 +13,4 @@ module Player {
     requires Common;
     provides dk.sdu.smp4.common.Services.IGamePluginService with dk.sdu.smp4.player.PlayerPlugin;
     provides dk.sdu.smp4.common.Services.IEntityProcessingService with dk.sdu.smp4.player.PlayerControlSystem;
-
 }
