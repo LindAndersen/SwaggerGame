@@ -1,6 +1,7 @@
 package dk.sdu.smp4;
 
 import dk.sdu.smp4.common.Services.IGamePluginService;
+import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
@@ -19,9 +20,9 @@ public class QuestItemPlugin implements IGamePluginService {
         world.removeEntity(QuestNote);
     }
 
-    private Entity CreateQuest(GameData gameData) {
+    private SoftEntity CreateQuest(GameData gameData) {
 
-        Entity QuestNote = new QuestItem();
+        SoftEntity QuestNote = new QuestItem();
         QuestNote.setPolygonCoordinates(-5,-5,10,0,-5,5, 10, 10);
 
         QuestNote.setX(20);

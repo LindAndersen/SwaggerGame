@@ -14,9 +14,19 @@ public abstract class Entity implements Serializable {
     private double x;
     private double y;
     private double rotation;
-    private float radius;
     private Paint paint;
     private boolean shouldRotateAlternative;
+    private boolean solid;
+
+    public boolean isSolid() {
+        return solid;
+    }
+
+    public void setSolid(boolean solid) {
+        this.solid = solid;
+    }
+
+
 
     public Entity()
     {
@@ -63,13 +73,8 @@ public abstract class Entity implements Serializable {
         return rotation;
     }
 
-    public void setRadius(float radius) {
-        this.radius = radius;
-    }
         
-    public float getRadius() {
-        return this.radius;
-    }
+
 
     public Paint getPaint() {
         return paint;

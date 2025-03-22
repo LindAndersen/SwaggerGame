@@ -1,6 +1,6 @@
 package dk.sdu.smp4;
-import dk.sdu.smp4.common.data.Entity;
+import dk.sdu.smp4.common.data.SoftEntity;
 
-public class QuestItem extends Entity {
+public class QuestItem extends SoftEntity {
 
 }

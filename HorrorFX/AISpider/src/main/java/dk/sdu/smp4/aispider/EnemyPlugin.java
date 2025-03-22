@@ -1,12 +1,12 @@
 package dk.sdu.smp4.aispider;
 
 import dk.sdu.smp4.common.Services.IGamePluginService;
-import dk.sdu.smp4.common.data.Entity;
+import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 
 public class EnemyPlugin implements IGamePluginService {
-    private Entity enemy;
+    private SoftEntity enemy;
 
     @Override
     public void start(GameData gameData, World world) {
@@ -20,12 +20,13 @@ public class EnemyPlugin implements IGamePluginService {
         world.removeEntity(enemy);
     }
 
-    private Entity createEnemy(GameData gameData) {
+    private SoftEntity createEnemy(GameData gameData) {
         enemy = new enemy();
         enemy.setPolygonCoordinates(-8, -8, 8, -8, 8, 8, -8, 8); // Simple square
         enemy.setX(Math.random() * gameData.getDisplayWidth());  // Spawn at a random location
         enemy.setY(Math.random() * gameData.getDisplayHeight());
         enemy.setRadius(8);
+        enemy.setSolid(true);
         enemy.setPaint("red");
         return enemy;
 
