@@ -5,6 +5,7 @@ import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
 
 module PlayerConeLight {
     requires Common;
+    requires CommonLightSource;
     requires CommonPlayerLight;
     provides IPlayerLightPlugin with PlayerConeLightPlugin;
     provides IPlayerLightProcessor with PlayerConeLightProcessor;
