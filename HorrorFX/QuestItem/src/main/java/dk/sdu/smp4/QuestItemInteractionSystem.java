@@ -11,7 +11,7 @@ import javax.management.QueryEval;
 import javax.swing.*;
 
 public class QuestItemInteractionSystem implements IQuestInteractable {
-    //imlement the other interface.... then put all this into that interfaces proces method... then it work :)
+    //implement the other interface.... then put all this into that interfaces proces method... then it work :)
     @Override
     public void interact(Entity player, GameData gameData, World world) {
 
