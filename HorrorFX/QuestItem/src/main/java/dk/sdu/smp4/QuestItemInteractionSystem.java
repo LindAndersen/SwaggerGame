@@ -7,9 +7,11 @@ import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 
+import javax.management.QueryEval;
 import javax.swing.*;
 
 public class QuestItemInteractionSystem implements IQuestInteractable {
+    //implement the other interface.... then put all this into that interfaces proces method... then it work :)
     @Override
     public void interact(Entity player, GameData gameData, World world) {
 
@@ -18,11 +20,16 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
             if (isQuestItemWithinReach(player, questItem))
             {
                 System.out.println("Yoink");
-                world.removeEntity(questItem);
+
+                //swapQuestItemPosition((QuestItem) questItem);
+                questItem.setX(50);
+                questItem.setY(50);
+
 
                 // 2. Display popup, when pressing E.
-                displayQuestPopup();
+                displayQuestPopup((QuestItem) questItem);
             }
+
         }
     }
 
@@ -38,10 +45,31 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
         return distancePlayerToQuest < 10;
     }
 
-    private void displayQuestPopup() {
+    private void displayQuestPopup(QuestItem questItem) {
         // Display a pop-up with quest details
-        JOptionPane.showMessageDialog(null, "Quest: Retrieve the ancient scroll from the haunted forest.");
+
+
+        // is quest started? (if statement check)
+        // If not display quest description start
+        JOptionPane.showMessageDialog(null, questItem.getQuestDescription());
+        // set quest started to true
+
+        // (if check is quest is already started) if started, check distance to player.
+        //TODO check distance to player, if within reach done. (queststarted booleaen should be true)
+        //remove entity when done.
+
     }
+
+    private void swapQuestItemPosition(QuestItem questItem) {
+        // Swap quest item position
+        questItem.setX(questItem.getQuestCompX());
+        questItem.setY(questItem.getQuestCompY());
+    }
+    private boolean isQuestComplete() {
+        // Check if quest is complete
+        return false;
+    }
+
 }
 
 
