@@ -13,7 +13,7 @@ import java.util.List;
 public class CommonPlayerLight extends CommonLightSource {
     public CommonPlayerLight()
     {
-        setPaint(Color.GREEN.deriveColor(0.5,0.5,0.5,0.3));
+        setPaint(Color.YELLOW.deriveColor(0,1,1,0.2));
     }
 
     @Override

@@ -12,23 +12,29 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity light : world.getEntities(CommonLightSource.class)) {
-            CommonLightSource lightSource = (CommonLightSource) light;
+        for (Entity entity : world.getEntities(CommonLightSource.class)) {
+            CommonLightSource light = (CommonLightSource) entity;
 
+            // Gather obstacles
             List<Polygon> obstacles = new ArrayList<>();
-            for (Entity entity : world.getEntities(HardEntity.class)) {
-                if (!entity.getID().equals(light.getID())) {
-                    obstacles.add(getTranslatedPolygon(entity));
+            for (Entity obstacle : world.getEntities(HardEntity.class)) {
+                if (!obstacle.getID().equals(light.getID())) {
+                    obstacles.add(getTranslatedPolygon(obstacle));
                 }
             }
 
-            double[] polygonCoords = calculateLightPolygon(lightSource, obstacles);
+            // Calculate light polygon
+            double[] polygonCoords = calculateLightPolygon(light, obstacles);
+
+            // Translate coordinates to local space (around light's position)
             for (int i = 0; i < polygonCoords.length; i += 2) {
                 polygonCoords[i] -= light.getX();
                 polygonCoords[i + 1] -= light.getY();
             }
 
+            // Apply to light entity
             light.setPolygonCoordinates(polygonCoords);
+            //light.setPaint(Color.rgb(255, 255, 200, 0.25));
         }
     }
 
@@ -50,7 +56,6 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
 
                 polygon.getPoints().addAll(rotatedX + pivotX, rotatedY + pivotY);
             }
-
         } else {
             double centerX = 0;
             double centerY = 0;
@@ -62,11 +67,8 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
             centerY /= (coords.length / 2);
 
             for (int i = 0; i < coords.length; i += 2) {
-                double x = coords[i];
-                double y = coords[i + 1];
-
-                double dx = x - centerX;
-                double dy = y - centerY;
+                double dx = coords[i] - centerX;
+                double dy = coords[i + 1] - centerY;
 
                 double rotatedX = dx * Math.cos(angle) - dy * Math.sin(angle);
                 double rotatedY = dx * Math.sin(angle) + dy * Math.cos(angle);
@@ -85,13 +87,15 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
         int numRays = light.getNumRays();
         double radius = light.getRadius() * light.getRadiusFactor();
 
-        double lightRotationRad = Math.toRadians(light.getRotation());
-        double halfAngleRad = Math.toRadians(light.getAngleWidth()) / 2.0;
-        double startAngle = lightRotationRad - halfAngleRad;
-        double endAngle = lightRotationRad + halfAngleRad;
+        double rotationRad = Math.toRadians(light.getRotation());
+        double spreadRad = Math.toRadians(light.getAngleWidth());
+        double startAngle = rotationRad - spreadRad / 2;
+        double endAngle = rotationRad + spreadRad / 2;
 
         for (int i = 0; i < numRays; i++) {
-            double angle = startAngle + (endAngle - startAngle) * i / (double)(numRays - 1);
+            double angle = startAngle + i * (endAngle - startAngle) / (numRays - 1);
+            angle = (angle + 2 * Math.PI) % (2 * Math.PI); // Normalize
+
             double endX = originX + radius * Math.cos(angle);
             double endY = originY + radius * Math.sin(angle);
 
@@ -112,6 +116,7 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
             points.add(new PointWithAngle(closestPoint[0], closestPoint[1], angle));
         }
 
+        // Sort by angle to form valid polygon shape
         points.sort(Comparator.comparingDouble(p -> p.angle));
         double[] coords = new double[points.size() * 2];
         for (int i = 0; i < points.size(); i++) {

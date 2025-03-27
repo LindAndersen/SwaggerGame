@@ -15,6 +15,7 @@ module Player {
     requires CommonPlayerLight;
     requires CommonInteractable;
     requires Common;
+    requires javafx.graphics;
     provides IGamePluginService with PlayerPlugin;
     provides IEntityProcessingService with PlayerControlSystem;
 }

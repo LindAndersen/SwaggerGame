@@ -4,7 +4,7 @@ import dk.sdu.smp4.commonplayerlight.data.CommonPlayerLight;
 
 public class ConeLight extends CommonPlayerLight {
     public ConeLight(){
-        setNumRays(100);
+        setNumRays(150);
         setAngleWidth(40);
         setRadiusFactor(30);
         setShouldRotateAlternative(true);

@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.Collection;
@@ -38,7 +39,7 @@ public class Main extends Application {
     public void start(Stage window) throws Exception {
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
-        Scene scene = new Scene(gameWindow);
+        Scene scene = new Scene(gameWindow, Color.BLACK);
         scene.setOnMouseMoved((MouseEvent event) -> {
             gameData.getKeys().setMouseMoved(true);
             double mouseX = event.getSceneX();
