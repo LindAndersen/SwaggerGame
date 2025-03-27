@@ -1,7 +1,7 @@
 package dk.sdu.smp4;
-import dk.sdu.smp4.common.data.Entity;
+import dk.sdu.smp4.common.data.SoftEntity;
 
-public class QuestItem extends Entity {
+public class QuestItem extends SoftEntity {
     public int getQuestRadius() {
         return questRadius;
     }
@@ -21,6 +21,7 @@ public class QuestItem extends Entity {
     public String getQuestDescription() {
         return questDescription;
     }
+
 
     public String getQuestName() {
         return questName;

@@ -38,9 +38,9 @@ public class Main extends Application {
     public void start(Stage window) throws Exception {
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
-
         Scene scene = new Scene(gameWindow);
         scene.setOnMouseMoved((MouseEvent event) -> {
+            gameData.getKeys().setMouseMoved(true);
             double mouseX = event.getSceneX();
             double mouseY = event.getSceneY();
             GameKeys.setMousePosition(mouseX, mouseY);
@@ -64,7 +64,6 @@ public class Main extends Application {
             if (event.getCode().equals(KeyCode.E)) {
                 gameData.getKeys().setKey(GameKeys.INTERACT, true);
             }
-
         });
         scene.setOnKeyReleased(event -> {
             if (event.getCode().equals(KeyCode.A)) {
@@ -167,4 +166,5 @@ public class Main extends Application {
     private Collection<? extends IPostEntityProcessingService> getPostEntityProcessor(){
         return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
+
 }
