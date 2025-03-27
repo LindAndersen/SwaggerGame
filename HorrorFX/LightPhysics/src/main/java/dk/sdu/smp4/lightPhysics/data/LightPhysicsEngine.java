@@ -1,10 +1,7 @@
 package dk.sdu.smp4.lightPhysics.data;
 
 import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
-import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.data.GameData;
-import dk.sdu.smp4.common.data.SoftEntity;
-import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.data.*;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -18,11 +15,11 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
     public void process(GameData gameData, World world) {
         for (Entity light : world.getEntities(CommonLightSource.class))
         {
-            for (Entity entity : world.getEntities())
+            for (Entity entity : world.getEntities(HardEntity.class))
             {
-                if (light.getID().equals(entity.getID()) || entity instanceof SoftEntity)
+                if (light.getID().equals(entity.getID()))
                 {
-                    light.setPaint(Color.GREEN);
+                    light.setPaint(Color.GREEN.deriveColor(1,1,1,0.3));
                     continue;
                 }
 
@@ -32,8 +29,12 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
                     double[] lightPolygonCoordinates = calculateLightPolygon(entity, (CommonLightSource) light);
                     if (lightPolygonCoordinates.length > 0) {
                         light.setPolygonCoordinates(lightPolygonCoordinates);
-                        light.setPaint(Color.RED);
+                        light.setPaint(Color.RED.deriveColor(1,1,1,0.3));
+                    } else {
+                        light.setPaint(Color.GREEN.deriveColor(1,1,1,0.3));
                     }
+                } else {
+                    light.setPaint(Color.GREEN.deriveColor(1,1,1,0.3));
                 }
             }
         }
@@ -43,10 +44,18 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
         double[] coords = entity.getPolygonCoordinates();
         Polygon polygon = new Polygon();
 
+        double rotationAngle = Math.toRadians(entity.getRotation());  // Convert rotation to radians
+        double pivotX = entity.getX();  // Rotation pivot point (entity's position)
+        double pivotY = entity.getY();
+
         for (int i = 0; i < coords.length; i+=2) {
-            double x = coords[i] + entity.getX();
-            double y = coords[i+1] + entity.getY();
-            polygon.getPoints().addAll(x, y);
+            double rotatedX = coords[i] * Math.cos(rotationAngle) - coords[i+1] * Math.sin(rotationAngle);
+            double rotatedY = coords[i+1] * Math.sin(rotationAngle) + coords[i+1] * Math.cos(rotationAngle);
+
+            double x = rotatedX + pivotX;
+            double y = rotatedY + pivotY;
+
+            polygon.getPoints().addAll(x, y);  // Add the rotated and translated point to the polygon
         }
 
         return polygon;
@@ -69,7 +78,7 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
 
         for (int i = 0; i < light.getNUM_RAYS(); i++) {
             double angle = Math.toRadians(i);
-            double rayX = lightX + light.getRadius() * Math.cos(angle);  // Extend the ray far out
+            double rayX = lightX + light.getRadius() * Math.cos(angle);
             double rayY = lightY + light.getRadius() * Math.sin(angle);
 
             double[] closestPoint = {rayX, rayY};
