@@ -29,7 +29,7 @@ public class Main extends Application {
     private final GameData gameData = new GameData();
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
-    private final Pane gameWindow = new Pane();
+    private final Pane gameWindow = gameData.getPane();
 
     public static void main(String[] args) {
         launch(Main.class);

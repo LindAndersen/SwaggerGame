@@ -1,10 +1,13 @@
 package dk.sdu.smp4.common.data;
 
+import javafx.scene.layout.Pane;
+
 public class GameData {
 
     private int displayWidth  = 800 ;
     private int displayHeight = 800;
     private final GameKeys keys = new GameKeys();
+    private final Pane pane = new Pane();
 
 
     public GameKeys getKeys() {
@@ -27,5 +30,7 @@ public class GameData {
         return displayHeight;
     }
 
-
+    public Pane getPane() {
+        return pane;
+    }
 }

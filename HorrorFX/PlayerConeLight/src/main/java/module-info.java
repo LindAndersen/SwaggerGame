@@ -4,6 +4,7 @@ import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
 
 module PlayerConeLight {
+    requires javafx.graphics;
     requires Common;
     requires CommonLightSource;
     requires CommonPlayerLight;
