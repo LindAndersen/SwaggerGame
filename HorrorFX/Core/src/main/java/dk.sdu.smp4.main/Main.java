@@ -140,6 +140,12 @@ public class Main extends Application {
                 gameWindow.getChildren().add(polygon);
             }
 
+            polygon.getPoints().clear();
+            for (double coord : entity.getPolygonCoordinates()) {
+                polygon.getPoints().add(coord);
+            }
+
+
             polygon.getTransforms().clear();
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());

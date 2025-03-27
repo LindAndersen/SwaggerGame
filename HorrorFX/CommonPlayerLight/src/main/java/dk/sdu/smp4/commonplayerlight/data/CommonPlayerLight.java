@@ -13,6 +13,11 @@ import java.util.List;
 public class CommonPlayerLight extends CommonLightSource {
     public CommonPlayerLight()
     {
-        setPaint(Color.GREEN.deriveColor(1,1,1,0.3));
+        setPaint(Color.GREEN.deriveColor(0.5,0.5,0.5,0.3));
+    }
+
+    @Override
+    public void setRadius(double radius) {
+        super.setRadius(radius*getRadiusFactor());
     }
 }

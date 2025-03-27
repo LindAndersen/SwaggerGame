@@ -4,8 +4,10 @@ import dk.sdu.smp4.commonplayerlight.data.CommonPlayerLight;
 
 public class CircleLight extends CommonPlayerLight {
 
-    public CircleLight() {
-        setNUM_RAYS(90);
+    public CircleLight(){
+        setNumRays(100);
+        setAngleWidth(360);
+        setRadiusFactor(5);
+        setShouldRotateAlternative(false);
     }
-
 }
