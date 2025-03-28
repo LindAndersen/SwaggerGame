@@ -1,8 +1,6 @@
-package dk.sdu.smp4.roomsystem;
+package dk.sdu.smp4.structureSystem;
 
-import dk.sdu.smp4.structureSystem.Structure;
-
-public class Room {
+public class Room extends Structure {
     Structure topWall, bottomWall, leftWall, rightWall;
 
     public Structure getTopWall() {

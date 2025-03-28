@@ -21,7 +21,6 @@
     <module>PlayerConeLight</module>
     <module>Door</module>
     <module>Key</module>
-    <module>Room</module>
   </modules>
   <properties>
     <java>java</java>
