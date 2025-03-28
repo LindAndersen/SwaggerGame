@@ -16,10 +16,10 @@ public class StructurePlugin implements IGamePluginService
 
     @Override
     public void start(GameData gameData, World world) {
-        for (int i = 0; i < 10; i++) {
-            structure = createStructure(gameData);
-            world.addEntity(structure);
-        }
+//        for (int i = 0; i < 10; i++) {
+//            structure = createStructure(gameData);
+//            world.addEntity(structure);
+//        }
 
         room = createRoom(gameData, 100, 200, 20, 200, 200);
         world.addEntity(room.getBottomWall());

@@ -6,6 +6,8 @@ import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 
 import javax.management.QueryEval;
 import javax.swing.*;
@@ -21,13 +23,11 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
             {
                 System.out.println("Yoink");
 
-                //swapQuestItemPosition((QuestItem) questItem);
-                questItem.setX(50);
-                questItem.setY(50);
-
+//                swapQuestItemPosition((QuestItem) questItem);
+                world.removeEntity(questItem);
 
                 // 2. Display popup, when pressing E.
-                displayQuestPopup((QuestItem) questItem);
+                displayQuestPopup(gameData, (QuestItem) questItem);
             }
 
         }
@@ -45,19 +45,18 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
         return distancePlayerToQuest < 10;
     }
 
-    private void displayQuestPopup(QuestItem questItem) {
+    private void displayQuestPopup(GameData gameData, QuestItem questItem) {
         // Display a pop-up with quest details
 
+        gameData.setQuestPane("Quest Description", questItem.getQuestDescription());
 
-        // is quest started? (if statement check)
-        // If not display quest description start
-        JOptionPane.showMessageDialog(null, questItem.getQuestDescription());
-        // set quest started to true
-
-        // (if check is quest is already started) if started, check distance to player.
-        //TODO check distance to player, if within reach done. (queststarted booleaen should be true)
-        //remove entity when done.
-
+//        Platform.runLater(() -> {
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setTitle("Quest Description");
+//            alert.setHeaderText(null);
+//            alert.setContentText(questItem.getQuestDescription());
+//            alert.showAndWait();
+//        });
     }
 
     private void swapQuestItemPosition(QuestItem questItem) {

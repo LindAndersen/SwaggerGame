@@ -11,8 +11,8 @@ public class QuestItemPlugin implements IGamePluginService {
     private Entity QuestNote;
     @Override
     public void start(GameData gameData, World world) {
-        world.addEntity(CreateQuest("name", "description", 1, 20, 20, 8, 100, 140));
-        world.addEntity(CreateQuest("name2", "description2", 1, 40, 40, 8, 100, 140));
+        world.addEntity(CreateQuest("name", "description", 1, 600, 400, 8, 100, 140));
+        world.addEntity(CreateQuest("name2", "description2", 1, 400, 400, 8, 100, 140));
     }
 
     @Override
