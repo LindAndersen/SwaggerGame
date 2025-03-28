@@ -18,6 +18,13 @@ public abstract class Entity implements Serializable {
     private boolean shouldRotateAlternative;
     private boolean solid;
 
+    public Entity()
+    {
+        paint = Color.BLACK;
+        shouldRotateAlternative = false;
+
+    }
+
     public boolean isSolid() {
         return solid;
     }
@@ -26,14 +33,6 @@ public abstract class Entity implements Serializable {
         this.solid = solid;
     }
 
-
-
-    public Entity()
-    {
-        paint = Color.BLACK;
-        shouldRotateAlternative = false;
-
-    }
 
     public String getID() {
         return ID.toString();
