@@ -9,18 +9,21 @@ import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polygon;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
 
 import java.util.Collection;
 import java.util.Map;
@@ -33,24 +36,59 @@ public class Main extends Application {
     private final GameData gameData = new GameData();
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
-    private final Pane gameWindow = gameData.getGameWindow();
-
+    private Pane gamePane = gameData.getGamePane();
+    private StackPane startPane = new StackPane();
     public static void main(String[] args) {
         launch(Main.class);
     }
 
     @Override
-    public void start(Stage window) throws Exception {
-        gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+    public void start(Stage stage) throws Exception {
+        Scene startScene = new Scene(startPane, gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        stage.setScene(startScene);
 
-        Scene scene = new Scene(gameWindow);
-        scene.setOnMouseMoved((MouseEvent event) -> {
+        setStartPane();
+
+        stage.setTitle("HorrorFX");
+        stage.show();
+    }
+
+    private void setStartPane() {
+        startPane.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+
+        Label title = new Label("HorrorFX");
+        title.setPrefSize(100,100);
+        Button startButton = new Button("Start");
+
+        startButton.setOnMouseClicked((MouseEvent event) -> {
+            Stage stage = (Stage) startPane.getScene().getWindow();
+            stage.setScene(createGameScene());
+        });
+
+        Image image = new Image(getClass().getResource("/spider2.png").toExternalForm());
+        ImageView background = new ImageView(image);
+        background.setPreserveRatio(false);
+        background.setSmooth(true);
+        background.setCache(true);
+        background.fitWidthProperty().bind(startPane.widthProperty());
+        background.fitHeightProperty().bind(startPane.heightProperty());
+
+        VBox vBox = new VBox(20);
+        vBox.setAlignment(Pos.CENTER);
+
+        vBox.getChildren().addAll(title, startButton);
+        startPane.getChildren().addAll(background, vBox);
+    }
+
+    private Scene createGameScene(){
+        Scene gameScene = new Scene(gamePane);
+        gameScene.setOnMouseMoved((MouseEvent event) -> {
             gameData.getKeys().setMouseMoved(true);
             double mouseX = event.getSceneX();
             double mouseY = event.getSceneY();
             GameKeys.setMousePosition(mouseX, mouseY);
         });
-        scene.setOnKeyPressed(event -> {
+        gameScene.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.A)) {
                 gameData.getKeys().setKey(GameKeys.LEFT, true);
             }
@@ -70,7 +108,7 @@ public class Main extends Application {
                 gameData.getKeys().setKey(GameKeys.INTERACT, true);
             }
         });
-        scene.setOnKeyReleased(event -> {
+        gameScene.setOnKeyReleased(event -> {
             if (event.getCode().equals(KeyCode.A)) {
                 gameData.getKeys().setKey(GameKeys.LEFT, false);
             }
@@ -90,6 +128,7 @@ public class Main extends Application {
                 gameData.getKeys().setKey(GameKeys.INTERACT, false);
             }
 
+
         });
 
         // Lookup all Game Plugins using ServiceLoader
@@ -99,12 +138,10 @@ public class Main extends Application {
         for (Entity entity : world.getEntities()) {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());
             polygons.put(entity, polygon);
-            gameWindow.getChildren().add(polygon);
+            gamePane.getChildren().add(polygon);
         }
         render();
-        window.setScene(scene);
-        window.setTitle("HorrorFX");
-        window.show();
+        return gameScene;
     }
 
     private void render() {
@@ -133,7 +170,7 @@ public class Main extends Application {
             if(!world.getEntities().contains(polygonEntity)){
                 Polygon removedPolygon = polygons.get(polygonEntity);
                 polygons.remove(polygonEntity);
-                gameWindow.getChildren().remove(removedPolygon);
+                gamePane.getChildren().remove(removedPolygon);
             }
         }
 
@@ -142,7 +179,7 @@ public class Main extends Application {
             if (polygon == null) {
                 polygon = new Polygon(entity.getPolygonCoordinates());
                 polygons.put(entity, polygon);
-                gameWindow.getChildren().add(polygon);
+                gamePane.getChildren().add(polygon);
             }
 
             polygon.getTransforms().clear();
