@@ -12,7 +12,8 @@ import java.util.Random;
 public class StructurePlugin implements IGamePluginService
 {
     private Structure structure;
-    private Room room;
+
+    private Room room, room2;
 
     @Override
     public void start(GameData gameData, World world) {
@@ -21,11 +22,17 @@ public class StructurePlugin implements IGamePluginService
 //            world.addEntity(structure);
 //        }
 
-        room = createRoom(gameData, 100, 200, 20, 200, 200);
+        room = createRoom(gameData, 200, 300, 20, 400, 400);
         world.addEntity(room.getBottomWall());
         world.addEntity(room.getLeftWall());
         world.addEntity(room.getTopWall());
         world.addEntity(room.getRightWall());
+
+        room2 = createRoom(gameData, 600, 600, 20, 300, 400);
+        world.addEntity(room2.getBottomWall());
+        world.addEntity(room2.getLeftWall());
+        world.addEntity(room2.getTopWall());
+        world.addEntity(room2.getRightWall());
     }
 
     public Structure createStructure(GameData gameData){ //TODO: Probably not necessary to have random structures
