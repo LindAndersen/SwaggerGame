@@ -14,13 +14,12 @@ public abstract class Entity implements Serializable {
     private double x;
     private double y;
     private double rotation;
-    private float radius;
     private Paint paint;
     private boolean shouldRotateAlternative;
+    private boolean solid;
     private Map<String, Object> properties = new HashMap<>();
     private Set<String> inventory = new HashSet<>();
     private String type;
-
 
     public Entity()
     {
@@ -29,6 +28,13 @@ public abstract class Entity implements Serializable {
 
     }
 
+    public boolean isSolid() {
+        return solid;
+    }
+
+    public void setSolid(boolean solid) {
+        this.solid = solid;
+    }
     public Object getProperty(String key) {
         return properties.get(key);
     }
@@ -48,6 +54,7 @@ public abstract class Entity implements Serializable {
     public void setType(String type){
         this.type = type;
     }
+
 
     public String getID() {
         return ID.toString();
@@ -87,13 +94,8 @@ public abstract class Entity implements Serializable {
         return rotation;
     }
 
-    public void setRadius(float radius) {
-        this.radius = radius;
-    }
         
-    public float getRadius() {
-        return this.radius;
-    }
+
 
     public Paint getPaint() {
         return paint;

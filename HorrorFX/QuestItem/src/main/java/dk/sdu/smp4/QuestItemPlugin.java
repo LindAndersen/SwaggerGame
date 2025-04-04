@@ -1,6 +1,7 @@
 package dk.sdu.smp4;
 
 import dk.sdu.smp4.common.Services.IGamePluginService;
+import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
@@ -10,8 +11,8 @@ public class QuestItemPlugin implements IGamePluginService {
     private Entity QuestNote;
     @Override
     public void start(GameData gameData, World world) {
-        QuestNote = CreateQuest(gameData);
-        world.addEntity(QuestNote);
+        world.addEntity(CreateQuest("name", "description", 1, 600, 400, 8, 100, 140));
+        world.addEntity(CreateQuest("name2", "description2", 1, 400, 400, 8, 100, 140));
     }
 
     @Override
@@ -19,18 +20,16 @@ public class QuestItemPlugin implements IGamePluginService {
         world.removeEntity(QuestNote);
     }
 
-    private Entity CreateQuest(GameData gameData) {
+    private Entity CreateQuest(String questName, String questDescription, int questID, int questX, int questY, int questRadius, int questCompX, int questCompY) {
 
-        Entity QuestNote = new QuestItem();
-        QuestNote.setPolygonCoordinates(-5,-5,10,0,-5,5, 10, 10);
+        SoftEntity quest = new QuestItem(questName, questDescription, questID, questX, questY, questRadius, questCompX, questCompY);
+        quest.setPolygonCoordinates(-5,-5,5,0,-5,5, 10, 10);
 
-        QuestNote.setX(20);
-        QuestNote.setY(gameData.getDisplayWidth() -20);
+        quest.setX(questX);
+        quest.setY(questY);
 
-        QuestNote.setRadius(8);
-
-        QuestNote.setType("guest_note");
-
-        return QuestNote;
+        quest.setRadius(questRadius);
+        quest.setType("guest");
+        return quest;
     }
 }

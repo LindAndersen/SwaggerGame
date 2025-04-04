@@ -1,6 +1,6 @@
 package dk.sdu.smp4.playerconelight;
 
-import dk.sdu.smp4.common.data.Entity;
+import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
@@ -10,12 +10,13 @@ import java.util.List;
 
 public class PlayerConeLightPlugin implements IPlayerLightPlugin {
     @Override
-    public void createPlayerLight(Entity player, GameData gameData, World world) {
-        Entity lightEntity = new ConeLight();
+    public void createPlayerLight(SoftEntity player, GameData gameData, World world) {
+        SoftEntity lightEntity = new ConeLight();
 
         lightEntity.setX(player.getX());
         lightEntity.setY(player.getY());
         lightEntity.setRadius(player.getRadius()*30);
+        lightEntity.setSolid(false);
 
         List<Double> conePoints = new ArrayList<>();
         conePoints.add(0.0);

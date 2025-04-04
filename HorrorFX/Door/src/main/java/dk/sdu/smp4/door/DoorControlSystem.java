@@ -7,6 +7,7 @@ import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 
 public class DoorControlSystem implements IQuestInteractable {
+
     private static final String REQUIRED_KEY = "golden_key";
 
     @Override

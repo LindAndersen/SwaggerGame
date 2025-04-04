@@ -8,4 +8,5 @@ import dk.sdu.smp4.common.data.World;
 public interface IQuestInteractable {
     void interact(Entity player, GameData gameData, World world);
     void consume(GameData gameData, World world);
+
 }
