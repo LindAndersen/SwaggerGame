@@ -32,6 +32,7 @@ public class DoorPlugin implements IGamePluginService {
         door.setX(randomX);
         door.setY(randomY);
         door.setPaint("brown");
+        door.setType("brown_door");
         return door;
     }
 

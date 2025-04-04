@@ -29,6 +29,8 @@ public class QuestItemPlugin implements IGamePluginService {
 
         QuestNote.setRadius(8);
 
+        QuestNote.setType("guest_note");
+
         return QuestNote;
     }
 }

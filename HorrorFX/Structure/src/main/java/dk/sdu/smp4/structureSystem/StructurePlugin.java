@@ -30,6 +30,7 @@ public class StructurePlugin implements IGamePluginService
         structure.setY(rnd.nextInt(500));
         structure.setRadius(structureSize);
         structure.setRotation(90);
+        structure.setType("structure");
         return structure;
     }
 
