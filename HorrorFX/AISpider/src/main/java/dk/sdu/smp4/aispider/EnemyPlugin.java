@@ -28,6 +28,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setRadius(8);
         enemy.setSolid(true);
         enemy.setPaint("red");
+        enemy.setType("spider");
         return enemy;
 
     }

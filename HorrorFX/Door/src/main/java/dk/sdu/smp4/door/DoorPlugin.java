@@ -36,6 +36,7 @@ public class DoorPlugin implements IGamePluginService {
         door.setHeight(40);
         door.setSolid(true);
         door.setPaint("brown");
+        door.setType("brown_door");
         return door;
     }
 
