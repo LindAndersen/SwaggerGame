@@ -6,4 +6,6 @@ module Core {
     uses dk.sdu.smp4.common.Services.IGamePluginService;
     uses dk.sdu.smp4.common.Services.IEntityProcessingService;
     uses dk.sdu.smp4.common.Services.IPostEntityProcessingService;
+    uses dk.sdu.smp4.common.Services.IGraphicsProcessingService;
+
 }

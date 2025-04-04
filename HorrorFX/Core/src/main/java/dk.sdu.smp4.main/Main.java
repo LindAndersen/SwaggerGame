@@ -2,6 +2,7 @@ package dk.sdu.smp4.main;
 
 import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.Services.IGamePluginService;
+import dk.sdu.smp4.common.Services.IGraphicsProcessingService;
 import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
@@ -21,6 +22,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -140,6 +142,13 @@ public class Main extends Application {
 
     private Collection<? extends IPostEntityProcessingService> getPostEntityProcessor(){
         return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+
+    }
+    private Collection<? extends IGraphicsProcessingService> getGraphicsServices() {
+        return ServiceLoader.load(IGraphicsProcessingService.class)
+                .stream()
+                .map(ServiceLoader.Provider::get)
+                .collect(Collectors.toList());
     }
 
 }
