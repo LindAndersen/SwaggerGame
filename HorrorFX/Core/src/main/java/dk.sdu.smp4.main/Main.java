@@ -124,36 +124,11 @@ public class Main extends Application {
     }
 
     private void draw() {
-        for (Entity polygonEntity : polygons.keySet()) {
-            if(!world.getEntities().contains(polygonEntity)){
-                Polygon removedPolygon = polygons.get(polygonEntity);
-                polygons.remove(polygonEntity);
-                gameWindow.getChildren().remove(removedPolygon);
-            }
+        for (IGraphicsProcessingService graphicsService : getGraphicsServices()) {
+            graphicsService.render(gameData, world, gameWindow);
         }
-
-        for (Entity entity : world.getEntities()) {
-            Polygon polygon = polygons.get(entity);
-            if (polygon == null) {
-                polygon = new Polygon(entity.getPolygonCoordinates());
-                polygons.put(entity, polygon);
-                gameWindow.getChildren().add(polygon);
-            }
-
-            polygon.getTransforms().clear();
-            polygon.setTranslateX(entity.getX());
-            polygon.setTranslateY(entity.getY());
-            if (entity.isShouldRotateAlternative())
-            {
-                polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
-            } else
-            {
-                polygon.setRotate(entity.getRotation());
-            }
-            polygon.setFill(entity.getPaint());
-        }
-
     }
+
 
     private Collection<? extends IGamePluginService> getPluginServices() {
         return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
