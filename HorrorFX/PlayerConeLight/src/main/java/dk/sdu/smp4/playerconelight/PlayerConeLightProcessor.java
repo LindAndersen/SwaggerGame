@@ -11,7 +11,7 @@ import javafx.geometry.Point2D;
 public class PlayerConeLightProcessor implements IPlayerLightProcessor {
     @Override
     public void processPlayerLight(SoftEntity player, GameData gameData, World world) {
-        Point2D mouseLocal = gameData.getPane().sceneToLocal(GameKeys.getMouseX(), GameKeys.getMouseY());
+        Point2D mouseLocal = gameData.getRoot().sceneToLocal(GameKeys.getMouseX(), GameKeys.getMouseY());
 
         double dx = mouseLocal.getX() - player.getX();
         double dy = mouseLocal.getX() - player.getY();

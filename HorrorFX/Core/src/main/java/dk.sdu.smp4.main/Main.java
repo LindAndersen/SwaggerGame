@@ -7,13 +7,20 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -29,7 +36,9 @@ public class Main extends Application {
     private final GameData gameData = new GameData();
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
-    private final Pane gameWindow = gameData.getPane();
+    private final StackPane gameWindow = gameData.getRoot();
+    private Rectangle blackOverlay;
+
 
     public static void main(String[] args) {
         launch(Main.class);
@@ -39,7 +48,7 @@ public class Main extends Application {
     public void start(Stage window) throws Exception {
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
-        Scene scene = new Scene(gameWindow, Color.BLACK);
+        Scene scene = new Scene(gameWindow, Color.TRANSPARENT);
         scene.setOnMouseMoved((MouseEvent event) -> {
             gameData.getKeys().setMouseMoved(true);
             double mouseX = event.getSceneX();
@@ -124,12 +133,43 @@ public class Main extends Application {
         }
     }
 
+    private void drawLightingMask() {
+        // Step 1: Start with full black screen
+        Shape currentMask = new Rectangle(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        currentMask.setFill(Color.BLACK);
+
+        // Step 2: Subtract each light polygon
+        for (Entity entity : world.getEntities(CommonLightSource.class)) {
+            double[] coords = entity.getPolygonCoordinates();
+            Polygon lightPolygon = new Polygon();
+
+            for (int i = 0; i < coords.length; i += 2) {
+                lightPolygon.getPoints().addAll(
+                        coords[i] + entity.getX(),
+                        coords[i + 1] + entity.getY()
+                );
+            }
+
+            currentMask = Shape.subtract(currentMask, lightPolygon);
+        }
+
+        // Step 3: Style and show the resulting mask
+        currentMask.setFill(Color.BLACK);
+        currentMask.setSmooth(true);
+
+        // Step 4: Add it to the lightLayer (replace old mask)
+        gameData.getLightLayer().getChildren().setAll(currentMask);
+    }
+
+
+
+
     private void draw() {
         for (Entity polygonEntity : polygons.keySet()) {
             if(!world.getEntities().contains(polygonEntity)){
                 Polygon removedPolygon = polygons.get(polygonEntity);
                 polygons.remove(polygonEntity);
-                gameWindow.getChildren().remove(removedPolygon);
+                gameData.getPolygonLayer().getChildren().remove(removedPolygon);
             }
         }
 
@@ -159,6 +199,8 @@ public class Main extends Application {
             }
             polygon.setFill(entity.getPaint());
         }
+
+        drawLightingMask();
 
     }
 
