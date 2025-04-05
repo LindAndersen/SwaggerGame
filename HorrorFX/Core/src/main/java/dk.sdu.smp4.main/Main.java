@@ -9,6 +9,7 @@ import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,11 +18,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -45,27 +44,38 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Scene startScene = new Scene(startPane, gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        startScene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
         stage.setScene(startScene);
-
-        setStartPane();
+        setStartPane(stage);
+        Font.loadFont(getClass().getResource("/fonts/was.ttf").toExternalForm(), 10);
 
         stage.setTitle("HorrorFX");
         stage.show();
     }
 
-    private void setStartPane() {
+    private void setStartPane(Stage stage) {
         startPane.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        startPane.getStyleClass().add("start-pane");
 
         Label title = new Label("HorrorFX");
-        title.setPrefSize(100,100);
-        Button startButton = new Button("Start");
+        title.setPadding(new Insets(50, 0, 0, 0));
+        title.getStyleClass().add("title-label");
 
+        Button startButton = new Button("Start");
+        startButton.getStyleClass().add("menu-button");
         startButton.setOnMouseClicked((MouseEvent event) -> {
-            Stage stage = (Stage) startPane.getScene().getWindow();
-            stage.setScene(createGameScene());
+            stage.setScene(createGameScene(stage));
         });
 
-        Image image = new Image(getClass().getResource("/spider2.png").toExternalForm());
+
+        Button quitButton = new Button("Quit");
+        quitButton.getStyleClass().add("menu-button");
+        quitButton.setOnMouseClicked((MouseEvent event) -> {
+            stage.close();
+        });
+
+
+        Image image = new Image(getClass().getResource("/images/dungeon.gif").toExternalForm());
         ImageView background = new ImageView(image);
         background.setPreserveRatio(false);
         background.setSmooth(true);
@@ -73,14 +83,21 @@ public class Main extends Application {
         background.fitWidthProperty().bind(startPane.widthProperty());
         background.fitHeightProperty().bind(startPane.heightProperty());
 
-        VBox vBox = new VBox(20);
-        vBox.setAlignment(Pos.CENTER);
 
-        vBox.getChildren().addAll(title, startButton);
-        startPane.getChildren().addAll(background, vBox);
+        VBox buttons = new VBox(20);
+        buttons.setMaxWidth(225);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.getChildren().addAll(startButton, quitButton);
+
+        BorderPane layout = new BorderPane();
+        layout.setTop(title);
+        layout.setCenter(buttons);
+        BorderPane.setAlignment(title, Pos.TOP_CENTER);
+
+        startPane.getChildren().addAll(background, layout);
     }
 
-    private Scene createGameScene(){
+    private Scene createGameScene(Stage stage){
         Scene gameScene = new Scene(gamePane);
         gameScene.setOnMouseMoved((MouseEvent event) -> {
             gameData.getKeys().setMouseMoved(true);
@@ -107,6 +124,10 @@ public class Main extends Application {
             if (event.getCode().equals(KeyCode.E)) {
                 gameData.getKeys().setKey(GameKeys.INTERACT, true);
             }
+            if (event.getCode().equals(KeyCode.ESCAPE)) {
+                gameData.setPausedBox(stage);
+            }
+
         });
         gameScene.setOnKeyReleased(event -> {
             if (event.getCode().equals(KeyCode.A)) {
@@ -127,8 +148,6 @@ public class Main extends Application {
             if (event.getCode().equals(KeyCode.E)) {
                 gameData.getKeys().setKey(GameKeys.INTERACT, false);
             }
-
-
         });
 
         // Lookup all Game Plugins using ServiceLoader
@@ -148,9 +167,11 @@ public class Main extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                update();
-                draw();
-                gameData.getKeys().update();
+                if (!gameData.isPaused()){
+                    update();
+                    draw();
+                    gameData.getKeys().update();
+                }
             }
 
         }.start();
