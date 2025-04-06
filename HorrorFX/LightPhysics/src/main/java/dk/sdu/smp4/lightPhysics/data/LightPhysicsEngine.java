@@ -38,6 +38,12 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
         }
     }
 
+    /**
+     * Used to map every hardentity to its absolute positions so that the collision with light can be calculated accordingly
+     * @param entity
+     * @return Polygon
+     */
+
     private Polygon getTranslatedPolygon(Entity entity) {
         double[] coords = entity.getPolygonCoordinates();
         Polygon polygon = new Polygon();
@@ -80,6 +86,12 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
         return polygon;
     }
 
+    /**
+     * calculateLightPolygon is the method used for calculating the lights absolute coordinates -> figure out collision with obstacles -> change coordinates accordingly -> (later) normalized back into relative coordinates
+     * @param light
+     * @param obstacles
+     * @return
+     */
     private double[] calculateLightPolygon(CommonLightSource light, List<Polygon> obstacles) {
         List<PointWithAngle> points = new ArrayList<>();
         double originX = light.getX();
@@ -89,11 +101,11 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
 
         double rotationRad = Math.toRadians(light.getRotation());
         double spreadRad = Math.toRadians(light.getAngleWidth());
-        double startAngle = rotationRad - spreadRad / 2;
-        double endAngle = rotationRad + spreadRad / 2;
+        double startAngle = rotationRad + spreadRad / 2;
+        double endAngle = rotationRad - spreadRad / 2;
 
         for (int i = 0; i < numRays; i++) {
-            double angle = startAngle + i * (endAngle - startAngle) / (numRays - 1);
+            double angle = startAngle - i * (endAngle - startAngle) / (numRays - 1);
             angle = (angle + 2 * Math.PI) % (2 * Math.PI); // Normalize
 
             double endX = originX + radius * Math.cos(angle);
@@ -116,8 +128,11 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
             points.add(new PointWithAngle(closestPoint[0], closestPoint[1], angle));
         }
 
-        // Sort by angle to form valid polygon shape
-        points.sort(Comparator.comparingDouble(p -> p.angle));
+
+        //points.sort(Comparator.comparingDouble(p -> p.angle));
+        if (light.getAngleWidth() >= 360) {
+            points.sort(Comparator.comparingDouble(p -> p.angle));
+        }
         double[] coords = new double[points.size() * 2];
         for (int i = 0; i < points.size(); i++) {
             coords[i * 2] = points.get(i).x;

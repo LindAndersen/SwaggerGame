@@ -82,25 +82,19 @@ public class Main extends Application {
     }
 
     private void drawLightingMask() {
-        GraphicsContext gcNoise = noiseCanvas.getGraphicsContext2D();
-        gcNoise.setGlobalBlendMode(BlendMode.SRC_OVER);
-        gcNoise.clearRect(0, 0, noiseCanvas.getWidth(), noiseCanvas.getHeight());
-        // Only draw noise once to the entire screen
-        gcNoise.drawImage(noiseImage, 0, 0, noiseCanvas.getWidth(), noiseCanvas.getHeight());
-        noiseCanvas.setBlendMode(BlendMode.MULTIPLY);
-
         GraphicsContext gcLight = lightMaskCanvas.getGraphicsContext2D();
         gcLight.setGlobalBlendMode(BlendMode.SRC_OVER);
         gcLight.clearRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        // 1. Fill with darkness
-        gcLight.setFill(Color.color(0, 0, 0, 0.95));
+        // Draw noise background
+        gcLight.drawImage(noiseImage, 0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
+
+        // Opacity value here alongside base value in generateNoiseImage controls contrast in between light and non-light areas
+        gcLight.setFill(Color.color(0, 0, 0, 0.97));
         gcLight.fillRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        // 2. Punch out light with SRC_OUT blend mode
-        gcLight.setGlobalBlendMode(BlendMode.SRC_OVER);
-        gcLight.setFill(Color.color(1, 1, 1, 1)); // white light cutouts
-
+        // Draw light cutouts
+        gcLight.setFill(Color.color(1, 1, 1, 1));
         for (Entity entity : world.getEntities(CommonLightSource.class)) {
             double[] coords = entity.getPolygonCoordinates();
             Polygon poly = new Polygon(coords);
@@ -118,13 +112,9 @@ public class Main extends Application {
             }
         }
 
-        // 3. Reset blend mode
-        gcLight.setGlobalBlendMode(BlendMode.SRC_OVER);
-
         lightMaskCanvas.setBlendMode(BlendMode.MULTIPLY);
-        // Draw noise only outside light areas by layering after lightMaskCanvas
-        noiseCanvas.setBlendMode(null); // reset blend mode to avoid multiplying inside light
-        gameData.getLightLayer().getChildren().setAll(lightMaskCanvas, noiseCanvas);
+        gameData.getLightLayer().getChildren().setAll(lightMaskCanvas);
+
     }
 
     private void draw() {
@@ -155,7 +145,7 @@ public class Main extends Application {
         polygon.setTranslateX(entity.getX());
         polygon.setTranslateY(entity.getY());
         if (entity.isShouldRotateAlternative()) {
-            polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
+            //polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
         } else {
             polygon.setRotate(entity.getRotation());
         }
@@ -169,8 +159,8 @@ public class Main extends Application {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                double v = rand.nextDouble() * 0.4;
-                pw.setColor(x, y, Color.color(0.6 + v, 0.5 + v * 0.5, 0.2 + v * 0.3, 0.6));
+                double base = 0.2 + rand.nextDouble() * 0.3;
+                pw.setColor(x, y, Color.color(base, base * 0.8, base * 0.6, 1.0));
             }
         }
 
