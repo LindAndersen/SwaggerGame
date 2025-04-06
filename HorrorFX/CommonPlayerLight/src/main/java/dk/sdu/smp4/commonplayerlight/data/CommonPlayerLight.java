@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 public class CommonPlayerLight extends CommonLightSource {
     public CommonPlayerLight()
     {
-        setPaint(Color.WHITE.deriveColor(0,1,1,0));
+        //setPaint(Color.WHITE.deriveColor(0,1,1,0));
     }
 
     @Override

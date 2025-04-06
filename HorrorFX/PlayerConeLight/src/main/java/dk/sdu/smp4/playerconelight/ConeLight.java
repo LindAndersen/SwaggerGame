@@ -6,7 +6,7 @@ public class ConeLight extends CommonPlayerLight {
     public ConeLight(){
         setNumRays(150);
         setAngleWidth(40);
-        setRadiusFactor(30);
+        setRadiusFactor(8);
         setShouldRotateAlternative(true);
     }
 }

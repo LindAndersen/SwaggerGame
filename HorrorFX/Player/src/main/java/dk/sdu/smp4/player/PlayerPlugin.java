@@ -37,8 +37,8 @@ public class PlayerPlugin implements IGamePluginService {
                 12, 0,  // tip (front middle point)
                 6, 8,   // near front bottom-right
                 -8, 8  );
-        player.setX(gameData.getDisplayHeight() /2);
-        player.setY(gameData.getDisplayWidth() /2);
+        player.setX(gameData.getDisplayWidth() /2);
+        player.setY(gameData.getDisplayHeight() /2);
         player.setRadius(8);
         player.setSolid(true);
         player.setPaint(new Color(0,1,0,0.8));

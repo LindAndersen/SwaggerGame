@@ -20,8 +20,8 @@ public class PlayerConeLightProcessor implements IPlayerLightProcessor {
         for (Entity lightEntity : world.getEntities(ConeLight.class)) {
             lightEntity.setX(player.getX());
             lightEntity.setY(player.getY());
-            lightEntity.setRotation(angle); // Use angle, not player rotation
-            player.setRotation(angle);
+            lightEntity.setRotation(player.getRotation()); // Use angle, not player rotation
+            //player.setRotation(angle);
             lightEntity.setShouldRotateAlternative(true);
         }
     }
