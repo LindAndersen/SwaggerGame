@@ -85,15 +85,22 @@ public class Main extends Application {
         GraphicsContext gcNoise = noiseCanvas.getGraphicsContext2D();
         gcNoise.setGlobalBlendMode(BlendMode.SRC_OVER);
         gcNoise.clearRect(0, 0, noiseCanvas.getWidth(), noiseCanvas.getHeight());
+        // Only draw noise once to the entire screen
         gcNoise.drawImage(noiseImage, 0, 0, noiseCanvas.getWidth(), noiseCanvas.getHeight());
+        noiseCanvas.setBlendMode(BlendMode.MULTIPLY);
 
         GraphicsContext gcLight = lightMaskCanvas.getGraphicsContext2D();
         gcLight.setGlobalBlendMode(BlendMode.SRC_OVER);
         gcLight.clearRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
-        gcLight.setFill(Color.color(0, 0, 0, 0.85));
+
+        // 1. Fill with darkness
+        gcLight.setFill(Color.color(0, 0, 0, 0.95));
         gcLight.fillRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        gcLight.setFill(Color.color(1, 1, 1, 1));
+        // 2. Punch out light with SRC_OUT blend mode
+        gcLight.setGlobalBlendMode(BlendMode.SRC_OVER);
+        gcLight.setFill(Color.color(1, 1, 1, 1)); // white light cutouts
+
         for (Entity entity : world.getEntities(CommonLightSource.class)) {
             double[] coords = entity.getPolygonCoordinates();
             Polygon poly = new Polygon(coords);
@@ -110,9 +117,14 @@ public class Main extends Application {
                 gcLight.fill();
             }
         }
-        gcLight.setGlobalBlendMode(BlendMode.MULTIPLY);
 
-        gameData.getLightLayer().getChildren().setAll(noiseCanvas, lightMaskCanvas);
+        // 3. Reset blend mode
+        gcLight.setGlobalBlendMode(BlendMode.SRC_OVER);
+
+        lightMaskCanvas.setBlendMode(BlendMode.MULTIPLY);
+        // Draw noise only outside light areas by layering after lightMaskCanvas
+        noiseCanvas.setBlendMode(null); // reset blend mode to avoid multiplying inside light
+        gameData.getLightLayer().getChildren().setAll(lightMaskCanvas, noiseCanvas);
     }
 
     private void draw() {
