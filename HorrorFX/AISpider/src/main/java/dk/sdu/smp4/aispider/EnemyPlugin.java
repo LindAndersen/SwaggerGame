@@ -21,7 +21,7 @@ public class EnemyPlugin implements IGamePluginService {
     }
 
     private SoftEntity createEnemy(GameData gameData) {
-        enemy = new enemy();
+        enemy = new Enemy();
         enemy.setPolygonCoordinates(-8, -8, 8, -8, 8, 8, -8, 8); // Simple square
         enemy.setX(Math.random() * gameData.getDisplayWidth());  // Spawn at a random location
         enemy.setY(Math.random() * gameData.getDisplayHeight());

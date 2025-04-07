@@ -1,5 +1,6 @@
 package dk.sdu.smp4.common.data;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -20,12 +21,21 @@ public abstract class Entity implements Serializable {
     private Map<String, Object> properties = new HashMap<>();
     private Set<String> inventory = new HashSet<>();
     private String type;
+    private Image image;
 
     public Entity()
     {
         paint = Color.BLACK;
         shouldRotateAlternative = false;
 
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public Image getImage() {
+        return image;
     }
 
     public boolean isSolid() {
