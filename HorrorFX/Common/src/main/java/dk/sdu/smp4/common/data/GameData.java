@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 import java.util.List;
 
@@ -87,7 +88,7 @@ public class GameData {
         textLayer.getChildren().add(questPane);
     }
 
-    public void setPausedBox(/*Stage stage*/) {
+    public void setPausedBox(Stage stage) {
         if (isPaused){
             textLayer.getChildren().remove(pausedBox);
         } else {
@@ -110,7 +111,7 @@ public class GameData {
             Button quitButton = new Button("Quit to title");
             quitButton.setOnAction(e -> {
                 ((Pane) pausedBox.getParent()).getChildren().remove(pausedBox);
-                //stage.close();
+                stage.close();
             });
 
             pausedBox.getChildren().addAll(continueButton, quitButton);

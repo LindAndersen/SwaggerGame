@@ -118,7 +118,7 @@ public class Main extends Application {
         stage.getScene().setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
             if (code == KeyCode.ESCAPE) {
-                gameData.setPausedBox();
+                gameData.setPausedBox(stage);
             } else {
                 setKey(code, true);
             }
