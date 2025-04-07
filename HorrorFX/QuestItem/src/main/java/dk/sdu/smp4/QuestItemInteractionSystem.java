@@ -28,6 +28,13 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
                     world.removeEntity(questItem);
                     // 2. Display popup, when pressing E.
                     displayQuestPopup(gameData, _questItem);
+
+                    // Add subquests to the world
+                    for (QuestItem subQuest : _questItem.getChildren()) {
+                        world.addEntity(subQuest);
+                    }
+
+
                     continue;
                 }
 

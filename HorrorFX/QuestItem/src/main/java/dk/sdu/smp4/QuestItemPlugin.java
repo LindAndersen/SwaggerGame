@@ -13,10 +13,16 @@ public class QuestItemPlugin implements IGamePluginService {
     public void start(GameData gameData, World world) {
         QuestItem childQuest1 = CreateQuest("child1", "poke my ass", 400, 200, 8);
         QuestItem childQuest2 = CreateQuest("child2", "poke my eyes", 500, 100, 8);
-        QuestItem parentQuest = CreateQuest("name","description",400, 600, 8);
+        QuestItem parentQuest = CreateQuest("Main Quest","Go save the world",400, 600, 8);
+        QuestItem parentQuest2 = CreateQuest("Main Quest2tihi","Go save the world again",450, 600, 8);
+
+        //Define Quest relationships.
         parentQuest.addChildQuest(childQuest1);
-        parentQuest.addChildQuest(childQuest2);
+        parentQuest2.addChildQuest(childQuest2);
+
+        //Add Quests to the world
         world.addEntity(parentQuest);
+        world.addEntity(parentQuest2);
     }
 
     @Override

@@ -4,6 +4,7 @@ import dk.sdu.smp4.common.data.SoftEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class QuestItem extends SoftEntity {
     private String questName;
     private String questDescription;
@@ -26,6 +27,10 @@ public class QuestItem extends SoftEntity {
     {
         children.add(child);
         child.setParentID(this.parentID);
+    }
+
+    public List<QuestItem> getChildren() {
+        return children;
     }
 
     public int getQuestRadius() {
