@@ -51,4 +51,11 @@ public class GameKeys {
         return keys[k] && !pkeys[k];
     }
 
+    public static double getMouseY() {
+        return mouseY;
+    }
+
+    public static double getMouseX() {
+        return mouseX;
+    }
 }
