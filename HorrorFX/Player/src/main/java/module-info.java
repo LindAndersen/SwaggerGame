@@ -14,8 +14,8 @@ module Player {
     uses IQuestInteractable;
     requires CommonPlayerLight;
     requires CommonInteractable;
-    requires Common;
     requires javafx.graphics;
+    requires Common;
     provides IGamePluginService with PlayerPlugin;
     provides IEntityProcessingService with PlayerControlSystem;
 }

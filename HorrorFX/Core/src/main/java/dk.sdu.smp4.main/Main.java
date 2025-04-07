@@ -12,6 +12,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
@@ -39,9 +40,9 @@ public class Main extends Application {
     private final GameData gameData = new GameData();
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
+    private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
     private final StackPane gameWindow = gameData.getRoot();
     private final Image noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-    private final Canvas noiseCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
     private final Canvas lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
     public static void main(String[] args) {
@@ -98,7 +99,7 @@ public class Main extends Application {
         gcLight.drawImage(noiseImage, 0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
         // Opacity value here alongside base value in generateNoiseImage controls contrast in between light and non-light areas
-        gcLight.setFill(Color.color(0, 0, 0, 0.97));
+        gcLight.setFill(Color.color(0, 0, 0, 0.85));
         gcLight.fillRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
         // Draw light cutouts
@@ -130,6 +131,11 @@ public class Main extends Application {
             if (!world.getEntities().contains(polygonEntity)) {
                 gameData.getPolygonLayer().getChildren().remove(polygons.get(polygonEntity));
                 polygons.remove(polygonEntity);
+
+                ImageView removedImage = images.remove(polygonEntity);
+                if (removedImage != null) {
+                    gameData.getPolygonLayer().getChildren().remove(removedImage);
+                }
             }
         }
 
@@ -143,9 +149,28 @@ public class Main extends Application {
             });
 
             handlePolygonCoordsPreDrawing(polygon, entity);
-        }
+            drawLightingMask();
 
-        drawLightingMask();
+            Image image = entity.getImage();
+            if (image != null) {
+                ImageView imageView = images.get(entity);
+                if (imageView == null) {
+                    imageView = new ImageView();
+                    images.put(entity, imageView);
+                    gameData.getPolygonLayer().getChildren().add(imageView);
+                } else if (imageView.getImage() != image) {
+                    imageView.setImage(image);
+                }
+
+                imageView.setTranslateX(entity.getX() - image.getWidth()/2);
+                imageView.setTranslateY(entity.getY()- image.getHeight()/2);
+            } else {
+                ImageView imageView = images.remove(entity);
+                if(imageView != null){
+                    gameData.getPolygonLayer().getChildren().remove(imageView);
+                }
+            }
+        }
     }
 
     private void handlePolygonCoordsPreDrawing(Polygon polygon, Entity entity) {

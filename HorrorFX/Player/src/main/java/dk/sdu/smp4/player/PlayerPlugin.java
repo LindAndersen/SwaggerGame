@@ -18,7 +18,6 @@ public class PlayerPlugin implements IGamePluginService {
     public void start(GameData gameData, World world) {
         player = CreatePlayer(gameData);
         world.addEntity(player);
-        System.out.println("Player position: (" + player.getX() + ", " + player.getY() + ")");
 
         for(IPlayerLightPlugin lightPlugin : getEntityPlayerLights()) {
             lightPlugin.createPlayerLight(player, gameData, world);
