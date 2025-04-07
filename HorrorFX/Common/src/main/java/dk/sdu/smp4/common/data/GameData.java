@@ -1,12 +1,11 @@
 package dk.sdu.smp4.common.data;
 
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 
 public class GameData {
 
@@ -21,7 +20,7 @@ public class GameData {
     private final VBox questPane = new VBox();
 
     public GameData(){
-        backgroundLayer.setStyle("-fx-background-color: rgba(180, 140, 20, 0.1);");
+        //backgroundLayer.setStyle("-fx-background-color: rgba(180, 140, 20, 0.1);");
         root.setAlignment(Pos.TOP_LEFT); // <- this is the key
         root.getChildren().addAll(backgroundLayer, polygonLayer, lightLayer, textLayer);
 
@@ -39,6 +38,19 @@ public class GameData {
         }
 
         backgroundLayer.setMouseTransparent(false);
+        //Image backgroundActualImage = new Image(getClass().getResourceAsStream("/background.jpg"));
+        Image backgroundActualImage = new Image(getClass().getResourceAsStream("/from_chat.png"));
+        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(
+                backgroundActualImage,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                backgroundSize
+        );
+
+        Background background = new Background(backgroundImage);
+        backgroundLayer.setBackground(background);
     }
 
     public VBox getQuestPane(){
