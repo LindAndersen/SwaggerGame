@@ -18,6 +18,7 @@ public class PlayerPlugin implements IGamePluginService {
     public void start(GameData gameData, World world) {
         player = CreatePlayer(gameData);
         world.addEntity(player);
+        System.out.println("Player position: (" + player.getX() + ", " + player.getY() + ")");
 
         for(IPlayerLightPlugin lightPlugin : getEntityPlayerLights()) {
             lightPlugin.createPlayerLight(player, gameData, world);
@@ -41,7 +42,8 @@ public class PlayerPlugin implements IGamePluginService {
         player.setY(gameData.getDisplayHeight() /2);
         player.setRadius(8);
         player.setSolid(true);
-        player.setPaint(new Color(0,1,0,0.8));
+        player.setPaint("blue");
+        player.setType("player");
         return player;
     }
 

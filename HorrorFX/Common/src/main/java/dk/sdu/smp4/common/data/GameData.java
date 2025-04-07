@@ -3,8 +3,10 @@ package dk.sdu.smp4.common.data;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
-
 import java.util.List;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 public class GameData {
 
@@ -16,6 +18,7 @@ public class GameData {
     private final Pane textLayer = new Pane();
     private final Pane lightLayer = new Pane();
     private final StackPane root = new StackPane();
+    private final VBox questPane = new VBox();
 
     public GameData(){
         backgroundLayer.setStyle("-fx-background-color: rgba(180, 140, 20, 0.1);");
@@ -27,7 +30,7 @@ public class GameData {
             layer.prefWidthProperty().bind(root.widthProperty());
             layer.prefHeightProperty().bind(root.heightProperty());
             layer.setMouseTransparent(true);
-
+          
             // TO BE VERY SAFE (fml) guarantee no offset
             layer.setLayoutX(0);
             layer.setLayoutY(0);
@@ -36,6 +39,30 @@ public class GameData {
         }
 
         backgroundLayer.setMouseTransparent(false);
+    }
+
+    public VBox getQuestPane(){
+        return questPane;
+    }
+
+    public void setQuestPane(String title, String description){
+        questPane.getChildren().clear();
+
+        questPane.setMinSize(400, 400);
+        questPane.setLayoutX((double) displayWidth /2);
+        questPane.setLayoutY((double) displayHeight/2);
+        questPane.setAlignment(Pos.CENTER);
+
+        Label labelDescription = new Label(description);
+        questPane.getChildren().add(labelDescription);
+
+        Button acceptButton = new Button("Confirm");
+        acceptButton.setOnAction(e -> {
+            ((Pane) questPane.getParent()).getChildren().remove(questPane);
+        });
+
+        questPane.getChildren().add(acceptButton);
+        getTextLayer().getChildren().add(questPane);
     }
 
     public GameKeys getKeys() {
