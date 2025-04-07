@@ -3,6 +3,7 @@ import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.Services.IGamePluginService;
 
 module AISpider {
+    exports dk.sdu.smp4.aispider;
     requires Common;
     provides IEntityProcessingService with EnemyControlSystem;
     provides IGamePluginService with dk.sdu.smp4.aispider.EnemyPlugin;
