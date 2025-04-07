@@ -3,54 +3,68 @@ package dk.sdu.smp4.main;
 import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.Services.IGamePluginService;
 import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
-import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.data.GameData;
-import dk.sdu.smp4.common.data.GameKeys;
-import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.data.*;
+import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 public class Main extends Application {
     private final GameData gameData = new GameData();
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
-    private Pane gamePane = gameData.getGamePane();
+    private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
+    private final StackPane gameWindow = gameData.getRoot();
     private StackPane startPane = new StackPane();
+    private final Image noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+    private final Canvas lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+
     public static void main(String[] args) {
         launch(Main.class);
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage window) {
         Scene startScene = new Scene(startPane, gameData.getDisplayWidth(), gameData.getDisplayHeight());
         startScene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
-        stage.setScene(startScene);
-        setStartPane(stage);
+        window.setScene(startScene);
+        setStartPane(window);
         Font.loadFont(getClass().getResource("/fonts/was.ttf").toExternalForm(), 10);
 
-        stage.setTitle("HorrorFX");
-        stage.show();
+        window.setTitle("HorrorFX");
+        window.show();
     }
 
     private void setStartPane(Stage stage) {
@@ -98,70 +112,36 @@ public class Main extends Application {
     }
 
     private Scene createGameScene(Stage stage){
-        Scene gameScene = new Scene(gamePane);
-        gameScene.setOnMouseMoved((MouseEvent event) -> {
+        Scene gameScene = new Scene(gameWindow);
+        gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+
+        Scene scene = new Scene(gameWindow, gameData.getDisplayWidth(), gameData.getDisplayHeight(), Color.TRANSPARENT);
+        gameWindow.prefWidthProperty().bind(scene.widthProperty());
+        gameWindow.prefHeightProperty().bind(scene.heightProperty());
+
+        scene.setOnMouseMoved(event -> {
             gameData.getKeys().setMouseMoved(true);
-            double mouseX = event.getSceneX();
-            double mouseY = event.getSceneY();
-            GameKeys.setMousePosition(mouseX, mouseY);
-        });
-        gameScene.setOnKeyPressed(event -> {
-            if (event.getCode().equals(KeyCode.A)) {
-                gameData.getKeys().setKey(GameKeys.LEFT, true);
-            }
-            if (event.getCode().equals(KeyCode.D)) {
-                gameData.getKeys().setKey(GameKeys.RIGHT, true);
-            }
-            if (event.getCode().equals(KeyCode.W)) {
-                gameData.getKeys().setKey(GameKeys.UP, true);
-            }
-            if (event.getCode().equals(KeyCode.SPACE)) {
-                gameData.getKeys().setKey(GameKeys.SPACE, true);
-            }
-            if (event.getCode().equals(KeyCode.S)) {
-                gameData.getKeys().setKey(GameKeys.DOWN, true);
-            }
-            if (event.getCode().equals(KeyCode.E)) {
-                gameData.getKeys().setKey(GameKeys.INTERACT, true);
-            }
-            if (event.getCode().equals(KeyCode.ESCAPE)) {
-                gameData.setPausedBox(stage);
-            }
-
-        });
-        gameScene.setOnKeyReleased(event -> {
-            if (event.getCode().equals(KeyCode.A)) {
-                gameData.getKeys().setKey(GameKeys.LEFT, false);
-            }
-            if (event.getCode().equals(KeyCode.D)) {
-                gameData.getKeys().setKey(GameKeys.RIGHT, false);
-            }
-            if (event.getCode().equals(KeyCode.W)) {
-                gameData.getKeys().setKey(GameKeys.UP, false);
-            }
-            if (event.getCode().equals(KeyCode.SPACE)) {
-                gameData.getKeys().setKey(GameKeys.SPACE, false);
-            }
-            if (event.getCode().equals(KeyCode.S)) {
-                gameData.getKeys().setKey(GameKeys.DOWN, false);
-            }
-            if (event.getCode().equals(KeyCode.E)) {
-                gameData.getKeys().setKey(GameKeys.INTERACT, false);
-            }
+            GameKeys.setMousePosition(event.getSceneX(), event.getSceneY());
         });
 
-        // Lookup all Game Plugins using ServiceLoader
-        for (IGamePluginService iGamePlugin : getPluginServices()) {
-            iGamePlugin.start(gameData, world);
-        }
-        for (Entity entity : world.getEntities()) {
-            Polygon polygon = new Polygon(entity.getPolygonCoordinates());
-            polygons.put(entity, polygon);
-            gamePane.getChildren().add(polygon);
-        }
+        scene.setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
+            if (code == KeyCode.ESCAPE){
+                gameData.setPausedBox();
+            } else {
+                setKey(event.getCode(), true);
+            }
+        });
+        scene.setOnKeyReleased(event -> setKey(event.getCode(), false));
+
+        getPluginServices().forEach(plugin -> plugin.start(gameData, world));
+
         render();
         return gameScene;
     }
+
+
+
 
     private void render() {
         new AnimationTimer() {
@@ -173,61 +153,142 @@ public class Main extends Application {
                     gameData.getKeys().update();
                 }
             }
-
         }.start();
     }
 
     private void update() {
-        for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
-            entityProcessorService.process(gameData, world);
+        getEntityProcessingServices().forEach(service -> service.process(gameData, world));
+        getPostEntityProcessor().forEach(service -> service.process(gameData, world));
+    }
+
+    private void drawLightingMask() {
+        GraphicsContext gcLight = lightMaskCanvas.getGraphicsContext2D();
+        gcLight.setGlobalBlendMode(BlendMode.SRC_OVER);
+        gcLight.clearRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
+
+        // Draw noise background
+        gcLight.drawImage(noiseImage, 0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
+
+        // Opacity value here alongside base value in generateNoiseImage controls contrast in between light and non-light areas
+        gcLight.setFill(Color.color(0, 0, 0, 0.85));
+        gcLight.fillRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
+
+        // Draw light cutouts
+        gcLight.setFill(Color.color(1, 1, 1, 1));
+        for (Entity entity : world.getEntities(CommonLightSource.class)) {
+            double[] coords = entity.getPolygonCoordinates();
+            Polygon poly = new Polygon(coords);
+            handlePolygonCoordsPreDrawing(poly, entity);
+            double[] points = poly.getPoints().stream().mapToDouble(Double::doubleValue).toArray();
+
+            if (points.length >= 4) {
+                gcLight.beginPath();
+                gcLight.moveTo(points[0] + poly.getTranslateX(), points[1] + poly.getTranslateY());
+                for (int i = 2; i < points.length; i += 2) {
+                    gcLight.lineTo(points[i] + poly.getTranslateX(), points[i + 1] + poly.getTranslateY());
+                }
+                gcLight.closePath();
+                gcLight.fill();
+            }
         }
-        for (IPostEntityProcessingService postEntityProcessor : getPostEntityProcessor()){ //Should probably be refactored
-            postEntityProcessor.process(gameData, world);
-        }
+
+        lightMaskCanvas.setBlendMode(BlendMode.MULTIPLY);
+        gameData.getLightLayer().getChildren().setAll(lightMaskCanvas);
+
     }
 
     private void draw() {
         for (Entity polygonEntity : polygons.keySet()) {
-            if(!world.getEntities().contains(polygonEntity)){
-                Polygon removedPolygon = polygons.get(polygonEntity);
+            if (!world.getEntities().contains(polygonEntity)) {
+                gameData.getPolygonLayer().getChildren().remove(polygons.get(polygonEntity));
                 polygons.remove(polygonEntity);
-                gamePane.getChildren().remove(removedPolygon);
+
+                ImageView removedImage = images.remove(polygonEntity);
+                if (removedImage != null) {
+                    gameData.getPolygonLayer().getChildren().remove(removedImage);
+                }
             }
         }
 
         for (Entity entity : world.getEntities()) {
-            Polygon polygon = polygons.get(entity);
-            if (polygon == null) {
-                polygon = new Polygon(entity.getPolygonCoordinates());
-                polygons.put(entity, polygon);
-                gamePane.getChildren().add(polygon);
-            }
+            if (entity instanceof CommonLightSource) continue;
 
-            polygon.getTransforms().clear();
-            polygon.setTranslateX(entity.getX());
-            polygon.setTranslateY(entity.getY());
-            if (entity.isShouldRotateAlternative())
-            {
-                polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
-            } else
-            {
-                polygon.setRotate(entity.getRotation());
+            Polygon polygon = polygons.computeIfAbsent(entity, e -> {
+                Polygon newPoly = new Polygon(e.getPolygonCoordinates());
+                gameData.getPolygonLayer().getChildren().add(newPoly);
+                return newPoly;
+            });
+
+            handlePolygonCoordsPreDrawing(polygon, entity);
+            drawLightingMask();
+
+            Image image = entity.getImage();
+            if (image != null) {
+                ImageView imageView = images.get(entity);
+                if (imageView == null) {
+                    imageView = new ImageView();
+                    images.put(entity, imageView);
+                    gameData.getPolygonLayer().getChildren().add(imageView);
+                } else if (imageView.getImage() != image) {
+                    imageView.setImage(image);
+                }
+
+                imageView.setTranslateX(entity.getX() - image.getWidth()/2);
+                imageView.setTranslateY(entity.getY()- image.getHeight()/2);
+            } else {
+                ImageView imageView = images.remove(entity);
+                if(imageView != null){
+                    gameData.getPolygonLayer().getChildren().remove(imageView);
+                }
             }
-            polygon.setFill(entity.getPaint());
+        }
+    }
+
+    private void handlePolygonCoordsPreDrawing(Polygon polygon, Entity entity) {
+        polygon.getTransforms().clear();
+        polygon.setTranslateX(entity.getX());
+        polygon.setTranslateY(entity.getY());
+        if (entity.isShouldRotateAlternative()) {
+            //polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
+        } else {
+            polygon.setRotate(entity.getRotation());
+        }
+        polygon.setFill(entity.getPaint());
+    }
+
+    private Image generateNoiseImage(int width, int height) {
+        WritableImage image = new WritableImage(width, height);
+        PixelWriter pw = image.getPixelWriter();
+        Random rand = new Random();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                double base = 0.2 + rand.nextDouble() * 0.3;
+                pw.setColor(x, y, Color.color(base, base * 0.8, base * 0.6, 1.0));
+            }
         }
 
+        return image;
+    }
+
+    private void setKey(KeyCode code, boolean pressed) {
+        if (code == KeyCode.A) gameData.getKeys().setKey(GameKeys.LEFT, pressed);
+        if (code == KeyCode.D) gameData.getKeys().setKey(GameKeys.RIGHT, pressed);
+        if (code == KeyCode.W) gameData.getKeys().setKey(GameKeys.UP, pressed);
+        if (code == KeyCode.SPACE) gameData.getKeys().setKey(GameKeys.SPACE, pressed);
+        if (code == KeyCode.S) gameData.getKeys().setKey(GameKeys.DOWN, pressed);
+        if (code == KeyCode.E) gameData.getKeys().setKey(GameKeys.INTERACT, pressed);
     }
 
     private Collection<? extends IGamePluginService> getPluginServices() {
-        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
-        return ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        return ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 
-    private Collection<? extends IPostEntityProcessingService> getPostEntityProcessor(){
-        return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    private Collection<? extends IPostEntityProcessingService> getPostEntityProcessor() {
+        return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
-
 }

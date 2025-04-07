@@ -5,6 +5,7 @@ import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
+import javafx.scene.paint.Color;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
@@ -36,11 +37,12 @@ public class PlayerPlugin implements IGamePluginService {
                 12, 0,  // tip (front middle point)
                 6, 8,   // near front bottom-right
                 -8, 8  );
-        player.setX(gameData.getDisplayHeight() /2);
-        player.setY(gameData.getDisplayWidth() /2);
+        player.setX(gameData.getDisplayWidth() /2);
+        player.setY(gameData.getDisplayHeight() /2);
         player.setRadius(8);
         player.setSolid(true);
         player.setPaint("blue");
+        player.setType("player");
         return player;
     }
 

@@ -55,6 +55,7 @@ public class StructurePlugin implements IGamePluginService
         structure.setWidth(width);
         structure.setHeight(height);
         structure.setSolid(true);
+        structure.setType("structure");
         return structure;
     }
 
