@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,18 +25,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +40,7 @@ public class Main extends Application {
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
     private final StackPane gameWindow = gameData.getRoot();
-    private StackPane startPane = new StackPane();
+    private final StackPane startMenu = new StackPane();
     private final Image noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
     private final Canvas lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
@@ -56,20 +49,23 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage window) {
-        Scene startScene = new Scene(startPane, gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        startScene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
-        window.setScene(startScene);
-        setStartPane(window);
+    public void start(Stage stage) {
         Font.loadFont(getClass().getResource("/fonts/was.ttf").toExternalForm(), 10);
 
-        window.setTitle("HorrorFX");
-        window.show();
+        Scene scene = new Scene(gameWindow, gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        stage.setScene(scene);
+        stage.setTitle("HorrorFX");
+
+        setupStartMenu(stage);
+        gameWindow.getChildren().add(startMenu);
+
+        stage.show();
     }
 
-    private void setStartPane(Stage stage) {
-        startPane.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        startPane.getStyleClass().add("start-pane");
+    private void setupStartMenu(Stage stage) {
+        startMenu.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        startMenu.getStyleClass().add("start-pane");
 
         Label title = new Label("HorrorFX");
         title.setPadding(new Insets(50, 0, 0, 0));
@@ -78,9 +74,9 @@ public class Main extends Application {
         Button startButton = new Button("Start");
         startButton.getStyleClass().add("menu-button");
         startButton.setOnMouseClicked((MouseEvent event) -> {
-            stage.setScene(createGameScene(stage));
+            gameWindow.getChildren().remove(startMenu);
+            initGame(stage);
         });
-
 
         Button quitButton = new Button("Quit");
         quitButton.getStyleClass().add("menu-button");
@@ -88,15 +84,13 @@ public class Main extends Application {
             stage.close();
         });
 
-
         Image image = new Image(getClass().getResource("/images/dungeon.gif").toExternalForm());
         ImageView background = new ImageView(image);
         background.setPreserveRatio(false);
         background.setSmooth(true);
         background.setCache(true);
-        background.fitWidthProperty().bind(startPane.widthProperty());
-        background.fitHeightProperty().bind(startPane.heightProperty());
-
+        background.fitWidthProperty().bind(startMenu.widthProperty());
+        background.fitHeightProperty().bind(startMenu.heightProperty());
 
         VBox buttons = new VBox(20);
         buttons.setMaxWidth(225);
@@ -108,46 +102,40 @@ public class Main extends Application {
         layout.setCenter(buttons);
         BorderPane.setAlignment(title, Pos.TOP_CENTER);
 
-        startPane.getChildren().addAll(background, layout);
+        startMenu.getChildren().addAll(background, layout);
     }
 
-    private Scene createGameScene(Stage stage){
-        Scene gameScene = new Scene(gameWindow);
+    private void initGame(Stage stage) {
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        gameWindow.prefWidthProperty().bind(stage.getScene().widthProperty());
+        gameWindow.prefHeightProperty().bind(stage.getScene().heightProperty());
 
-        Scene scene = new Scene(gameWindow, gameData.getDisplayWidth(), gameData.getDisplayHeight(), Color.TRANSPARENT);
-        gameWindow.prefWidthProperty().bind(scene.widthProperty());
-        gameWindow.prefHeightProperty().bind(scene.heightProperty());
-
-        scene.setOnMouseMoved(event -> {
+        stage.getScene().setOnMouseMoved(event -> {
             gameData.getKeys().setMouseMoved(true);
             GameKeys.setMousePosition(event.getSceneX(), event.getSceneY());
         });
 
-        scene.setOnKeyPressed(event -> {
+        stage.getScene().setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
-            if (code == KeyCode.ESCAPE){
+            if (code == KeyCode.ESCAPE) {
                 gameData.setPausedBox();
             } else {
-                setKey(event.getCode(), true);
+                setKey(code, true);
             }
         });
-        scene.setOnKeyReleased(event -> setKey(event.getCode(), false));
+
+        stage.getScene().setOnKeyReleased(event -> setKey(event.getCode(), false));
 
         getPluginServices().forEach(plugin -> plugin.start(gameData, world));
 
         render();
-        return gameScene;
     }
-
-
-
 
     private void render() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (!gameData.isPaused()){
+                if (!gameData.isPaused()) {
                     update();
                     draw();
                     gameData.getKeys().update();
@@ -166,14 +154,11 @@ public class Main extends Application {
         gcLight.setGlobalBlendMode(BlendMode.SRC_OVER);
         gcLight.clearRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        // Draw noise background
         gcLight.drawImage(noiseImage, 0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        // Opacity value here alongside base value in generateNoiseImage controls contrast in between light and non-light areas
         gcLight.setFill(Color.color(0, 0, 0, 0.85));
         gcLight.fillRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        // Draw light cutouts
         gcLight.setFill(Color.color(1, 1, 1, 1));
         for (Entity entity : world.getEntities(CommonLightSource.class)) {
             double[] coords = entity.getPolygonCoordinates();
@@ -194,7 +179,6 @@ public class Main extends Application {
 
         lightMaskCanvas.setBlendMode(BlendMode.MULTIPLY);
         gameData.getLightLayer().getChildren().setAll(lightMaskCanvas);
-
     }
 
     private void draw() {
@@ -233,11 +217,11 @@ public class Main extends Application {
                     imageView.setImage(image);
                 }
 
-                imageView.setTranslateX(entity.getX() - image.getWidth()/2);
-                imageView.setTranslateY(entity.getY()- image.getHeight()/2);
+                imageView.setTranslateX(entity.getX() - image.getWidth() / 2);
+                imageView.setTranslateY(entity.getY() - image.getHeight() / 2);
             } else {
                 ImageView imageView = images.remove(entity);
-                if(imageView != null){
+                if (imageView != null) {
                     gameData.getPolygonLayer().getChildren().remove(imageView);
                 }
             }
@@ -249,7 +233,7 @@ public class Main extends Application {
         polygon.setTranslateX(entity.getX());
         polygon.setTranslateY(entity.getY());
         if (entity.isShouldRotateAlternative()) {
-            //polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
+            polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
         } else {
             polygon.setRotate(entity.getRotation());
         }

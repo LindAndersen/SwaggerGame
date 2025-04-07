@@ -30,7 +30,7 @@ public class GameData {
         root.setAlignment(Pos.TOP_LEFT); // <- this is the key
         root.getChildren().addAll(backgroundLayer, polygonLayer, lightLayer, textLayer);
 
-        for (Pane layer : List.of(backgroundLayer, polygonLayer, textLayer, lightLayer)) {
+        for (Pane layer : List.of(backgroundLayer, polygonLayer, lightLayer, textLayer)) {
             layer.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             layer.prefWidthProperty().bind(root.widthProperty());
             layer.prefHeightProperty().bind(root.heightProperty());
@@ -44,6 +44,7 @@ public class GameData {
         }
 
         backgroundLayer.setMouseTransparent(false);
+        textLayer.setMouseTransparent(false);
         //Image backgroundActualImage = new Image(getClass().getResourceAsStream("/background.jpg"));
         Image backgroundActualImage = new Image(getClass().getResourceAsStream("/from_chat.png"));
         BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, false, true);
@@ -96,7 +97,7 @@ public class GameData {
             pausedBox.setLayoutX((double) displayWidth /2-200);
             pausedBox.setLayoutY((double) displayHeight/2-200);
             pausedBox.setAlignment(Pos.CENTER);
-            //pausedBox.setStyle("-fx-background-color: lightgray;");
+            pausedBox.setStyle("-fx-background-color: lightgray;");
 
             Label labelDescription = new Label("Paused");
             pausedBox.getChildren().add(labelDescription);

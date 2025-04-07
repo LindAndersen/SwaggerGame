@@ -41,7 +41,7 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
     private void displayQuestPopup(GameData gameData, QuestItem questItem) {
         // Display a pop-up with quest details
 
-        gameData.setQuestBox("Quest Description", questItem.getQuestDescription());
+        gameData.setQuestPane("Quest Description", questItem.getQuestDescription());
 
 //        Platform.runLater(() -> {
 //            Alert alert = new Alert(Alert.AlertType.INFORMATION);
