@@ -7,10 +7,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Door</artifactId>
+    <artifactId>LightPhysics</artifactId>
     <packaging>jar</packaging>
 
-    <name>Door</name>
+    <name>LightPhysics</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -31,7 +31,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>CommonInteractable</artifactId>
+            <artifactId>CommonLightSource</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

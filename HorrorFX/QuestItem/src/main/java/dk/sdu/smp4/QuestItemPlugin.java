@@ -29,7 +29,7 @@ public class QuestItemPlugin implements IGamePluginService {
         quest.setY(questY);
 
         quest.setRadius(questRadius);
-
+        quest.setType("guest");
         return quest;
     }
 }
