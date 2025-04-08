@@ -18,12 +18,13 @@ public class EnemyControlSystem implements IEntityProcessingService {
             lastKnownPlayerY = event.getY();
         });
     }
+
     @Override
     public void process(GameData gameData, World world) {
         if (lastKnownPlayerX == -1 || lastKnownPlayerY == -1) return;
 
-        for (Entity entity : world.getEntities(enemy.class)) {
-            enemy enemy = (enemy) entity;
+        for (Entity entity : world.getEntities(Enemy.class)) {
+            Enemy enemy = (Enemy) entity;
             enemy.setPreviousX(enemy.getX());
             enemy.setPreviousY(enemy.getY());
             double dx = lastKnownPlayerX - enemy.getX();
@@ -37,6 +38,16 @@ public class EnemyControlSystem implements IEntityProcessingService {
                 enemy.setY(enemy.getY() + (dy / distance) * speed);
             }
 
+            handleImage(enemy, dx);
+        }
+    }
+
+    private void handleImage(Enemy enemy, double dx)
+    {
+        if(dx < 0){
+            enemy.setMoveLeft();
+        } else {
+            enemy.setMoveRight();
         }
     }
 }

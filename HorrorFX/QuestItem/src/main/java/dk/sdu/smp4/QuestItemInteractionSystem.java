@@ -1,12 +1,9 @@
 package dk.sdu.smp4;
 
-import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
-import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
-
 
 public class QuestItemInteractionSystem implements IQuestInteractable {
     QuestManager questManager = new QuestManager();

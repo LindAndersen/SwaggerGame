@@ -42,5 +42,6 @@
                 <version>3.6.1</version>
             </plugin>
         </plugins>
+
     </build>
 </project>

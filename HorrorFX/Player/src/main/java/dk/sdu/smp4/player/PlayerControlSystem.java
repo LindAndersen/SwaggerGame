@@ -34,12 +34,18 @@ public class PlayerControlSystem implements IEntityProcessingService {
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 player.setX(player.getX()-1);
                 player.setPreviousX(player.getX()+1.00001);
+                if (player.getImage() != null && !player.getImage().equals(player.getMoveLeftImage())) {
+                    player.setImage(player.getMoveLeftImage());
+                }
             }
 
             //RIGHT
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 player.setX(player.getX()+1);
                 player.setPreviousX(player.getX()-1.00001);
+                if (player.getImage() != null && !player.getImage().equals(player.getMoveRightImage())) {
+                    player.setImage(player.getMoveRightImage());
+                }
             }
 
             //UP
