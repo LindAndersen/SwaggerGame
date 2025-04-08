@@ -101,11 +101,11 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
 
         double rotationRad = Math.toRadians(light.getRotation());
         double spreadRad = Math.toRadians(light.getAngleWidth());
-        double startAngle = rotationRad + spreadRad / 2;
-        double endAngle = rotationRad - spreadRad / 2;
+        double startAngle = rotationRad - spreadRad / 2;
+        double endAngle = rotationRad + spreadRad / 2;
 
         for (int i = 0; i < numRays; i++) {
-            double angle = startAngle - i * (endAngle - startAngle) / (numRays - 1);
+            double angle = startAngle + i * (endAngle - startAngle) / (numRays - 1);
             angle = (angle + 2 * Math.PI) % (2 * Math.PI); // Normalize
 
             double endX = originX + radius * Math.cos(angle);
@@ -133,10 +133,12 @@ public class LightPhysicsEngine implements IPostEntityProcessingService {
         if (light.getAngleWidth() >= 360) {
             points.sort(Comparator.comparingDouble(p -> p.angle));
         }
-        double[] coords = new double[points.size() * 2];
+        double[] coords = new double[(points.size()+1) * 2];
+        coords[0] = originX;
+        coords[1] = originY;
         for (int i = 0; i < points.size(); i++) {
-            coords[i * 2] = points.get(i).x;
-            coords[i * 2 + 1] = points.get(i).y;
+            coords[(i+1) * 2] = points.get(i).x;
+            coords[(i+1) * 2 + 1] = points.get(i).y;
         }
 
         return coords;
