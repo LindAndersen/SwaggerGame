@@ -1,5 +1,6 @@
 package dk.sdu.smp4;
 import dk.sdu.smp4.common.data.SoftEntity;
+import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,10 @@ public class QuestItem extends SoftEntity {
     private int questRadius;
     private String parentID;
     private List<QuestItem> children;
+    private final Image defaultGif = new Image(getClass().getResourceAsStream("/quest_hover_gif.gif"), 40, 40, true, true);
 
     public QuestItem(String questName, String questDescription, int questX, int questY, int questRadius) {
+        setImage(defaultGif);
         this.questName = questName;
         this.questDescription = questDescription;
         this.questX = questX;

@@ -237,6 +237,11 @@ public class Main extends Application {
         } else {
             polygon.setRotate(entity.getRotation());
         }
+        if(entity instanceof SoftEntity)
+        {
+            polygon.setOpacity(0);
+        }
+
         polygon.setFill(entity.getPaint());
     }
 

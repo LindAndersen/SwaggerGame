@@ -9,7 +9,8 @@ import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 public class KeyControlSystem implements IQuestInteractable {
     @Override
     public void interact(Entity player, GameData gameData, World world) {
-        for (Entity key : world.getEntities(Key.class)) {
+        for (Entity keyIn : world.getEntities(Key.class)) {
+            Key key = (Key) keyIn;
             if (isKeyWithinReach(player, key) && gameData.getKeys().isPressed(GameKeys.INTERACT)) {
                 System.out.println("Key picked up: " + key.getProperty("keyId"));
                 player.getInventory().add((String) key.getProperty("keyId"));
@@ -29,6 +30,6 @@ public class KeyControlSystem implements IQuestInteractable {
     }
 
     private void displayKeyPickupMessage(Entity key) {
-        System.out.println("You have picked up a key: " + key.getProperty("keyId"));
+        System.out.println("You have picked up a key: " + ((Key)key).getProperty("keyId"));
     }
 }
