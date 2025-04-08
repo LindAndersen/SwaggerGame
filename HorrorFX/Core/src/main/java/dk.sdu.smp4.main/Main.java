@@ -7,9 +7,13 @@ import dk.sdu.smp4.common.data.*;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,20 +21,14 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,6 +40,7 @@ public class Main extends Application {
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
     private final StackPane gameWindow = gameData.getRoot();
+    private final StackPane startMenu = new StackPane();
     private final Image noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
     private final Canvas lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
@@ -50,37 +49,97 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage window) {
+    public void start(Stage stage) {
+        Font.loadFont(getClass().getResource("/fonts/was.ttf").toExternalForm(), 10);
+
+        Scene scene = new Scene(gameWindow, gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        stage.setScene(scene);
+        stage.setTitle("HorrorFX");
+
+        setupStartMenu(stage);
+        gameWindow.getChildren().add(startMenu);
+
+        stage.show();
+    }
+
+    private void setupStartMenu(Stage stage) {
+        startMenu.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        startMenu.getStyleClass().add("start-pane");
+
+        Label title = new Label("HorrorFX");
+        title.setPadding(new Insets(50, 0, 0, 0));
+        title.getStyleClass().add("title-label");
+
+        Button startButton = new Button("Start");
+        startButton.getStyleClass().add("menu-button");
+        startButton.setOnMouseClicked((MouseEvent event) -> {
+            gameWindow.getChildren().remove(startMenu);
+            initGame(stage);
+        });
+
+        Button quitButton = new Button("Quit");
+        quitButton.getStyleClass().add("menu-button");
+        quitButton.setOnMouseClicked((MouseEvent event) -> {
+            stage.close();
+        });
+
+        Image image = new Image(getClass().getResource("/images/dungeon.gif").toExternalForm());
+        ImageView background = new ImageView(image);
+        background.setPreserveRatio(false);
+        background.setSmooth(true);
+        background.setCache(true);
+        background.fitWidthProperty().bind(startMenu.widthProperty());
+        background.fitHeightProperty().bind(startMenu.heightProperty());
+
+        VBox buttons = new VBox(20);
+        buttons.setMaxWidth(225);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.getChildren().addAll(startButton, quitButton);
+
+        BorderPane layout = new BorderPane();
+        layout.setTop(title);
+        layout.setCenter(buttons);
+        BorderPane.setAlignment(title, Pos.TOP_CENTER);
+
+        startMenu.getChildren().addAll(background, layout);
+    }
+
+    private void initGame(Stage stage) {
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        gameWindow.prefWidthProperty().bind(stage.getScene().widthProperty());
+        gameWindow.prefHeightProperty().bind(stage.getScene().heightProperty());
 
-        Scene scene = new Scene(gameWindow, gameData.getDisplayWidth(), gameData.getDisplayHeight(), Color.TRANSPARENT);
-        gameWindow.prefWidthProperty().bind(scene.widthProperty());
-        gameWindow.prefHeightProperty().bind(scene.heightProperty());
-
-        scene.setOnMouseMoved(event -> {
+        stage.getScene().setOnMouseMoved(event -> {
             gameData.getKeys().setMouseMoved(true);
             GameKeys.setMousePosition(event.getSceneX(), event.getSceneY());
         });
 
-        scene.setOnKeyPressed(event -> setKey(event.getCode(), true));
-        scene.setOnKeyReleased(event -> setKey(event.getCode(), false));
+        stage.getScene().setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
+            if (code == KeyCode.ESCAPE) {
+                gameData.setPausedBox(stage);
+            } else {
+                setKey(code, true);
+            }
+        });
+
+        stage.getScene().setOnKeyReleased(event -> setKey(event.getCode(), false));
 
         getPluginServices().forEach(plugin -> plugin.start(gameData, world));
 
         render();
-
-        window.setScene(scene);
-        window.setTitle("HorrorFX");
-        window.show();
     }
 
     private void render() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                update();
-                draw();
-                gameData.getKeys().update();
+                if (!gameData.isPaused()) {
+                    update();
+                    draw();
+                    gameData.getKeys().update();
+                }
             }
         }.start();
     }
@@ -95,14 +154,11 @@ public class Main extends Application {
         gcLight.setGlobalBlendMode(BlendMode.SRC_OVER);
         gcLight.clearRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        // Draw noise background
         gcLight.drawImage(noiseImage, 0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        // Opacity value here alongside base value in generateNoiseImage controls contrast in between light and non-light areas
         gcLight.setFill(Color.color(0, 0, 0, 0.85));
         gcLight.fillRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        // Draw light cutouts
         gcLight.setFill(Color.color(1, 1, 1, 1));
         for (Entity entity : world.getEntities(CommonLightSource.class)) {
             double[] coords = entity.getPolygonCoordinates();
@@ -123,7 +179,6 @@ public class Main extends Application {
 
         lightMaskCanvas.setBlendMode(BlendMode.MULTIPLY);
         gameData.getLightLayer().getChildren().setAll(lightMaskCanvas);
-
     }
 
     private void draw() {
@@ -162,11 +217,11 @@ public class Main extends Application {
                     imageView.setImage(image);
                 }
 
-                imageView.setTranslateX(entity.getX() - image.getWidth()/2);
-                imageView.setTranslateY(entity.getY()- image.getHeight()/2);
+                imageView.setTranslateX(entity.getX() - image.getWidth() / 2);
+                imageView.setTranslateY(entity.getY() - image.getHeight() / 2);
             } else {
                 ImageView imageView = images.remove(entity);
-                if(imageView != null){
+                if (imageView != null) {
                     gameData.getPolygonLayer().getChildren().remove(imageView);
                 }
             }
@@ -178,7 +233,7 @@ public class Main extends Application {
         polygon.setTranslateX(entity.getX());
         polygon.setTranslateY(entity.getY());
         if (entity.isShouldRotateAlternative()) {
-            //polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
+            polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
         } else {
             polygon.setRotate(entity.getRotation());
         }

@@ -1,16 +1,9 @@
 package dk.sdu.smp4;
 
-import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
-import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-
-import javax.management.QueryEval;
-import javax.swing.*;
 
 public class QuestItemInteractionSystem implements IQuestInteractable {
     //implement the other interface.... then put all this into that interfaces proces method... then it work :)
