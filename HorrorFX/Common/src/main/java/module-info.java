@@ -5,4 +5,5 @@ module Common {
     exports dk.sdu.smp4.common.data;
     exports  dk.sdu.smp4.common.Services;
     exports dk.sdu.smp4.common.events;
+    exports dk.sdu.smp4.common.GUIelements;
 }
