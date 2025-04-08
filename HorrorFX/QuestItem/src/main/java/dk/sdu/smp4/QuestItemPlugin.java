@@ -11,8 +11,18 @@ public class QuestItemPlugin implements IGamePluginService {
     private Entity QuestNote;
     @Override
     public void start(GameData gameData, World world) {
-        world.addEntity(CreateQuest("name", "description", 1, 600, 400, 8, 100, 140));
-        world.addEntity(CreateQuest("name2", "description2", 1, 400, 400, 8, 100, 140));
+        QuestItem childQuest1 = CreateQuest("child1", "poke my ass", 400, 200, 8);
+        QuestItem childQuest2 = CreateQuest("child2", "poke my eyes", 500, 100, 8);
+        QuestItem parentQuest = CreateQuest("Main Quest","Go save the world",400, 600, 8);
+        QuestItem parentQuest2 = CreateQuest("Main Quest2tihi","Go save the world again",450, 600, 8);
+
+        //Define Quest relationships.
+        parentQuest.addChildQuest(childQuest1);
+        parentQuest2.addChildQuest(childQuest2);
+
+        //Add Quests to the world
+        world.addEntity(parentQuest);
+        world.addEntity(parentQuest2);
     }
 
     @Override
@@ -20,9 +30,9 @@ public class QuestItemPlugin implements IGamePluginService {
         world.removeEntity(QuestNote);
     }
 
-    private Entity CreateQuest(String questName, String questDescription, int questID, int questX, int questY, int questRadius, int questCompX, int questCompY) {
+    private QuestItem CreateQuest(String questName, String questDescription, int questX, int questY, int questRadius) {
 
-        SoftEntity quest = new QuestItem(questName, questDescription, questID, questX, questY, questRadius, questCompX, questCompY);
+        QuestItem quest = new QuestItem(questName, questDescription, questX, questY, questRadius);
         quest.setPolygonCoordinates(-5,-5,5,0,-5,5, 10, 10);
 
         quest.setX(questX);
