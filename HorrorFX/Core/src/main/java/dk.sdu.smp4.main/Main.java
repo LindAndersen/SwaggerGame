@@ -172,6 +172,10 @@ public class Main extends Application {
                 for (int i = 2; i < points.length; i += 2) {
                     gcLight.lineTo(points[i] + poly.getTranslateX(), points[i + 1] + poly.getTranslateY());
                 }
+
+                // Explicitly close the path by connecting back to the first point
+                gcLight.lineTo(points[0] + poly.getTranslateX(), points[1] + poly.getTranslateY());
+
                 gcLight.closePath();
                 gcLight.fill();
             }
@@ -233,7 +237,7 @@ public class Main extends Application {
         polygon.setTranslateX(entity.getX());
         polygon.setTranslateY(entity.getY());
         if (entity.isShouldRotateAlternative()) {
-            polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
+            //polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
         } else {
             polygon.setRotate(entity.getRotation());
         }
