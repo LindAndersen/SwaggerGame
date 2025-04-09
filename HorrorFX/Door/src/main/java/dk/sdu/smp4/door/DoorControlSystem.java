@@ -16,16 +16,22 @@ public class DoorControlSystem implements IQuestInteractable {
             if (isDoorWithinReach(player, door) && gameData.getKeys().isPressed(GameKeys.INTERACT)) {
 
                 if (player.getInventory().contains(REQUIRED_KEY)) {
-                    System.out.println("Door unlocked with the golden key!");
+                    // Show unlock popup
+                    gameData.setQuestPane("Unlocked", "The golden key fits perfectly. The door swings open...");
+
+                    // Unlock door
                     player.getInventory().remove(REQUIRED_KEY);
                     world.removeEntity(door);
-                    System.out.println("The door has been removed!");
                 } else {
-                    System.out.println("The door is locked. You need a golden key!");
+                    // Show locked popup
+                    gameData.setQuestPane("Locked", "The door is locked. You need a golden key.");
                 }
+
+                break;
             }
         }
     }
+
 
     @Override
     public void consume(GameData gameData, World world) {
@@ -34,6 +40,6 @@ public class DoorControlSystem implements IQuestInteractable {
 
     private boolean isDoorWithinReach(Entity player, Entity door) {
         double distance = Math.sqrt(Math.pow(door.getX() - player.getX(), 2) + Math.pow(door.getY() - player.getY(), 2));
-        return distance < 40;  // Adjust based on gameplay needs
+        return distance < 40;
     }
 }
