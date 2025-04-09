@@ -1,5 +1,7 @@
 package dk.sdu.smp4.common.GUIelements;
 
+import javafx.scene.input.KeyCode;
+
 public class PausePopup extends GamePopup {
 
     public PausePopup(Runnable onContinue, Runnable onQuit) {
