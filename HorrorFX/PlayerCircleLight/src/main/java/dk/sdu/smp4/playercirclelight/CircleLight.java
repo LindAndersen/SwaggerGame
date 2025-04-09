@@ -7,7 +7,7 @@ public class CircleLight extends CommonPlayerLight {
     public CircleLight(){
         setNumRays(100);
         setAngleWidth(360);
-        setRadiusFactor(3);
+        setRadiusFactor(2);
         setShouldRotateAlternative(false);
     }
 }

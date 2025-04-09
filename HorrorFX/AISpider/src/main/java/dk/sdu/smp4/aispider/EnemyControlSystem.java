@@ -16,6 +16,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
         EventBus.subscribe(PlayerPositionEvent.class, event -> {
             lastKnownPlayerX = event.getX();
             lastKnownPlayerY = event.getY();
+
         });
     }
 
@@ -25,6 +26,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
         for (Entity entity : world.getEntities(Enemy.class)) {
             Enemy enemy = (Enemy) entity;
+            if (enemy.isInCooldown()) continue;
             enemy.setPreviousX(enemy.getX());
             enemy.setPreviousY(enemy.getY());
             double dx = lastKnownPlayerX - enemy.getX();

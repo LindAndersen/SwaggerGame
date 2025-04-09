@@ -12,16 +12,17 @@ public class DoorControlSystem implements IQuestInteractable {
 
     @Override
     public void interact(Entity player, GameData gameData, World world) {
-        for (Entity door : world.getEntities(Door.class)) {
+        for (Entity doorEntity : world.getEntities(Door.class)) {
+            Door door = (Door) doorEntity;
             if (isDoorWithinReach(player, door) && gameData.getKeys().isPressed(GameKeys.INTERACT)) {
 
-                if (player.getInventory().contains(REQUIRED_KEY)) {
-                    System.out.println("Door unlocked with the golden key!");
+                if (player.getInventory().contains(door.getRequiredKey())) {
+                    System.out.println("Door unlocked with the "+door.getRequiredKey()+"!");
                     player.getInventory().remove(REQUIRED_KEY);
                     world.removeEntity(door);
                     System.out.println("The door has been removed!");
                 } else {
-                    System.out.println("The door is locked. You need a golden key!");
+                    System.out.println("The door is locked. You need a "+door.getRequiredKey()+"!");
                 }
             }
         }

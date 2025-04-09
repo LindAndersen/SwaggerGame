@@ -12,19 +12,21 @@ public class KeyPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        Entity goldenKey = createKey(gameData, "golden_key", "gold");
-        Entity blueKey = createKey(gameData, "blue_key", "blue");
-        Entity steelKey = createKey(gameData, "steel_key", "gray");
+        Entity goldenKey = createKey(gameData, 400, 400, "golden_key", "gold");
+        Entity bronzeKey = createKey(gameData, 400, 600, "bronze_key", "blue");
 
         world.addEntity(goldenKey);
-        world.addEntity(blueKey);
-        world.addEntity(steelKey);
+        world.addEntity(bronzeKey);
     }
 
-    private Entity createKey(GameData gameData, String keyId, String color) {
-        Entity key = new Key();
-        float randomX = random.nextFloat() * gameData.getDisplayWidth();
-        float randomY = random.nextFloat() * gameData.getDisplayHeight();
+    private Entity createKey(GameData gameData, int x, int y, String keyId, String color) {
+        Key key = new Key(keyId);
+//        float randomX = random.nextFloat(0.1F,0.7F) * gameData.getDisplayWidth();
+//        float value1 = random.nextFloat() * (0.3f - 0.2f) + 0.2f;
+//        float value2 = random.nextFloat() * (0.8f - 0.7f) + 0.7f;
+//
+//        float result = random.nextBoolean() ? value1 : value2;
+//        float randomY = result * gameData.getDisplayHeight();
 
         key.setPolygonCoordinates(
                 // Teeth (blocky bit)
@@ -47,11 +49,10 @@ public class KeyPlugin implements IGamePluginService {
                 4, -33
         );
 
-        key.setX(randomX);
-        key.setY(randomY);
+        key.setX(x);
+        key.setY(y);
         key.setPaint(color);
         key.setType("key");
-        key.setProperties("keyId", keyId);
         return key;
     }
 

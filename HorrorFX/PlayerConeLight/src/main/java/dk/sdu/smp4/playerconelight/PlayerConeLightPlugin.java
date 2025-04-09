@@ -12,7 +12,7 @@ public class PlayerConeLightPlugin implements IPlayerLightPlugin {
 
         lightEntity.setX(player.getX());
         lightEntity.setY(player.getY());
-        lightEntity.setRadius(player.getRadius()*30);
+        lightEntity.setRadius(player.getRadius()*6);
         lightEntity.setSolid(false);
         lightEntity.setRotation(player.getRotation());
 

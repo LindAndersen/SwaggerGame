@@ -25,4 +25,27 @@ public class Player extends SoftEntity {
     @Override
     public void collide(World world, Entity entity) {
     }
+    private int lives = 2;
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void loseLife() {
+        this.lives--;
+    }
+
+    private boolean isDead = false;
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        this.isDead = dead;
+    }
 }
