@@ -10,12 +10,14 @@ import dk.sdu.smp4.common.events.EventBus;
 
 public class DoorPlugin implements IGamePluginService {
 
-    private HardEntity door;
+    private Door door, door2;
 
     @Override
     public void start(GameData gameData, World world) {
-        door = createDoor(400, 400-100, 40,20);
+        door = createDoor(400, 300, 40,20, "bronze_key");
+        door2 = createDoor(300, 100, 40,20, "golden_key");
         world.addEntity(door);
+        world.addEntity(door2);
 //        System.out.println("DoorPlugin started");
 //        EventBus.subscribe(DoorCreationEvent.class, event -> {
 //            System.out.println("DoorCreationEvent received: " + event);
@@ -25,8 +27,8 @@ public class DoorPlugin implements IGamePluginService {
 //        });
     }
 
-    private HardEntity createDoor(float x, float y, float width, float height) {
-        door = new Door();
+    private Door createDoor(float x, float y, float width, float height, String requiredKey) {
+        Door door = new Door();
 
         door.setPolygonCoordinates(
                 -width / 2, -height / 2,   // Top left
@@ -41,6 +43,7 @@ public class DoorPlugin implements IGamePluginService {
         door.setSolid(true);
         door.setPaint("brown");
         door.setType("brown_door");
+        door.setRequiredKey(requiredKey);
         return door;
     }
 

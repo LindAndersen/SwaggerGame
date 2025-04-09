@@ -13,8 +13,6 @@ import java.util.Random;
  */
 public class StructurePlugin implements IGamePluginService
 {
-    private Structure structure;
-
     private Room room, room2;
 
     @Override
@@ -120,6 +118,7 @@ public class StructurePlugin implements IGamePluginService
 
     @Override
     public void stop(GameData gameData, World world) {
-        world.removeEntity(structure);
+        world.removeEntity(room);
+        world.removeEntity(room2);
     }
 }

@@ -11,18 +11,21 @@ public class QuestItemPlugin implements IGamePluginService {
     private Entity QuestNote;
     @Override
     public void start(GameData gameData, World world) {
-        QuestItem childQuest1 = CreateQuest("child1", "poke my ass", 400, 200, 8);
-        QuestItem childQuest2 = CreateQuest("child2", "poke my eyes", 500, 100, 8);
-        QuestItem parentQuest = CreateQuest("Main Quest","Go save the world",400, 600, 8);
-        QuestItem parentQuest2 = CreateQuest("Main Quest2tihi","Go save the world again",450, 600, 8);
+        //QuestItem childQuest2 = CreateQuest("child2", "poke my eyes", 500, 100, 8);
+        QuestItem parentQuest = CreateQuest("Find the bronze key","Find the bronze key, to open the room in the middle",gameData.getDisplayWidth() /5, (gameData.getDisplayHeight()/5)+20, 8);
+        QuestItem childQuest1 = CreateQuest("Escape!", "You found the golden key! Now you can escape the castle", 360, 400, 8);
+        QuestItem childQuest2 = CreateQuest("Victory!", "You escaped the castle, congratulations!", 300, 50, 8);
+        //QuestItem parentQuest2 = CreateQuest("Main Quest2tihi","Go save the world again",450, 600, 8);
 
         //Define Quest relationships.
         parentQuest.addChildQuest(childQuest1);
-        parentQuest2.addChildQuest(childQuest2);
+        //parentQuest2.addChildQuest(childQuest2);
 
         //Add Quests to the world
         world.addEntity(parentQuest);
-        world.addEntity(parentQuest2);
+
+        childQuest1.addChildQuest(childQuest2);
+        //world.addEntity(parentQuest2);
     }
 
     @Override
