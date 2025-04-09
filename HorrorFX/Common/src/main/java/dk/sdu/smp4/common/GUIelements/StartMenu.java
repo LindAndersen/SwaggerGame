@@ -8,8 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-import java.util.Objects;
-
 public class StartMenu extends StackPane {
 
     public StartMenu(Runnable onStart, Runnable onQuit) {
@@ -19,12 +17,10 @@ public class StartMenu extends StackPane {
         Label title = new Label("HorrorFX");
         title.getStyleClass().add("title-label");
 
-        Button startButton = new Button("Start");
-        startButton.getStyleClass().add("menu-button");
+        GameButton startButton = new GameButton("Start");
         startButton.setOnMouseClicked(e -> onStart.run());
 
-        Button quitButton = new Button("Quit");
-        quitButton.getStyleClass().add("menu-button");
+        GameButton quitButton = new GameButton("Quit");
         quitButton.setOnMouseClicked(e -> onQuit.run());
 
         VBox buttons = new VBox(20, startButton, quitButton);
@@ -36,7 +32,7 @@ public class StartMenu extends StackPane {
         layout.setCenter(buttons);
         BorderPane.setAlignment(title, Pos.TOP_CENTER);
 
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/images/dungeon.gif")).toExternalForm());
+        Image image = new Image(getClass().getResource("/images/dungeon.gif").toExternalForm());
         ImageView background = new ImageView(image);
         background.setPreserveRatio(false);
         background.setSmooth(true);
