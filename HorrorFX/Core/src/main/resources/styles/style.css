@@ -1,24 +1,20 @@
 .start-pane {
     -fx-background-color: black;
+    -fx-font-family: 'Who asks Satan';
 }
 
 .title-label {
-    -fx-font-size: 96px;
-    -fx-text-fill: lightgrey;
-    -fx-font-family: 'Who asks Satan';
+    -fx-font-size: 128px;
+    -fx-text-fill: maroon;
 }
 
 .menu-button {
     -fx-text-fill: white;
-    -fx-font-size: 32px;
-    -fx-font-family: 'Times New Roman';
-    -fx-background-color: black;
-    -fx-border-color: red;
-    -fx-border-width: 2px;
-    -fx-padding: 10px 20px;
+    -fx-font-size: 96px;
+    -fx-background-color: transparent;
     -fx-cursor: hand;
 }
 
 .menu-button:hover {
-    -fx-border-color: lightcoral;
+    -fx-text-fill: maroon;
 }
