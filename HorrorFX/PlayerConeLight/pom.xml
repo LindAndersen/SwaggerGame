@@ -25,6 +25,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>CommonLightSource</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>CommonPlayerLight</artifactId>
             <version>${project.version}</version>
         </dependency>

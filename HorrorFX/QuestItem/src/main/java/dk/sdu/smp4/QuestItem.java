@@ -1,7 +1,41 @@
 package dk.sdu.smp4;
 import dk.sdu.smp4.common.data.SoftEntity;
+import javafx.scene.image.Image;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class QuestItem extends SoftEntity {
+    private String questName;
+    private String questDescription;
+    private int questX;
+    private int questY;
+    private int questRadius;
+    private String parentID;
+    private List<QuestItem> children;
+    private final Image defaultGif = new Image(getClass().getResourceAsStream("/quest_hover_gif.gif"), 40, 40, true, true);
+
+    public QuestItem(String questName, String questDescription, int questX, int questY, int questRadius) {
+        setImage(defaultGif);
+        this.questName = questName;
+        this.questDescription = questDescription;
+        this.questX = questX;
+        this.questY = questY;
+        this.questRadius = questRadius;
+        this.children = new ArrayList<>();
+    }
+
+    public void addChildQuest(QuestItem child)
+    {
+        children.add(child);
+        child.setParentID(this.parentID);
+    }
+
+    public List<QuestItem> getChildren() {
+        return children;
+    }
+
     public int getQuestRadius() {
         return questRadius;
     }
@@ -14,51 +48,13 @@ public class QuestItem extends SoftEntity {
         return questX;
     }
 
-    public int getQuestID() {
-        return questID;
-    }
-
     public String getQuestDescription() {
         return questDescription;
     }
 
-
     public String getQuestName() {
         return questName;
     }
-
-    public boolean isStarted() {
-        return isStarted;
-    }
-
-    public int getQuestCompX() {
-        return questCompX;
-    }
-
-    public int getQuestCompY() {
-        return questCompY;
-    }
-
-    private boolean isStarted = false;
-    private String questName;
-    private String questDescription;
-    private int questID;
-    private int questX;
-    private int questY;
-    private int questRadius;
-    private int questCompX;
-    private int questCompY;
-
-
-
-    public QuestItem(String questName, String questDescription, int questID, int questX, int questY, int questRadius, int questCompX, int questCompY) {
-        this.questName = questName;
-        this.questDescription = questDescription;
-        this.questID = questID;
-        this.questX = questX;
-        this.questY = questY;
-        this.questRadius = questRadius;
-        this.questCompX = questX;
-        this.questCompY = questY;
-    }
+    public String getParentID(){return parentID;}
+    public void setParentID(String parentID){this.parentID = parentID;}
 }
