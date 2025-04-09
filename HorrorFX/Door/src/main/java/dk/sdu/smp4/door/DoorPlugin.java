@@ -14,13 +14,15 @@ public class DoorPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        System.out.println("DoorPlugin started");
-        EventBus.subscribe(DoorCreationEvent.class, event -> {
-            System.out.println("DoorCreationEvent received: " + event);
-            HardEntity door = createDoor(event.getX(), event.getY(), event.getWidth(), event.getHeight());
-            world.addEntity(door);
-            System.out.println("Door created at (" + door.getX() + ", " + door.getY() + ") and added to world");
-        });
+        door = createDoor(400, 400-100, 40,20);
+        world.addEntity(door);
+//        System.out.println("DoorPlugin started");
+//        EventBus.subscribe(DoorCreationEvent.class, event -> {
+//            System.out.println("DoorCreationEvent received: " + event);
+//            HardEntity door = createDoor(event.getX(), event.getY(), event.getWidth(), event.getHeight());
+//            world.addEntity(door);
+//            System.out.println("Door created at (" + door.getX() + ", " + door.getY() + ") and added to world");
+//        });
     }
 
     private HardEntity createDoor(float x, float y, float width, float height) {

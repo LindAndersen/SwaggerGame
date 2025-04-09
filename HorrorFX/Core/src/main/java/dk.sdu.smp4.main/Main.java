@@ -134,7 +134,6 @@ public class Main extends Application {
                 Polygon removedPolygon = polygons.get(polygonEntity);
                 polygons.remove(polygonEntity);
                 gameWindow.getChildren().remove(removedPolygon);
-                System.out.println("Entity removed: " + polygonEntity);
             }
         }
 
@@ -144,7 +143,6 @@ public class Main extends Application {
                 polygon = new Polygon(entity.getPolygonCoordinates());
                 polygons.put(entity, polygon);
                 gameWindow.getChildren().add(polygon);
-                System.out.println("Entity added: " + entity);
             }
 
             polygon.getTransforms().clear();

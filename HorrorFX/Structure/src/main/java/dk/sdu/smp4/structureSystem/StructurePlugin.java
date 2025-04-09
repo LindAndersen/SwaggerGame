@@ -109,8 +109,8 @@ public class StructurePlugin implements IGamePluginService
         room.setLeftWall(createStructure(gameData, verticalHeight, wallThickness, x-width/2, y));
         room.setRightWall(createStructure(gameData, verticalHeight, wallThickness, x+width/2, y));
 
-        EventBus.post(new DoorCreationEvent((float) x, (float) y - height / 2, doorGapWidth, wallThickness));
-        System.out.println("DoorCreationEvent posted");
+//        EventBus.post(new DoorCreationEvent((float) x, (float) y - height / 2, doorGapWidth, wallThickness));
+//        System.out.println("DoorCreationEvent posted");
 
 
         return room;
