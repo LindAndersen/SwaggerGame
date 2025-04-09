@@ -2,6 +2,8 @@ package dk.sdu.smp4.structureSystem;
 
 import dk.sdu.smp4.common.Services.IGamePluginService;
 import dk.sdu.smp4.common.data.*;
+import dk.sdu.smp4.common.events.DoorCreationEvent;
+import dk.sdu.smp4.common.events.EventBus;
 
 import java.util.Random;
 
@@ -11,8 +13,6 @@ import java.util.Random;
  */
 public class StructurePlugin implements IGamePluginService
 {
-    private Structure structure;
-
     private Room room, room2;
 
     @Override
@@ -25,13 +25,15 @@ public class StructurePlugin implements IGamePluginService
         room = createRoom(gameData, 200, 300, 20, 400, 400);
         world.addEntity(room.getBottomWall());
         world.addEntity(room.getLeftWall());
-        world.addEntity(room.getTopWall());
+        world.addEntity(room.getTopWallLeft());
+        world.addEntity(room.getTopWallRight());
         world.addEntity(room.getRightWall());
 
         room2 = createRoom(gameData, 600, 600, 20, 300, 400);
         world.addEntity(room2.getBottomWall());
         world.addEntity(room2.getLeftWall());
-        world.addEntity(room2.getTopWall());
+        world.addEntity(room2.getTopWallLeft());
+        world.addEntity(room2.getTopWallRight());
         world.addEntity(room2.getRightWall());
     }
 
@@ -93,11 +95,21 @@ public class StructurePlugin implements IGamePluginService
 
         int horizontalWidth = width+wallThickness;
         int verticalHeight = height+wallThickness;
+        int doorGapWidth = 40;
 
-        room.setTopWall(createStructure(gameData, wallThickness, horizontalWidth, x, y+height/2));
-        room.setBottomWall(createStructure(gameData, wallThickness, horizontalWidth, x, y-height/2));
+        room.setTopWallLeft(createStructure(gameData, wallThickness, (horizontalWidth - doorGapWidth) / 2,
+                x - (horizontalWidth - doorGapWidth) / 4 - doorGapWidth / 2, y - height / 2));
+
+        room.setTopWallRight(createStructure(gameData, wallThickness, (horizontalWidth - doorGapWidth) / 2,
+                x + (horizontalWidth - doorGapWidth) / 4 + doorGapWidth / 2, y - height / 2));
+
+        room.setBottomWall(createStructure(gameData, wallThickness, horizontalWidth, x, y+height/2));
         room.setLeftWall(createStructure(gameData, verticalHeight, wallThickness, x-width/2, y));
         room.setRightWall(createStructure(gameData, verticalHeight, wallThickness, x+width/2, y));
+
+//        EventBus.post(new DoorCreationEvent((float) x, (float) y - height / 2, doorGapWidth, wallThickness));
+//        System.out.println("DoorCreationEvent posted");
+
 
         return room;
     }
@@ -106,6 +118,7 @@ public class StructurePlugin implements IGamePluginService
 
     @Override
     public void stop(GameData gameData, World world) {
-        world.removeEntity(structure);
+        world.removeEntity(room);
+        world.removeEntity(room2);
     }
 }

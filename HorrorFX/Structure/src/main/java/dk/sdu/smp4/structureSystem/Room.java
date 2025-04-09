@@ -1,14 +1,21 @@
 package dk.sdu.smp4.structureSystem;
 
 public class Room extends Structure {
-    Structure topWall, bottomWall, leftWall, rightWall;
+    Structure topLeftWall, topRightWall, bottomWall, leftWall, rightWall;
 
-    public Structure getTopWall() {
-        return topWall;
+    public Structure getTopWallLeft() {
+        return topLeftWall;
+    }
+    public Structure getTopWallRight() {
+        return topRightWall;
     }
 
-    public void setTopWall(Structure topWall) {
-        this.topWall = topWall;
+    public void setTopWallLeft(Structure topWall) {
+        this.topLeftWall = topWall;
+    }
+
+    public void setTopWallRight(Structure topWall) {
+        this.topRightWall = topWall;
     }
 
     public Structure getBottomWall() {
