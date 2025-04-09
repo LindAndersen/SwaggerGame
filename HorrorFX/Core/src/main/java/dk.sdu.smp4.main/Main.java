@@ -161,10 +161,10 @@ public class Main extends Application {
             double localX = entityX - lightPoly.getTranslateX();
             double localY = entityY - lightPoly.getTranslateY();
 
-            Circle debugDot = new Circle(3, Color.RED);
-            debugDot.setTranslateX(entity.getX());
-            debugDot.setTranslateY(entity.getY());
-            gameData.getPolygonLayer().getChildren().add(debugDot);
+//            Circle debugDot = new Circle(3, Color.RED);
+//            debugDot.setTranslateX(entity.getX());
+//            debugDot.setTranslateY(entity.getY());
+//            gameData.getPolygonLayer().getChildren().add(debugDot);
 
 
             // Check 5 points: center + four offsets
