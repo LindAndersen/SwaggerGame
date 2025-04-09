@@ -42,14 +42,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class Main extends Application {
-    private final GameData gameData = new GameData();
+    private GameData gameData = new GameData();
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
-    private final StackPane gameWindow = gameData.getRoot();
+    private StackPane gameWindow = gameData.getRoot();
     private StartMenu startMenu;
     private final Image noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
     private final Canvas lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+    private Stage primaryStage;
 
     public static void main(String[] args) {
         launch(Main.class);
@@ -57,6 +58,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        primaryStage = stage;
         Font.loadFont(getClass().getResource("/fonts/was.ttf").toExternalForm(), 10);
 
         Scene scene = new Scene(gameWindow, gameData.getDisplayWidth(), gameData.getDisplayHeight());
@@ -167,9 +169,6 @@ public class Main extends Application {
 
         gcLight.drawImage(noiseImage, 0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        gcLight.setFill(Color.color(0, 0, 0, 0));
-        gcLight.fillRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
-
         gcLight.setFill(Color.color(1, 1, 1, 1));
         for (Entity entity : world.getEntities(CommonLightSource.class)) {
             double[] coords = entity.getPolygonCoordinates();
@@ -272,7 +271,7 @@ public class Main extends Application {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                double base = 0.2 + rand.nextDouble() * 0.3;
+                double base = 0.65 + rand.nextDouble() * 0.3;
                 pw.setColor(x, y, Color.color(base, base * 0.8, base * 0.6, 1.0));
             }
         }
@@ -302,6 +301,7 @@ public class Main extends Application {
     }
 
     private void showGameOverScreen() {
+        System.out.println("I want to show game over screen");
         VBox gameOverBox = new VBox();
         gameOverBox.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         gameOverBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.85);");
@@ -332,16 +332,16 @@ public class Main extends Application {
     }
 
     private void restartGame() {
-        world.getEntities().forEach(entity -> gameData.getPolygonLayer().getChildren().clear());
+        gameData = new GameData();
+        gameWindow = gameData.getRoot();
         polygons.clear();
         images.clear();
         world.getEntities().clear();
-
-        getPluginServices().forEach(plugin -> plugin.stop(gameData, world));
-        getPluginServices().forEach(plugin -> plugin.start(gameData, world));
-
         gameData.setPaused(false);
+
+        start(primaryStage);
     }
+
     private final HBox lifeBox = new HBox(5);
     private final int maxLives = 2;
 

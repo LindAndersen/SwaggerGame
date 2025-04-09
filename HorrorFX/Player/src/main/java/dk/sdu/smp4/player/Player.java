@@ -3,15 +3,36 @@ package dk.sdu.smp4.player;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.events.EventBus;
+import dk.sdu.smp4.common.events.GameOverEvent;
+import dk.sdu.smp4.common.events.PlayerHitEvent;
+import dk.sdu.smp4.common.events.UpdateHUDLifeEvent;
 import javafx.scene.image.Image;
 
 public class Player extends SoftEntity {
     private final Image moveLeftImage = new Image(getClass().getResourceAsStream("/move_left.gif"));
     private final Image moveRightImage = new Image(getClass().getResourceAsStream("/move_right.gif"));
+    private int lives = 2;
+    private boolean isDead = false;
 
     public Player()
     {
         this.setImage(moveRightImage);
+
+        EventBus.subscribe(PlayerHitEvent.class, event -> {
+            if (event.getPlayer() instanceof Player ) {
+                if (isDead()) return;
+
+                loseLife();
+                System.out.println("Player hit! Lives left: " + getLives());
+                EventBus.post(new UpdateHUDLifeEvent(getLives()));
+
+                if (getLives() <= 0) {
+                    setDead(true); // blokerer flere hits
+                    EventBus.post(new GameOverEvent());
+                }
+            }
+        });
     }
 
     public Image getMoveLeftImage() {
@@ -25,7 +46,6 @@ public class Player extends SoftEntity {
     @Override
     public void collide(World world, Entity entity) {
     }
-    private int lives = 2;
 
     public int getLives() {
         return lives;
@@ -38,8 +58,6 @@ public class Player extends SoftEntity {
     public void loseLife() {
         this.lives--;
     }
-
-    private boolean isDead = false;
 
     public boolean isDead() {
         return isDead;

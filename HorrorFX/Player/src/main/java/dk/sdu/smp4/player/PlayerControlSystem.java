@@ -92,21 +92,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
             {
                 spi.processPlayerLight(player, gameData, world);
             }
-
-            EventBus.subscribe(PlayerHitEvent.class, event -> {
-                if (event.getPlayer() instanceof Player ) {
-                    if (player.isDead()) return;
-
-                    player.loseLife();
-                    System.out.println("Player hit! Lives left: " + player.getLives());
-                    EventBus.post(new UpdateHUDLifeEvent(player.getLives()));
-
-                    if (player.getLives() <= 0) {
-                        player.setDead(true); // blokerer flere hits
-                        EventBus.post(new GameOverEvent());
-                    }
-                }
-            });
         }
     }
 

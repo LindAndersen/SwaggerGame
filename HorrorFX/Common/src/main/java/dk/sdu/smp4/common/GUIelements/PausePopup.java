@@ -7,6 +7,12 @@ public class PausePopup extends GamePopup {
     public PausePopup(Runnable onContinue, Runnable onQuit) {
         super();
 
+        setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                onContinue.run();
+            }
+        });
+
         GameLabel pausedLabel = new GameLabel("Paused", GameLabel.Type.TITLE);
 
         GameButton continueButton = new GameButton("Continue");
