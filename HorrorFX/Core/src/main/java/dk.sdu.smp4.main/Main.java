@@ -25,6 +25,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
@@ -149,6 +150,37 @@ public class Main extends Application {
         getPostEntityProcessor().forEach(service -> service.process(gameData, world));
     }
 
+    private boolean isEntityLit(Entity entity) {
+        double entityX = entity.getX();
+        double entityY = entity.getY();
+
+        for (Entity lightEntity : world.getEntities(CommonLightSource.class)) {
+            Polygon lightPoly = new Polygon(lightEntity.getPolygonCoordinates());
+            handlePolygonCoordsPreDrawing(lightPoly, lightEntity);
+
+            double localX = entityX - lightPoly.getTranslateX();
+            double localY = entityY - lightPoly.getTranslateY();
+
+            Circle debugDot = new Circle(3, Color.RED);
+            debugDot.setTranslateX(entity.getX());
+            debugDot.setTranslateY(entity.getY());
+            gameData.getPolygonLayer().getChildren().add(debugDot);
+
+
+            // Check 5 points: center + four offsets
+            if (lightPoly.contains(localX, localY) ||
+                    lightPoly.contains(localX + 2, localY) ||
+                    lightPoly.contains(localX - 2, localY) ||
+                    lightPoly.contains(localX, localY + 2) ||
+                    lightPoly.contains(localX, localY - 2)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
     private void drawLightingMask() {
         GraphicsContext gcLight = lightMaskCanvas.getGraphicsContext2D();
         gcLight.setGlobalBlendMode(BlendMode.SRC_OVER);
@@ -156,7 +188,7 @@ public class Main extends Application {
 
         gcLight.drawImage(noiseImage, 0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
-        gcLight.setFill(Color.color(0, 0, 0, 0.85));
+        gcLight.setFill(Color.color(0, 0, 0, 0));
         gcLight.fillRect(0, 0, lightMaskCanvas.getWidth(), lightMaskCanvas.getHeight());
 
         gcLight.setFill(Color.color(1, 1, 1, 1));
@@ -186,6 +218,8 @@ public class Main extends Application {
     }
 
     private void draw() {
+        drawLightingMask();
+
         for (Entity polygonEntity : polygons.keySet()) {
             if (!world.getEntities().contains(polygonEntity)) {
                 gameData.getPolygonLayer().getChildren().remove(polygons.get(polygonEntity));
@@ -199,7 +233,9 @@ public class Main extends Application {
         }
 
         for (Entity entity : world.getEntities()) {
+            boolean isVisible;
             if (entity instanceof CommonLightSource) continue;
+            isVisible = !(entity instanceof SoftEntity) || isEntityLit(entity);
 
             Polygon polygon = polygons.computeIfAbsent(entity, e -> {
                 Polygon newPoly = new Polygon(e.getPolygonCoordinates());
@@ -208,7 +244,7 @@ public class Main extends Application {
             });
 
             handlePolygonCoordsPreDrawing(polygon, entity);
-            drawLightingMask();
+            polygon.setVisible(isVisible);
 
             Image image = entity.getImage();
             if (image != null) {
@@ -223,6 +259,7 @@ public class Main extends Application {
 
                 imageView.setTranslateX(entity.getX() - image.getWidth() / 2);
                 imageView.setTranslateY(entity.getY() - image.getHeight() / 2);
+                imageView.setVisible(isVisible);
             } else {
                 ImageView imageView = images.remove(entity);
                 if (imageView != null) {
