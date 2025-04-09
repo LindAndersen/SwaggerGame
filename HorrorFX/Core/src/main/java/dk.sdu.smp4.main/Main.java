@@ -130,10 +130,11 @@ public class Main extends Application {
 
     private void draw() {
         for (Entity polygonEntity : polygons.keySet()) {
-            if(!world.getEntities().contains(polygonEntity)){
+            if (!world.getEntities().contains(polygonEntity)) {
                 Polygon removedPolygon = polygons.get(polygonEntity);
                 polygons.remove(polygonEntity);
                 gameWindow.getChildren().remove(removedPolygon);
+                System.out.println("Entity removed: " + polygonEntity);
             }
         }
 
@@ -143,21 +144,19 @@ public class Main extends Application {
                 polygon = new Polygon(entity.getPolygonCoordinates());
                 polygons.put(entity, polygon);
                 gameWindow.getChildren().add(polygon);
+                System.out.println("Entity added: " + entity);
             }
 
             polygon.getTransforms().clear();
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
-            if (entity.isShouldRotateAlternative())
-            {
+            if (entity.isShouldRotateAlternative()) {
                 polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
-            } else
-            {
+            } else {
                 polygon.setRotate(entity.getRotation());
             }
             polygon.setFill(entity.getPaint());
         }
-
     }
 
     private Collection<? extends IGamePluginService> getPluginServices() {

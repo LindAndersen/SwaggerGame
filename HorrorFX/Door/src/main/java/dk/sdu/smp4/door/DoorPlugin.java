@@ -5,35 +5,37 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.HardEntity;
 import dk.sdu.smp4.common.data.World;
-
-import java.util.Random;
+import dk.sdu.smp4.common.events.DoorCreationEvent;
+import dk.sdu.smp4.common.events.EventBus;
 
 public class DoorPlugin implements IGamePluginService {
 
-    private Random random = new Random();
     private HardEntity door;
-    private int id;
-    private boolean isOpen = false;
-
-
 
     @Override
     public void start(GameData gameData, World world) {
-        door = createDoor(gameData);
-        world.addEntity(door);
+        System.out.println("DoorPlugin started");
+        EventBus.subscribe(DoorCreationEvent.class, event -> {
+            System.out.println("DoorCreationEvent received: " + event);
+            HardEntity door = createDoor(event.getX(), event.getY(), event.getWidth(), event.getHeight());
+            world.addEntity(door);
+            System.out.println("Door created at (" + door.getX() + ", " + door.getY() + ") and added to world");
+        });
     }
 
-    private HardEntity createDoor(GameData gameData){
+    private HardEntity createDoor(float x, float y, float width, float height) {
         door = new Door();
 
-        float randomX = random.nextFloat() * gameData.getDisplayWidth();
-        float randomY = random.nextFloat() * gameData.getDisplayHeight();
-
-        door.setPolygonCoordinates(-10, -20, 10, -20, 10, 20, -10, 20);
-        door.setX(randomX);
-        door.setY(randomY);
-        door.setWidth(20);
-        door.setHeight(40);
+        door.setPolygonCoordinates(
+                -width / 2, -height / 2,   // Top left
+                width / 2, -height / 2,    // Top right
+                width / 2, height / 2,     // Bottom right
+                -width / 2, height / 2     // Bottom left
+        );
+        door.setX(x);
+        door.setY(y);
+        door.setWidth(width);
+        door.setHeight(height);
         door.setSolid(true);
         door.setPaint("brown");
         door.setType("brown_door");
@@ -42,7 +44,6 @@ public class DoorPlugin implements IGamePluginService {
 
     @Override
     public void stop(GameData gameData, World world) {
-
-
+        world.removeEntity(door);
     }
 }
