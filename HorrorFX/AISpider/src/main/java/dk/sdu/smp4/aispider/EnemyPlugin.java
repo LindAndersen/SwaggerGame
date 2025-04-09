@@ -24,7 +24,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemy = new Enemy();
         enemy.setPolygonCoordinates(-8, -8, 8, -8, 8, 8, -8, 8); // Simple square
         enemy.setX(/*Math.random() **/ gameData.getDisplayWidth()/5);  // Spawn at a random location
-        enemy.setY(/*Math.random() **/ gameData.getDisplayHeight()/5);
+        enemy.setY(/*Math.random() **/ gameData.getDisplayHeight()/1.3);
         enemy.setRadius(8);
         enemy.setSolid(true);
         enemy.setPaint("red");

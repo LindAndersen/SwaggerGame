@@ -1,12 +1,17 @@
 package dk.sdu.smp4.main;
 
+import dk.sdu.smp4.common.GUIelements.StartMenu;
 import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.Services.IGamePluginService;
 import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.*;
+import dk.sdu.smp4.common.events.EventBus;
+import dk.sdu.smp4.common.events.GameOverEvent;
+import dk.sdu.smp4.common.events.UpdateHUDLifeEvent;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -22,6 +27,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -41,7 +47,7 @@ public class Main extends Application {
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
     private final StackPane gameWindow = gameData.getRoot();
-    private final StackPane startMenu = new StackPane();
+    private StartMenu startMenu;
     private final Image noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
     private final Canvas lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
 
@@ -58,52 +64,17 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.setTitle("HorrorFX");
 
-        setupStartMenu(stage);
+        startMenu = new StartMenu(
+                () -> {
+                    gameWindow.getChildren().remove(startMenu);
+                    initGame(stage);
+                },
+                stage::close
+        );
         gameWindow.getChildren().add(startMenu);
 
+
         stage.show();
-    }
-
-    private void setupStartMenu(Stage stage) {
-        startMenu.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        startMenu.getStyleClass().add("start-pane");
-
-        Label title = new Label("HorrorFX");
-        title.setPadding(new Insets(50, 0, 0, 0));
-        title.getStyleClass().add("title-label");
-
-        Button startButton = new Button("Start");
-        startButton.getStyleClass().add("menu-button");
-        startButton.setOnMouseClicked((MouseEvent event) -> {
-            gameWindow.getChildren().remove(startMenu);
-            initGame(stage);
-        });
-
-        Button quitButton = new Button("Quit");
-        quitButton.getStyleClass().add("menu-button");
-        quitButton.setOnMouseClicked((MouseEvent event) -> {
-            stage.close();
-        });
-
-        Image image = new Image(getClass().getResource("/images/dungeon.gif").toExternalForm());
-        ImageView background = new ImageView(image);
-        background.setPreserveRatio(false);
-        background.setSmooth(true);
-        background.setCache(true);
-        background.fitWidthProperty().bind(startMenu.widthProperty());
-        background.fitHeightProperty().bind(startMenu.heightProperty());
-
-        VBox buttons = new VBox(20);
-        buttons.setMaxWidth(225);
-        buttons.setAlignment(Pos.CENTER);
-        buttons.getChildren().addAll(startButton, quitButton);
-
-        BorderPane layout = new BorderPane();
-        layout.setTop(title);
-        layout.setCenter(buttons);
-        BorderPane.setAlignment(title, Pos.TOP_CENTER);
-
-        startMenu.getChildren().addAll(background, layout);
     }
 
     private void initGame(Stage stage) {
@@ -129,7 +100,15 @@ public class Main extends Application {
 
         getPluginServices().forEach(plugin -> plugin.start(gameData, world));
 
+        initLifeHUD();
+
         render();
+        EventBus.subscribe(GameOverEvent.class, event -> {
+            showGameOverScreen();
+        });
+        EventBus.subscribe(UpdateHUDLifeEvent.class, event -> {
+            updateLifeHUD(event.getLives());
+        });
     }
 
     private void render() {
@@ -320,5 +299,68 @@ public class Main extends Application {
 
     private Collection<? extends IPostEntityProcessingService> getPostEntityProcessor() {
         return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
+
+    private void showGameOverScreen() {
+        VBox gameOverBox = new VBox();
+        gameOverBox.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        gameOverBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.85);");
+        gameOverBox.setAlignment(Pos.CENTER);
+        gameOverBox.setSpacing(20);
+
+        Label gameOverLabel = new Label("Game Over");
+        gameOverLabel.getStyleClass().add("title-label");
+
+        Button goAgainButton = new Button("Go Again");
+        goAgainButton.getStyleClass().add("menu-button");
+        goAgainButton.setOnAction(e -> {
+            gameData.getTextLayer().getChildren().remove(gameOverBox);
+            restartGame();
+        });
+
+        Button quitButton = new Button("Quit");
+        quitButton.getStyleClass().add("menu-button");
+        quitButton.setOnAction(e -> System.exit(0));
+
+        gameOverBox.getChildren().addAll(gameOverLabel, goAgainButton, quitButton);
+        Platform.runLater(() -> {
+            gameData.getTextLayer().getChildren().add(gameOverBox);
+        });
+        gameData.setPaused(true);
+
+        gameOverBox.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+    }
+
+    private void restartGame() {
+        world.getEntities().forEach(entity -> gameData.getPolygonLayer().getChildren().clear());
+        polygons.clear();
+        images.clear();
+        world.getEntities().clear();
+
+        getPluginServices().forEach(plugin -> plugin.stop(gameData, world));
+        getPluginServices().forEach(plugin -> plugin.start(gameData, world));
+
+        gameData.setPaused(false);
+    }
+    private final HBox lifeBox = new HBox(5);
+    private final int maxLives = 2;
+
+    private void initLifeHUD() {
+        lifeBox.setPadding(new Insets(10));
+        lifeBox.setAlignment(Pos.TOP_LEFT);
+        updateLifeHUD(maxLives);
+
+        gameData.getTextLayer().getChildren().add(lifeBox);
+    }
+
+    private void updateLifeHUD(int lives) {
+        lifeBox.getChildren().clear();
+        for (int i = 0; i < maxLives; i++) {
+            Image heartImage = new Image(getClass().getResourceAsStream(
+                    i < lives ? "/coreImages/heart_full.png" : "/coreImages/heart_empty.png"
+            ), 32, 32, true, true);
+            ImageView heartView = new ImageView(heartImage);
+            lifeBox.getChildren().add(heartView);
+        }
     }
 }

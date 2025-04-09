@@ -5,8 +5,7 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.common.events.EventBus;
-import dk.sdu.smp4.common.events.PlayerPositionEvent;
+import dk.sdu.smp4.common.events.*;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
 
@@ -86,6 +85,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             if (player.getY() > gameData.getDisplayHeight()) {
                 player.setY(gameData.getDisplayHeight() - 1);
             }
+
             EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
 
             for (IPlayerLightProcessor spi : getEntityPlayerLights())
@@ -93,6 +93,20 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 spi.processPlayerLight(player, gameData, world);
             }
 
+            EventBus.subscribe(PlayerHitEvent.class, event -> {
+                if (event.getPlayer() instanceof Player ) {
+                    if (player.isDead()) return;
+
+                    player.loseLife();
+                    System.out.println("Player hit! Lives left: " + player.getLives());
+                    EventBus.post(new UpdateHUDLifeEvent(player.getLives()));
+
+                    if (player.getLives() <= 0) {
+                        player.setDead(true); // blokerer flere hits
+                        EventBus.post(new GameOverEvent());
+                    }
+                }
+            });
         }
     }
 

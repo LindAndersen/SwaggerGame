@@ -1,18 +1,18 @@
 package dk.sdu.smp4.common.data;
 
-
+import dk.sdu.smp4.common.GUIelements.PausePopup;
+import dk.sdu.smp4.common.GUIelements.QuestPopup;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Objects;
 
 public class GameData {
 
-    private int displayWidth  = 800 ;
+    private int displayWidth = 800;
     private int displayHeight = 800;
     private final GameKeys keys = new GameKeys();
     private final Pane backgroundLayer = new Pane();
@@ -21,14 +21,10 @@ public class GameData {
     private final Pane lightLayer = new Pane();
     private final StackPane root = new StackPane();
 
-    private final VBox questPane = new VBox();
-    private final VBox pausedBox = new VBox();
-
     private boolean isPaused;
 
-    public GameData(){
-        //backgroundLayer.setStyle("-fx-background-color: rgba(180, 140, 20, 0.1);");
-        root.setAlignment(Pos.TOP_LEFT); // <- this is the key
+    public GameData() {
+        root.setAlignment(Pos.TOP_LEFT);
         root.getChildren().addAll(backgroundLayer, polygonLayer, lightLayer, textLayer);
 
         for (Pane layer : List.of(backgroundLayer, polygonLayer, lightLayer, textLayer)) {
@@ -36,8 +32,6 @@ public class GameData {
             layer.prefWidthProperty().bind(root.widthProperty());
             layer.prefHeightProperty().bind(root.heightProperty());
             layer.setMouseTransparent(true);
-
-            // TO BE VERY SAFE (fml) guarantee no offset
             layer.setLayoutX(0);
             layer.setLayoutY(0);
             layer.setTranslateX(0);
@@ -46,8 +40,8 @@ public class GameData {
 
         backgroundLayer.setMouseTransparent(false);
         textLayer.setMouseTransparent(false);
-        //Image backgroundActualImage = new Image(getClass().getResourceAsStream("/background.jpg"));
-        Image backgroundActualImage = new Image(getClass().getResourceAsStream("/from_chat.png"));
+
+        Image backgroundActualImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/from_chat.png")));
         BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, false, true);
         BackgroundImage backgroundImage = new BackgroundImage(
                 backgroundActualImage,
@@ -57,67 +51,47 @@ public class GameData {
                 backgroundSize
         );
 
-        Background background = new Background(backgroundImage);
-        backgroundLayer.setBackground(background);
+        backgroundLayer.setBackground(new Background(backgroundImage));
     }
 
-    public VBox getQuestPane(){
-        return questPane;
-    }
-
-    public void setQuestPane(String title, String description){
+    public void setQuestPane(String title, String description) {
         setPaused(true);
-        questPane.getChildren().clear();
 
-        questPane.setMinSize(400, 400);
-        questPane.setLayoutX((double) displayWidth /2);
-        questPane.setLayoutY((double) displayHeight/2);
-        questPane.setAlignment(Pos.CENTER);
-        //questPane.setStyle("-fx-background-color: lightgray;");
-
-        Label labelDescription = new Label(description);
-        questPane.getChildren().add(labelDescription);
-
-        Button acceptButton = new Button("Confirm");
-        acceptButton.setOnAction(e -> {
-            ((Pane) questPane.getParent()).getChildren().remove(questPane);
+        final QuestPopup[] popupRef = new QuestPopup[1];
+        popupRef[0] = new QuestPopup(title, description, () -> {
+            textLayer.getChildren().remove(popupRef[0]);
             setPaused(false);
         });
 
-        questPane.getChildren().add(acceptButton);
-        textLayer.getChildren().add(questPane);
+        QuestPopup popup = popupRef[0];
+        centerPopup(popup);
+        textLayer.getChildren().add(popup);
     }
 
     public void setPausedBox(Stage stage) {
-        if (isPaused){
-            textLayer.getChildren().remove(pausedBox);
-        } else {
-            pausedBox.getChildren().clear();
+        if (isPaused) return;
 
-            pausedBox.setMinSize(400, 400);
-            pausedBox.setLayoutX((double) displayWidth /2-200);
-            pausedBox.setLayoutY((double) displayHeight/2-200);
-            pausedBox.setAlignment(Pos.CENTER);
-            pausedBox.setStyle("-fx-background-color: lightgray;");
+        final PausePopup[] popupRef = new PausePopup[1];
+        popupRef[0] = new PausePopup(
+                () -> {
+                    textLayer.getChildren().remove(popupRef[0]);
+                    setPaused(false);
+                },
+                () -> {
+                    textLayer.getChildren().remove(popupRef[0]);
+                    stage.close();
+                }
+        );
 
-            Label labelDescription = new Label("Paused");
-            pausedBox.getChildren().add(labelDescription);
+        PausePopup popup = popupRef[0];
+        centerPopup(popup);
+        textLayer.getChildren().add(popup);
+        setPaused(true);
+    }
 
-            Button continueButton = new Button("Continue");
-            continueButton.setOnAction(e -> {
-                ((Pane) pausedBox.getParent()).getChildren().remove(pausedBox);
-                setPaused(false);
-            });
-            Button quitButton = new Button("Quit to title");
-            quitButton.setOnAction(e -> {
-                ((Pane) pausedBox.getParent()).getChildren().remove(pausedBox);
-                stage.close();
-            });
-
-            pausedBox.getChildren().addAll(continueButton, quitButton);
-            textLayer.getChildren().add(pausedBox);
-        }
-        setPaused(!isPaused);
+    private void centerPopup(Region popup) {
+        popup.setLayoutX(displayWidth / 2.0 - popup.getMinWidth() / 2);
+        popup.setLayoutY(displayHeight / 2.0 - popup.getMinHeight() / 2);
     }
 
     public GameKeys getKeys() {
