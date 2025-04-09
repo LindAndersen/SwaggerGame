@@ -12,13 +12,20 @@ public class KeyControlSystem implements IQuestInteractable {
         for (Entity keyIn : world.getEntities(Key.class)) {
             Key key = (Key) keyIn;
             if (isKeyWithinReach(player, key) && gameData.getKeys().isPressed(GameKeys.INTERACT)) {
-                System.out.println("Key picked up: " + key.getProperty("keyId"));
-                player.getInventory().add((String) key.getProperty("keyId"));
+                String keyId = (String) key.getProperty("keyId");
+
+                player.getInventory().add(keyId);
                 world.removeEntity(key);
-                displayKeyPickupMessage(key);
+
+                // Show popup
+                String displayKeyName = prettifyKeyName(keyId);
+                gameData.setQuestPane("Key Acquired", "You picked up a " + displayKeyName + ".");
+
+                break;
             }
         }
     }
+
 
     @Override
     public void consume(GameData gameData, World world) {
@@ -32,4 +39,9 @@ public class KeyControlSystem implements IQuestInteractable {
     private void displayKeyPickupMessage(Entity key) {
         System.out.println("You have picked up a key: " + ((Key)key).getProperty("keyId"));
     }
+    private String prettifyKeyName(String keyId) {
+        if (keyId == null) return "key";
+        return keyId.replace("_", " ").replace("key", "Key").strip();
+    }
+
 }

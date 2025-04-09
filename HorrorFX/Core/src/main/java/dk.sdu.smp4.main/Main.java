@@ -17,6 +17,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +29,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
@@ -56,7 +59,6 @@ public class Main extends Application {
         Font.loadFont(getClass().getResource("/fonts/was.ttf").toExternalForm(), 10);
 
         Scene scene = new Scene(gameWindow, gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        System.out.println("CSS path: " + getClass().getResource("/styles/style.css"));
         scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("HorrorFX");
@@ -120,7 +122,6 @@ public class Main extends Application {
             }
         }.start();
     }
-
 
     private void update() {
         getEntityProcessingServices().forEach(service -> service.process(gameData, world));
@@ -319,7 +320,7 @@ public class Main extends Application {
         lifeBox.getChildren().clear();
         for (int i = 0; i < maxLives; i++) {
             Image heartImage = new Image(getClass().getResourceAsStream(
-                    i < lives ? "/images/heart_full.png" : "/images/heart_empty.png"
+                    i < lives ? "/coreImages/heart_full.png" : "/coreImages/heart_empty.png"
             ), 32, 32, true, true);
             ImageView heartView = new ImageView(heartImage);
             lifeBox.getChildren().add(heartView);

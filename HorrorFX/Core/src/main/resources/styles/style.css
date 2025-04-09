@@ -1,11 +1,17 @@
+/* === Main font === */
+.root {
+    -fx-font-family: "Who asks Satan", serif;
+}
+
+/* === Start screen === */
 .start-pane {
     -fx-background-color: black;
-    -fx-font-family: 'Who asks Satan';
 }
 
 .title-label {
     -fx-font-size: 128px;
     -fx-text-fill: maroon;
+    -fx-font-family: "Who asks Satan", serif;
 }
 
 .menu-button {
@@ -13,8 +19,62 @@
     -fx-font-size: 96px;
     -fx-background-color: transparent;
     -fx-cursor: hand;
+    -fx-font-family: "Who asks Satan", serif;
 }
 
 .menu-button:hover {
     -fx-text-fill: maroon;
 }
+
+/* === Game popup styling === */
+.game-popup {
+    -fx-background-color: rgba(10, 10, 10, 0.85);
+    -fx-border-color: crimson;
+    -fx-border-width: 2px;
+    -fx-padding: 30px;
+    -fx-spacing: 15px;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(255, 0, 0, 0.3), 15, 0.3, 0, 0);
+    -fx-font-family: "Who asks Satan", serif;
+}
+
+/* === Game buttons === */
+.game-button {
+    -fx-text-fill: beige;
+    -fx-font-size: 18px;
+    -fx-font-family: "Who asks Satan", serif;
+    -fx-background-color: #3e1d1d;
+    -fx-border-color: #5c1d1d;
+    -fx-border-width: 2px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 4, 0, 1, 1);
+}
+
+.game-button:hover {
+    -fx-border-color: #a76d56;
+    -fx-background-color: #222;
+}
+
+/* === Game labels === */
+.game-label {
+    -fx-font-family: "Who asks Satan", serif;
+    -fx-text-fill: white;
+}
+
+.game-label-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: crimson;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 6, 0.3, 2, 2);
+}
+
+.game-label-description {
+    -fx-font-size: 16px;
+    -fx-text-fill: #cccccc;
+    -fx-wrap-text: true;
+}
+
