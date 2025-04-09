@@ -9,6 +9,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Objects;
 
 public class GameData {
 
@@ -46,8 +47,8 @@ public class GameData {
 
         backgroundLayer.setMouseTransparent(false);
         textLayer.setMouseTransparent(false);
-        //Image backgroundActualImage = new Image(getClass().getResourceAsStream("/background.jpg"));
-        Image backgroundActualImage = new Image(getClass().getResourceAsStream("/from_chat.png"));
+        //Image backgroundActualImage = new Image(getClass().getResourceAsStream("/images/background.jpg"));
+        Image backgroundActualImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/from_chat.png")));
         BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, false, true);
         BackgroundImage backgroundImage = new BackgroundImage(
                 backgroundActualImage,
