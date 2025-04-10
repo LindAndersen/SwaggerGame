@@ -3,6 +3,8 @@ package dk.sdu.smp4;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.events.EventBus;
+import dk.sdu.smp4.common.events.GameOverEvent;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 
 public class QuestItemInteractionSystem implements IQuestInteractable {
@@ -17,8 +19,6 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
 
             if (isQuestItemWithinReach(player, questItem))
             {
-                System.out.println("Yoink");
-
                 if(!questManager.isSubQuest(_questItem) && !questManager.isActiveQuest(_questItem))
                 {
                     questManager.addQuest(_questItem);
@@ -30,12 +30,7 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
                     for (QuestItem subQuest : _questItem.getChildren()) {
                         world.addEntity(subQuest);
                     }
-
-
-                    continue;
                 }
-
-                System.out.println("print");
             }
 
         }
@@ -56,6 +51,11 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
     private void displayQuestPopup(GameData gameData, QuestItem questItem) {
         // Display a pop-up with quest details
         gameData.setQuestPane("Quest Description", questItem.getQuestDescription());
+        // ONLY FOR DEMO, SHOULD 100% REMOVE THIS GARBAGE EVENT HANDLING XD
+        if (questItem.getQuestName().equals("Victory!"))
+        {
+            EventBus.post(new GameOverEvent());
+        }
 
     }
 

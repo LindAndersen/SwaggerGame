@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 public class Enemy extends SoftEntity {
     private Image moveLeft;
     private Image moveRight;
+    private long lastHitTime = 0;
 
     public Enemy()
     {
@@ -27,15 +28,14 @@ public class Enemy extends SoftEntity {
     }
 
     @Override
-        public void collide(World world, Entity entity) {
-            // Define what happens when the enemy collides with another entity (e.g., damage player).
+    public void collide(World world, Entity entity) {
+        // Define what happens when the enemy collides with another entity (e.g., damage player).
         if ("player".equals(entity.getType()) && !isInCooldown()) {
+            System.out.println("Updated player hit bus");
             EventBus.post(new PlayerHitEvent(entity));
             setLastHitTime();
         }
-        }
-
-    private long lastHitTime = 0;
+    }
 
     public boolean isInCooldown() {
         return System.currentTimeMillis() - lastHitTime < 5000;
@@ -44,5 +44,5 @@ public class Enemy extends SoftEntity {
     public void setLastHitTime() {
         this.lastHitTime = System.currentTimeMillis();
     }
-    }
+}
 

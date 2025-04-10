@@ -1,5 +1,7 @@
 package dk.sdu.smp4;
 import dk.sdu.smp4.common.data.SoftEntity;
+import dk.sdu.smp4.common.events.EventBus;
+import dk.sdu.smp4.common.events.GameOverEvent;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;

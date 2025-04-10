@@ -19,8 +19,8 @@ public class MusicSystem implements IPostEntityProcessingService {
         if (player == null) return;
 
         for (Entity e : world.getEntities(Enemy.class)) {
-            boolean overlap = Math.abs(e.getX() - player.getX()) < 10 && Math.abs(e.getY() - player.getY()) < 10;
-            boolean close = Math.abs(e.getX() - player.getX()) < 70 && Math.abs(e.getY() - player.getY()) < 70;
+            boolean overlap = Math.abs(e.getX() - player.getX()) < 20 && Math.abs(e.getY() - player.getY()) < 20;
+            boolean close = Math.abs(e.getX() - player.getX()) < 200 && Math.abs(e.getY() - player.getY()) < 200;
 
             if (overlap) {
                 SoundService.playSound(HIT_SOUND);

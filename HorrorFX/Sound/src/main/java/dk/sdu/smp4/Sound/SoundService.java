@@ -26,7 +26,7 @@ public class SoundService {
                 clip.open(audioIn);
 
                 FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                gainControl.setValue(-25.0f); // decrease volume (0.0f is default volume, 80.0f is no sound)
+                gainControl.setValue(-10.0f); // decrease volume (0.0f is default volume, 80.0f is no sound)
 
                 clipMap.put(path, clip);
             }
