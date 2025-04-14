@@ -16,6 +16,17 @@ public class QuestItem extends SoftEntity {
     private List<QuestItem> children;
     private final Image defaultGif = new Image(getClass().getResourceAsStream("/quest_hover_gif.gif"), 40, 40, true, true);
 
+    public boolean isFinalquest() {
+        return finalquest;
+    }
+
+
+    public void setFinalquest(boolean finalquest) {
+        this.finalquest = finalquest;
+    }
+
+    private boolean finalquest = false;
+
     public QuestItem(String questName, String questDescription, int questX, int questY, int questRadius) {
         setImage(defaultGif);
         this.questName = questName;
@@ -24,6 +35,7 @@ public class QuestItem extends SoftEntity {
         this.questY = questY;
         this.questRadius = questRadius;
         this.children = new ArrayList<>();
+        this.finalquest = false;
     }
 
     public void addChildQuest(QuestItem child)

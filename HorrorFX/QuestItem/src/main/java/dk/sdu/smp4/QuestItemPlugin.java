@@ -15,6 +15,7 @@ public class QuestItemPlugin implements IGamePluginService {
         QuestItem parentQuest = CreateQuest("Find the bronze key","Find the bronze key, to open the room in the middle",gameData.getDisplayWidth() /5, (gameData.getDisplayHeight()/5)+20, 8);
         QuestItem childQuest1 = CreateQuest("Escape!", "You found the golden key! Now you can escape the castle", 360, 400, 8);
         QuestItem childQuest2 = CreateQuest("Victory!", "You escaped the castle, congratulations!", 300, 50, 8);
+        childQuest2.setFinalquest(true);
         //QuestItem parentQuest2 = CreateQuest("Main Quest2tihi","Go save the world again",450, 600, 8);
 
         //Define Quest relationships.

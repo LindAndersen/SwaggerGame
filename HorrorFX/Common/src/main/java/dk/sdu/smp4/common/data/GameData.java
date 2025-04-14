@@ -67,6 +67,9 @@ public class GameData {
         centerPopup(popup);
         textLayer.getChildren().add(popup);
     }
+    public void setVictoryPane(String title, String description) {
+       //tihi?
+    }
 
     public void setPausedBox(Stage stage) {
         if (isPaused) return;

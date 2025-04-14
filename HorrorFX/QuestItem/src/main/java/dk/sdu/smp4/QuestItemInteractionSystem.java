@@ -24,6 +24,10 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
                     questManager.addQuest(_questItem);
                     world.removeEntity(questItem);
                     // 2. Display popup, when pressing E.
+                    if(((QuestItem) questItem).isFinalquest() == true){
+                        displayVictoryPopup(gameData, _questItem);
+                        break;
+                    } else {
                     displayQuestPopup(gameData, _questItem);
 
                     // Add subquests to the world
@@ -31,11 +35,9 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
                         world.addEntity(subQuest);
                     }
 
-
-                    continue;
                 }
 
-                System.out.println("print");
+                }
             }
 
         }
@@ -56,6 +58,11 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
     private void displayQuestPopup(GameData gameData, QuestItem questItem) {
         // Display a pop-up with quest details
         gameData.setQuestPane("Quest Description", questItem.getQuestDescription());
+
+    }
+    private void displayVictoryPopup(GameData gameData, QuestItem questItem) {
+        // Display a pop-up with quest details
+        gameData.setVictoryPane("Quest Description", questItem.getQuestDescription());
 
     }
 
