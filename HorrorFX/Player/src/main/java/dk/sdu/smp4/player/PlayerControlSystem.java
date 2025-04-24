@@ -87,7 +87,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
             EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
-
             for (IPlayerLightProcessor spi : getEntityPlayerLights())
             {
                 spi.processPlayerLight(player, gameData, world);
