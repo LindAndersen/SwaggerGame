@@ -1,36 +1,54 @@
 package dk.sdu.smp4.Sound;
 
-import dk.sdu.smp4.aispider.Enemy;
+import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
-import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.player.Player;
+import dk.sdu.smp4.common.events.EventBus;
+import dk.sdu.smp4.common.events.PlayerPositionEvent;
+import dk.sdu.smp4.common.events.SpiderPositionEvent;
 
-public class MusicSystem implements IPostEntityProcessingService {
+public class MusicSystem {
 
     private static final String HIT_SOUND = "/background/man-scream.wav";
     private static final String PROXIMITY_SOUND = "/background/cropped_aggressive_scary.wav";
     private static final String DEFAULT_SOUND = "/background/chill_scary.wav";
+    private double playerX, playerY, spiderX, spiderY;
+    private static final MusicSystem INSTANCE = new MusicSystem();
 
-    @Override
-    public void process(GameData gameData, World world) {
-        Entity player = world.getEntities(Player.class).stream().findFirst().orElse(null);
-        if (player == null) return;
+    public MusicSystem() {
+        EventBus.subscribe(PlayerPositionEvent.class, event -> {
+            playerX = event.getX();
+            playerY = event.getY();
+        });
 
-        for (Entity e : world.getEntities(Enemy.class)) {
-            boolean overlap = Math.abs(e.getX() - player.getX()) < 20 && Math.abs(e.getY() - player.getY()) < 20;
-            boolean close = Math.abs(e.getX() - player.getX()) < 200 && Math.abs(e.getY() - player.getY()) < 200;
+        EventBus.subscribe(SpiderPositionEvent.class, event -> {
+            spiderX = event.getX();
+            spiderY = event.getY();
+        });
+    }
 
-            if (overlap) {
-                SoundService.playSound(HIT_SOUND);
-            } else if (close) {
-                SoundService.playSound(PROXIMITY_SOUND);
-                SoundService.stopSound(DEFAULT_SOUND);
-            } else {
-                SoundService.playSound(DEFAULT_SOUND);
-                SoundService.stopSound(PROXIMITY_SOUND);
-            }
+    public static MusicSystem getInstance(){
+        return INSTANCE;
+    }
+
+    public void play() {
+
+        if (playerX == 0 & playerY == 0 & spiderX == 0 & spiderY == 0){
+            return;
+        }
+
+        boolean overlap = Math.abs(spiderX - playerX) < 20 && Math.abs(spiderY - playerY) < 20;
+        boolean close = Math.abs(spiderX - playerX) < 200 && Math.abs(spiderY - playerY) < 200;
+
+        if (overlap) {
+            SoundService.playSound(HIT_SOUND);
+        } else if (close) {
+            SoundService.playSound(PROXIMITY_SOUND);
+            SoundService.stopSound(DEFAULT_SOUND);
+        } else {
+            SoundService.playSound(DEFAULT_SOUND);
+            SoundService.stopSound(PROXIMITY_SOUND);
         }
     }
 }

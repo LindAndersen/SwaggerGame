@@ -6,6 +6,7 @@ import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.PlayerPositionEvent;
+import dk.sdu.smp4.common.events.SpiderPositionEvent;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
@@ -16,7 +17,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
         EventBus.subscribe(PlayerPositionEvent.class, event -> {
             lastKnownPlayerX = event.getX();
             lastKnownPlayerY = event.getY();
-
         });
     }
 
@@ -41,6 +41,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
 
             handleImage(enemy, dx);
+            EventBus.post(new SpiderPositionEvent(entity, entity.getX(), entity.getY()));
         }
     }
 

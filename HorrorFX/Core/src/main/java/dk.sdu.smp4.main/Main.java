@@ -37,9 +37,11 @@ import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
+import java.security.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.time.LocalTime;
 
 public class Main extends Application {
     private GameData gameData = new GameData();
@@ -51,6 +53,7 @@ public class Main extends Application {
     private final Image noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
     private final Canvas lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
     private Stage primaryStage;
+    private AnimationTimer timer;
 
     public static void main(String[] args) {
         launch(Main.class);
@@ -114,16 +117,23 @@ public class Main extends Application {
     }
 
     private void render() {
-        new AnimationTimer() {
+        final long[] lastFrameTime = {0};
+        final long frameDuration = 1_000_000_000 / 60; // nanoseconds per frame (~16.67ms)
+
+        timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (!gameData.isPaused()) {
-                    update();
-                    draw();
-                    gameData.getKeys().update();
+                if (now - lastFrameTime[0] >= frameDuration) {
+                    if (!gameData.isPaused()) {
+                        update();
+                        draw();
+                        gameData.getKeys().update();
+                    }
+                    lastFrameTime[0] = now;
                 }
             }
-        }.start();
+        };
+        timer.start();
     }
 
     private void update() {
@@ -338,6 +348,9 @@ public class Main extends Application {
         images.clear();
         world.getEntities().clear();
         gameData.setPaused(false);
+        if (timer != null){
+            timer.stop();
+        }
 
         start(primaryStage);
     }
