@@ -7,16 +7,23 @@ import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.GameOverEvent;
 import dk.sdu.smp4.common.events.PlayerHitEvent;
 import dk.sdu.smp4.common.events.UpdateHUDLifeEvent;
+import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
+import dk.sdu.smp4.inventory.services.IHasInventory;
+import dk.sdu.smp4.inventory.data.Inventory;
 import javafx.scene.image.Image;
 
-public class Player extends SoftEntity {
+import java.util.Map;
+
+public class Player extends SoftEntity implements IHasInventory {
     private final Image moveLeftImage = new Image(getClass().getResourceAsStream("/move_left.gif"));
     private final Image moveRightImage = new Image(getClass().getResourceAsStream("/move_right.gif"));
     private int lives = 2;
     private boolean isDead = false;
+    private Inventory inventory;
 
     public Player()
     {
+        inventory = new Inventory();
         this.setImage(moveRightImage);
 
         EventBus.subscribe(PlayerHitEvent.class, event -> {
@@ -65,5 +72,10 @@ public class Player extends SoftEntity {
 
     public void setDead(boolean dead) {
         this.isDead = dead;
+    }
+
+    @Override
+    public Inventory getInventory() {
+        return inventory;
     }
 }

@@ -1,6 +1,5 @@
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
-import dk.sdu.smp4.playercirclelight.CircleLight;
 import dk.sdu.smp4.playercirclelight.PlayerCircleLightPlugin;
 import dk.sdu.smp4.playercirclelight.PlayerCircleLightProcessor;
 
