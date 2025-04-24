@@ -31,10 +31,10 @@ public class World {
         return entityMap.values();
     }
 
-    public <E extends Entity> List<Entity> getEntities(Class<E>... entityTypes) {
+    public List<Entity> getEntities(Class<?>... entityTypes) {
         List<Entity> r = new ArrayList<>();
         for (Entity e : getEntities()) {
-            for (Class<E> entityType : entityTypes) {
+            for (Class<?> entityType : entityTypes) {
                 if (entityType.isAssignableFrom(e.getClass())) {
                     r.add(e);
                 }

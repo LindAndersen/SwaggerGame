@@ -1,5 +1,4 @@
-import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
-import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
+import dk.sdu.smp4.commonplayerlight.services.*;
 import dk.sdu.smp4.common.Services.IGamePluginService;
 import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
@@ -12,6 +11,7 @@ module Player {
     uses IPlayerLightPlugin;
     uses IPlayerLightProcessor;
     uses IQuestInteractable;
+    uses IToggleableLight;
     requires CommonPlayerLight;
     requires CommonInteractable;
     requires javafx.graphics;

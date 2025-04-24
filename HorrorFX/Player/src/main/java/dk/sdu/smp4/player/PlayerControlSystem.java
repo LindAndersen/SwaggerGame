@@ -8,6 +8,7 @@ import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.events.*;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
+import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
@@ -60,7 +61,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {
-                System.out.println("Toggle flashlight");
+                for(IToggleableLight toggleableLight : getPlayerToggleableLights(world))
+                {
+                    toggleableLight.toggle();
+                }
             }
 
             if(gameData.getKeys().isDown(GameKeys.INTERACT)) {
@@ -87,14 +91,18 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
             EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
-            for (IPlayerLightProcessor spi : getEntityPlayerLights())
+            for (IPlayerLightProcessor spi : getEntityPlayerLightProcessors())
             {
                 spi.processPlayerLight(player, gameData, world);
             }
         }
     }
 
-    private Collection<? extends IPlayerLightProcessor> getEntityPlayerLights() {
+    private Collection<? extends IToggleableLight> getPlayerToggleableLights(World world) {
+        return world.getEntities(IToggleableLight.class).stream().map(IToggleableLight.class::cast).collect(toList());
+    }
+
+    private Collection<? extends IPlayerLightProcessor> getEntityPlayerLightProcessors() {
         return ServiceLoader.load(IPlayerLightProcessor.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 

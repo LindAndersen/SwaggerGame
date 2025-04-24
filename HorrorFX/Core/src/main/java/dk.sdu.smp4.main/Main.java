@@ -9,6 +9,8 @@ import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.GameOverEvent;
 import dk.sdu.smp4.common.events.UpdateHUDLifeEvent;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
+import dk.sdu.smp4.commonplayerlight.data.CommonPlayerLight;
+import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -181,6 +183,11 @@ public class Main extends Application {
 
         gcLight.setFill(Color.color(1, 1, 1, 1));
         for (Entity entity : world.getEntities(CommonLightSource.class)) {
+            if (entity instanceof IToggleableLight && !((IToggleableLight)entity).isToggled())
+            {
+                continue;
+            }
+
             double[] coords = entity.getPolygonCoordinates();
             Polygon poly = new Polygon(coords);
             handlePolygonCoordsPreDrawing(poly, entity);
