@@ -14,6 +14,24 @@ public class Player extends SoftEntity {
     private final Image moveRightImage = new Image(getClass().getResourceAsStream("/move_right.gif"));
     private int lives = 2;
     private boolean isDead = false;
+    private float velocityX = 0;
+    private float velocityY = 0;
+
+    public float getVelocityX() {
+        return velocityX;
+    }
+
+    public void setVelocityX(float velocityX) {
+        this.velocityX = velocityX;
+    }
+
+    public float getVelocityY() {
+        return velocityY;
+    }
+
+    public void setVelocityY(float velocityY) {
+        this.velocityY = velocityY;
+    }
 
     public Player()
     {
@@ -41,10 +59,6 @@ public class Player extends SoftEntity {
 
     public Image getMoveRightImage() {
         return moveRightImage;
-    }
-
-    @Override
-    public void collide(World world, Entity entity) {
     }
 
     public int getLives() {

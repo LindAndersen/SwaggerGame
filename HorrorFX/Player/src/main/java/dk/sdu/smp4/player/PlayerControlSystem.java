@@ -19,79 +19,79 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
+        float acceleration = 0.1f;
+        float maxSpeed = 2.0f;
+        float friction = 0.2f; //how quickly player stops
+
         for (Entity entity : world.getEntities(Player.class)) {
             Player player = (Player) entity;
-            player.setPreviousX(player.getX());
-            player.setPreviousY(player.getY());
 
-            if (gameData.getKeys().isMouseMoved()){
-                player.setRotation(Math.toDegrees(Math.atan2(GameKeys.mouseY- player.getY(), GameKeys.mouseX - player.getX())));
-            }
-            gameData.getKeys().setMouseMoved(false);
+            //update mouse position
+            player.setRotation(Math.toDegrees(Math.atan2(GameKeys.mouseY - player.getY(), GameKeys.mouseX - player.getX())));
 
-            //LEFT
+            // Adjust velocity
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                player.setX(player.getX()-1);
-                player.setPreviousX(player.getX()+1.00001);
+                player.setVelocityX(Math.max(player.getVelocityX() - acceleration, -maxSpeed));
                 if (player.getImage() != null && !player.getImage().equals(player.getMoveLeftImage())) {
                     player.setImage(player.getMoveLeftImage());
                 }
             }
-
-            //RIGHT
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                player.setX(player.getX()+1);
-                player.setPreviousX(player.getX()-1.00001);
+                player.setVelocityX(Math.min(player.getVelocityX() + acceleration, maxSpeed));
                 if (player.getImage() != null && !player.getImage().equals(player.getMoveRightImage())) {
                     player.setImage(player.getMoveRightImage());
                 }
             }
-
-            //UP
-            if (gameData.getKeys().isDown(GameKeys.UP)){
-                player.setY(player.getY()-1);
-                player.setPreviousY(player.getY()+1.00001);
+            if (gameData.getKeys().isDown(GameKeys.UP)) {
+                player.setVelocityY(Math.max(player.getVelocityY() - acceleration, -maxSpeed));
+            }
+            if (gameData.getKeys().isDown(GameKeys.DOWN)) {
+                player.setVelocityY(Math.min(player.getVelocityY() + acceleration, maxSpeed));
             }
 
-            //DOWN
-            if (gameData.getKeys().isDown(GameKeys.DOWN)){
-                player.setY(player.getY()+1);
-                player.setPreviousY(player.getY()-1.00001);
+            // Apply friction
+            if (!gameData.getKeys().isDown(GameKeys.LEFT) && !gameData.getKeys().isDown(GameKeys.RIGHT)) {
+                player.setVelocityX(approachZero(player.getVelocityX(), friction));
+            }
+            if (!gameData.getKeys().isDown(GameKeys.UP) && !gameData.getKeys().isDown(GameKeys.DOWN)) {
+                player.setVelocityY(approachZero(player.getVelocityY(), friction));
+            }
+
+            // Update position
+            player.setPreviousX(player.getX());
+            player.setPreviousY(player.getY());
+            player.setX(player.getX() + player.getVelocityX());
+            player.setY(player.getY() + player.getVelocityY());
+
+            // Out of bounds checks
+            player.setX(Math.min(Math.max(player.getX(), 0), gameData.getDisplayWidth()));
+            player.setY(Math.min(Math.max(player.getY(), 0), gameData.getDisplayHeight()));
+
+            EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
+
+            for (IPlayerLightProcessor spi : getEntityPlayerLights()) {
+                spi.processPlayerLight(player, gameData, world);
+            }
+
+            if(gameData.getKeys().isDown(GameKeys.INTERACT)) {
+                for(IQuestInteractable interactable : getEntityQuestInteractables()) {
+                    interactable.interact(player, gameData, world);
+                }
             }
 
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {
                 System.out.println("Toggle flashlight");
             }
-
-            if(gameData.getKeys().isDown(GameKeys.INTERACT)) {
-                for(IQuestInteractable interactable : getEntityQuestInteractables())
-                {
-                    interactable.interact(player, gameData, world);
-                }
-            }
-
-            if (player.getX() < 0) {
-                player.setX(1);
-            }
-
-            if (player.getX() > gameData.getDisplayWidth()) {
-                player.setX(gameData.getDisplayWidth()-1);
-            }
-
-            if (player.getY() < 0) {
-                player.setY(1);
-            }
-
-            if (player.getY() > gameData.getDisplayHeight()) {
-                player.setY(gameData.getDisplayHeight() - 1);
-            }
-
-            EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
-            for (IPlayerLightProcessor spi : getEntityPlayerLights())
-            {
-                spi.processPlayerLight(player, gameData, world);
-            }
         }
+    }
+    //Prevent instant stop
+    private float approachZero(float value, float decrement) {
+        if (value > 0) {
+            return Math.max(0, value - decrement);
+        } else if (value < 0) {
+            return Math.min(0, value + decrement);
+        }
+        return 0;
     }
 
     private Collection<? extends IPlayerLightProcessor> getEntityPlayerLights() {
