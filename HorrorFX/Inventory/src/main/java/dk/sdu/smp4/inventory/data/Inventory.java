@@ -33,13 +33,21 @@ public class Inventory {
         }
     }
 
-    public void remove(String name, Entity entity)
+    public void remove(String name)
     {
         if(inventory.containsKey(name)){
             InventorySlot slot = inventory.get(name);
-            slot.amount--;
-
+            slot.remove();
+            if (slot.amount == 0)
+            {
+                EventBus.post(new InventoryUpdateEvent(slot.index, null, 0));
+            }
         }
+    }
+
+    public boolean has(String name)
+    {
+        return inventory.containsKey(name);
     }
 
     static class InventorySlot
@@ -55,6 +63,16 @@ public class Inventory {
             this.amount = amount;
             index = globalIndex;
             globalIndex++;
+        }
+
+        void remove()
+        {
+            amount--;
+            if (amount == 0)
+            {
+                entity = null;
+            }
+            globalIndex--;
         }
     }
 }

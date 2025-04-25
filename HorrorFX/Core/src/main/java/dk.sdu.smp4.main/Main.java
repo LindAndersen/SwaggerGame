@@ -121,7 +121,7 @@ public class Main extends Application {
 
     private void render() {
         final long[] lastFrameTime = {0};
-        final long frameDuration = 1_000_000_000 / 60; // nanoseconds per frame (~16.67ms)
+        final long frameDuration = 1_000_000_000 / 900000000; // nanoseconds per frame (~16.67ms)
 
         timer = new AnimationTimer() {
             @Override
@@ -149,6 +149,10 @@ public class Main extends Application {
         double entityY = entity.getY();
 
         for (Entity lightEntity : world.getEntities(CommonLightSource.class)) {
+            if (lightEntity instanceof IToggleableLight iToggleableLight && !iToggleableLight.isToggled())
+            {
+                continue;
+            }
             Polygon lightPoly = new Polygon(lightEntity.getPolygonCoordinates());
             handlePolygonCoordsPreDrawing(lightPoly, lightEntity);
 

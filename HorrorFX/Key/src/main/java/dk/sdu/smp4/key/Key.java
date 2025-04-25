@@ -20,7 +20,7 @@ public class Key extends SoftEntity {
         }else if (keyId.toLowerCase().contains("gold"))
         {
             setImage(goldKey);
-            inventoryIdentifier = "gold_key";
+            inventoryIdentifier = "golden_key";
         } else if (keyId.toLowerCase().contains("grey")) {
             setImage(greyKey);
             inventoryIdentifier = "grey_key";

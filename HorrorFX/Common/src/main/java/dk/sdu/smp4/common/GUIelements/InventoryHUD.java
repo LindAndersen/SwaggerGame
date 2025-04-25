@@ -16,7 +16,7 @@ public class InventoryHUD extends HBox {
     private static final int SLOT_SIZE = 48;
     private static final int SLOT_COUNT = 8;
 
-    private final Map<UUID, StackPane> slots = new HashMap<>();
+    private final List<StackPane> slots = new ArrayList<>();
 
     public InventoryHUD() {
         setSpacing(10);
@@ -25,7 +25,7 @@ public class InventoryHUD extends HBox {
 
         for (int i = 0; i < SLOT_COUNT; i++) {
             StackPane slot = createSlot();
-            slots.put(null, slot);
+            slots.add(slot);
             getChildren().add(slot);
         }
 

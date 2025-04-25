@@ -52,12 +52,11 @@ public class KeyPlugin implements IGamePluginService {
         key.setX(x);
         key.setY(y);
         key.setPaint(color);
-        key.setType("key");
         return key;
     }
 
     @Override
     public void stop(GameData gameData, World world) {
-        world.getEntities().removeIf(e -> "key".equals(e.getType()));
+        world.getEntities(Key.class).forEach(world::removeEntity);
     }
 }

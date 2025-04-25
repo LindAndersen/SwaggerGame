@@ -1,5 +1,6 @@
 package dk.sdu.smp4.player;
 
+import dk.sdu.smp4.common.Services.IPlayer;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.World;
@@ -14,7 +15,7 @@ import javafx.scene.image.Image;
 
 import java.util.Map;
 
-public class Player extends SoftEntity implements IHasInventory {
+public class Player extends SoftEntity implements IHasInventory, IPlayer {
     private final Image moveLeftImage = new Image(getClass().getResourceAsStream("/move_left.gif"));
     private final Image moveRightImage = new Image(getClass().getResourceAsStream("/move_right.gif"));
     private int lives = 2;
