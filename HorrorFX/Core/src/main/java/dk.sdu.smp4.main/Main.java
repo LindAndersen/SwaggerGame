@@ -7,6 +7,7 @@ import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.*;
 import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.GameOverEvent;
+import dk.sdu.smp4.common.events.RestartGameEvent;
 import dk.sdu.smp4.common.events.UpdateHUDLifeEvent;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
 import javafx.animation.AnimationTimer;
@@ -105,11 +106,11 @@ public class Main extends Application {
 
         getPluginServices().forEach(plugin -> plugin.start(gameData, world));
 
-        render();
-        EventBus.subscribe(GameOverEvent.class, event -> {
-            showGameOverScreen();
+        EventBus.subscribe(RestartGameEvent.class, event -> {
+            restartGame();
         });
 
+        render();
     }
 
     private void render() {
@@ -304,36 +305,6 @@ public class Main extends Application {
 
     private Collection<? extends IPostEntityProcessingService> getPostEntityProcessor() {
         return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
-    }
-
-    private void showGameOverScreen() {
-        VBox gameOverBox = new VBox();
-        gameOverBox.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        gameOverBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.85);");
-        gameOverBox.setAlignment(Pos.CENTER);
-        gameOverBox.setSpacing(20);
-
-        Label gameOverLabel = new Label("Game Over");
-        gameOverLabel.getStyleClass().add("title-label");
-
-        Button goAgainButton = new Button("Go Again");
-        goAgainButton.getStyleClass().add("menu-button");
-        goAgainButton.setOnAction(e -> {
-            gameData.getTextLayer().getChildren().remove(gameOverBox);
-            restartGame();
-        });
-
-        Button quitButton = new Button("Quit");
-        quitButton.getStyleClass().add("menu-button");
-        quitButton.setOnAction(e -> System.exit(0));
-
-        gameOverBox.getChildren().addAll(gameOverLabel, goAgainButton, quitButton);
-        Platform.runLater(() -> {
-            gameData.getTextLayer().getChildren().add(gameOverBox);
-        });
-        gameData.setPaused(true);
-
-        gameOverBox.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
     }
 
     private void restartGame() {

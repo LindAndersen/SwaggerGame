@@ -3,6 +3,9 @@ package dk.sdu.smp4.common.data;
 import dk.sdu.smp4.common.GUIelements.HealthBar;
 import dk.sdu.smp4.common.GUIelements.PausePopup;
 import dk.sdu.smp4.common.GUIelements.QuestPopup;
+import dk.sdu.smp4.common.events.EventBus;
+import dk.sdu.smp4.common.events.GameOverEvent;
+import dk.sdu.smp4.common.GUIelements.GameOverScreen;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -22,6 +25,7 @@ public class GameData {
     private final Pane lightLayer = new Pane();
     private final StackPane root = new StackPane();
     private final HealthBar healthBar = new HealthBar();
+    private final GameOverScreen gameOverScreen = new GameOverScreen(this);
 
     private boolean isPaused;
 
@@ -55,6 +59,11 @@ public class GameData {
 
         backgroundLayer.setBackground(new Background(backgroundImage));
         textLayer.getChildren().add(healthBar);
+
+        EventBus.subscribe(GameOverEvent.class, event -> {
+            textLayer.getChildren().add(gameOverScreen);
+            setPaused(true);
+        });
     }
 
     public void setQuestPane(String title, String description) {
