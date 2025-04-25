@@ -60,7 +60,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
             if(gameData.getKeys().isDown(GameKeys.SPACE)) {
-                System.out.println("Toggle flashlight");
             }
 
             if(gameData.getKeys().isDown(GameKeys.INTERACT)) {

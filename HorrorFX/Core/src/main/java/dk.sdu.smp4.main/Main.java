@@ -307,7 +307,6 @@ public class Main extends Application {
     }
 
     private void showGameOverScreen() {
-        System.out.println("I want to show game over screen");
         VBox gameOverBox = new VBox();
         gameOverBox.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         gameOverBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.85);");

@@ -37,7 +37,7 @@ public class KeyControlSystem implements IQuestInteractable {
     }
 
     private void displayKeyPickupMessage(Entity key) {
-        System.out.println("You have picked up a key: " + ((Key)key).getProperty("keyId"));
+        //TODO
     }
     private String prettifyKeyName(String keyId) {
         if (keyId == null) return "key";

@@ -31,7 +31,6 @@ public class Enemy extends SoftEntity {
     public void collide(World world, Entity entity) {
         // Define what happens when the enemy collides with another entity (e.g., damage player).
         if ("player".equals(entity.getType()) && !isInCooldown()) {
-            System.out.println("Updated player hit bus");
             EventBus.post(new PlayerHitEvent(entity));
             setLastHitTime();
         }

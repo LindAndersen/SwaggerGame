@@ -25,7 +25,6 @@ public class Player extends SoftEntity {
                 if (isDead()) return;
 
                 loseLife();
-                System.out.println("Player hit! Lives left: " + lives);
                 EventBus.post(new UpdateHUDLifeEvent(lives, maxLives));
 
                 if (getLives() <= 0) {
