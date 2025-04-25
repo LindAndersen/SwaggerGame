@@ -19,9 +19,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        float acceleration = 0.1f;
+        float acceleration = 0.3f;
         float maxSpeed = 2.0f;
-        float friction = 0.2f; //how quickly player stops
+        float friction = 0.1f; //how quickly player stops
 
         for (Entity entity : world.getEntities(Player.class)) {
             Player player = (Player) entity;
