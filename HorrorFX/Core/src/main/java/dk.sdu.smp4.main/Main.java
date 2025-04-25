@@ -9,6 +9,8 @@ import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.GameOverEvent;
 import dk.sdu.smp4.common.events.UpdateHUDLifeEvent;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
+import dk.sdu.smp4.commonplayerlight.data.CommonPlayerLight;
+import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -63,6 +65,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         primaryStage = stage;
         Font.loadFont(getClass().getResource("/fonts/was.ttf").toExternalForm(), 10);
+        Font.loadFont(getClass().getResource("/fonts/SpecialElite-Regular.ttf").toExternalForm(), 10);
 
         Scene scene = new Scene(gameWindow, gameData.getDisplayWidth(), gameData.getDisplayHeight());
         scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
@@ -105,20 +108,16 @@ public class Main extends Application {
 
         getPluginServices().forEach(plugin -> plugin.start(gameData, world));
 
-        initLifeHUD();
-
         render();
         EventBus.subscribe(GameOverEvent.class, event -> {
             showGameOverScreen();
         });
-        EventBus.subscribe(UpdateHUDLifeEvent.class, event -> {
-            updateLifeHUD(event.getLives());
-        });
+
     }
 
     private void render() {
         final long[] lastFrameTime = {0};
-        final long frameDuration = 1_000_000_000 / 60; // nanoseconds per frame (~16.67ms)
+        final long frameDuration = 1_000_000_000 / 900000; // nanoseconds per frame (~16.67ms)
 
         timer = new AnimationTimer() {
             @Override
@@ -146,6 +145,10 @@ public class Main extends Application {
         double entityY = entity.getY();
 
         for (Entity lightEntity : world.getEntities(CommonLightSource.class)) {
+            if (lightEntity instanceof IToggleableLight iToggleableLight && !iToggleableLight.isToggled())
+            {
+                continue;
+            }
             Polygon lightPoly = new Polygon(lightEntity.getPolygonCoordinates());
             handlePolygonCoordsPreDrawing(lightPoly, lightEntity);
 
@@ -181,6 +184,11 @@ public class Main extends Application {
 
         gcLight.setFill(Color.color(1, 1, 1, 1));
         for (Entity entity : world.getEntities(CommonLightSource.class)) {
+            if (entity instanceof IToggleableLight && !((IToggleableLight)entity).isToggled())
+            {
+                continue;
+            }
+
             double[] coords = entity.getPolygonCoordinates();
             Polygon poly = new Polygon(coords);
             handlePolygonCoordsPreDrawing(poly, entity);
@@ -281,7 +289,7 @@ public class Main extends Application {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                double base = 0.65 + rand.nextDouble() * 0.3;
+                double base = 0.2 + rand.nextDouble() * 0.3;
                 pw.setColor(x, y, Color.color(base, base * 0.8, base * 0.6, 1.0));
             }
         }
@@ -353,27 +361,5 @@ public class Main extends Application {
         }
 
         start(primaryStage);
-    }
-
-    private final HBox lifeBox = new HBox(5);
-    private final int maxLives = 2;
-
-    private void initLifeHUD() {
-        lifeBox.setPadding(new Insets(10));
-        lifeBox.setAlignment(Pos.TOP_LEFT);
-        updateLifeHUD(maxLives);
-
-        gameData.getTextLayer().getChildren().add(lifeBox);
-    }
-
-    private void updateLifeHUD(int lives) {
-        lifeBox.getChildren().clear();
-        for (int i = 0; i < maxLives; i++) {
-            Image heartImage = new Image(getClass().getResourceAsStream(
-                    i < lives ? "/coreImages/heart_full.png" : "/coreImages/heart_empty.png"
-            ), 32, 32, true, true);
-            ImageView heartView = new ImageView(heartImage);
-            lifeBox.getChildren().add(heartView);
-        }
     }
 }

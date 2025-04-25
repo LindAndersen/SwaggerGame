@@ -8,6 +8,7 @@ import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.events.*;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
+import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
@@ -49,9 +50,16 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setVelocityY(Math.min(player.getVelocityY() + acceleration, maxSpeed));
             }
 
+            if(gameData.getKeys().isDown(GameKeys.SPACE)) {
+                for(IToggleableLight toggleableLight : getPlayerToggleableLights(world))
+                {
+                    toggleableLight.toggle();
+                }
+
             // Apply friction
             if (!gameData.getKeys().isDown(GameKeys.LEFT) && !gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 player.setVelocityX(approachZero(player.getVelocityX(), friction));
+
             }
             if (!gameData.getKeys().isDown(GameKeys.UP) && !gameData.getKeys().isDown(GameKeys.DOWN)) {
                 player.setVelocityY(approachZero(player.getVelocityY(), friction));
@@ -79,8 +87,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 }
             }
 
-            if(gameData.getKeys().isDown(GameKeys.SPACE)) {
-                System.out.println("Toggle flashlight");
+            EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
+            for (IPlayerLightProcessor spi : getEntityPlayerLightProcessors())
+            {
+                spi.processPlayerLight(player, gameData, world);
             }
         }
     }
@@ -94,7 +104,11 @@ public class PlayerControlSystem implements IEntityProcessingService {
         return 0;
     }
 
-    private Collection<? extends IPlayerLightProcessor> getEntityPlayerLights() {
+    private Collection<? extends IToggleableLight> getPlayerToggleableLights(World world) {
+        return world.getEntities(IToggleableLight.class).stream().map(IToggleableLight.class::cast).collect(toList());
+    }
+
+    private Collection<? extends IPlayerLightProcessor> getEntityPlayerLightProcessors() {
         return ServiceLoader.load(IPlayerLightProcessor.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 

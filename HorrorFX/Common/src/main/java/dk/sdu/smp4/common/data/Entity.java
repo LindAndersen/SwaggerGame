@@ -18,8 +18,6 @@ public abstract class Entity implements Serializable {
     private Paint paint;
     private boolean shouldRotateAlternative;
     private boolean solid;
-    private Set<String> inventory = new HashSet<>();
-    private String type;
     private Image image;
 
     public Entity()
@@ -44,19 +42,6 @@ public abstract class Entity implements Serializable {
     public void setSolid(boolean solid) {
         this.solid = solid;
     }
-
-    public Set<String> getInventory(){
-        return inventory;
-    }
-
-    public String getType(){
-        return type;
-    }
-
-    public void setType(String type){
-        this.type = type;
-    }
-
 
     public String getID() {
         return ID.toString();
@@ -96,9 +81,6 @@ public abstract class Entity implements Serializable {
         return rotation;
     }
 
-        
-
-
     public Paint getPaint() {
         return paint;
     }
@@ -112,8 +94,7 @@ public abstract class Entity implements Serializable {
         this.paint = color;
     }
 
-    public void collide(World world, Entity entity) {
-    }
+    public abstract void collide(World world, Entity entity);
 
     public boolean isShouldRotateAlternative() {
         return shouldRotateAlternative;

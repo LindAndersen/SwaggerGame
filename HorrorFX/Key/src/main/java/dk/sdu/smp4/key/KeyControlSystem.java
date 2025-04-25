@@ -5,16 +5,21 @@ import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
+import dk.sdu.smp4.inventory.services.IHasInventory;
 
 public class KeyControlSystem implements IQuestInteractable {
     @Override
     public void interact(Entity player, GameData gameData, World world) {
+        if (!(player instanceof IHasInventory iHasInventory))
+        {
+            return;
+        }
         for (Entity keyIn : world.getEntities(Key.class)) {
             Key key = (Key) keyIn;
-            if (isKeyWithinReach(player, key) && gameData.getKeys().isPressed(GameKeys.INTERACT)) {
-                String keyId = (String) key.getProperty("keyId");
+            String keyId = key.getInventoryIdentifier();
 
-                player.getInventory().add(keyId);
+            if (isKeyWithinReach(player, key) && gameData.getKeys().isPressed(GameKeys.INTERACT)) {
+                iHasInventory.getInventory().add(keyId, key);
                 world.removeEntity(key);
 
                 // Show popup
@@ -36,12 +41,8 @@ public class KeyControlSystem implements IQuestInteractable {
         return distance < 40;
     }
 
-    private void displayKeyPickupMessage(Entity key) {
-        System.out.println("You have picked up a key: " + ((Key)key).getProperty("keyId"));
-    }
     private String prettifyKeyName(String keyId) {
         if (keyId == null) return "key";
-        return keyId.replace("_", " ").replace("key", "Key").strip();
+        return keyId.replace("_", " ").replace("key", "Key").trim();
     }
-
 }

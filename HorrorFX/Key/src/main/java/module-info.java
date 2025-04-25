@@ -3,6 +3,7 @@ import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 
 module Key {
     requires CommonInteractable;
+    requires Inventory;
     requires Common;
     requires javafx.graphics;
     provides IQuestInteractable with dk.sdu.smp4.key.KeyControlSystem;
