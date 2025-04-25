@@ -22,6 +22,8 @@ public class Player extends SoftEntity implements IHasInventory, IPlayer {
     private int maxLives = 3;
     private boolean isDead = false;
     private Inventory inventory;
+    private float velocityX = 0;
+    private float velocityY = 0;
 
     public Player()
     {
@@ -78,6 +80,22 @@ public class Player extends SoftEntity implements IHasInventory, IPlayer {
 
     public void setDead(boolean dead) {
         this.isDead = dead;
+    }
+  
+    public float getVelocityX() {
+        return velocityX;
+    }
+
+    public void setVelocityX(float velocityX) {
+        this.velocityX = velocityX;
+    }
+
+    public float getVelocityY() {
+        return velocityY;
+    }
+
+    public void setVelocityY(float velocityY) {
+        this.velocityY = velocityY;
     }
 
     @Override
