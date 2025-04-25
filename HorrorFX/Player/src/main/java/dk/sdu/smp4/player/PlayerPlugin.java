@@ -42,7 +42,6 @@ public class PlayerPlugin implements IGamePluginService {
         player.setRadius(8);
         player.setSolid(true);
         player.setPaint("blue");
-        player.setType("player");
         return player;
     }
 

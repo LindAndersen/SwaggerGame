@@ -25,6 +25,7 @@
     <module>Sound</module>
 
     <module>LightPhysics</module>
+      <module>Inventory</module>
 
   </modules>
   <properties>

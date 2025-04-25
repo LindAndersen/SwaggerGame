@@ -28,13 +28,13 @@
 
 /* === Game popup styling === */
 .game-popup {
-    -fx-background-color: rgba(10, 10, 10, 0.85);
-    -fx-border-color: crimson;
+    -fx-background-color: rgba(0, 0, 0, 0.8);
+    -fx-border-color: white;
     -fx-border-width: 2px;
-    -fx-padding: 30px;
+    -fx-padding: 20px;
     -fx-spacing: 15px;
-    -fx-background-radius: 15px;
-    -fx-border-radius: 15px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
     -fx-effect: dropshadow(gaussian, rgba(255, 0, 0, 0.3), 15, 0.3, 0, 0);
     -fx-font-family: "Who asks Satan", serif;
 }
@@ -61,7 +61,7 @@
 
 /* === Game labels === */
 .game-label {
-    -fx-font-family: "Who asks Satan", serif;
+    -fx-font-family: "Special Elite";
     -fx-text-fill: white;
 }
 

@@ -5,6 +5,7 @@ import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
+import dk.sdu.smp4.inventory.services.IHasInventory;
 
 public class DoorControlSystem implements IQuestInteractable {
 
@@ -14,12 +15,12 @@ public class DoorControlSystem implements IQuestInteractable {
             Door door = (Door) doorEntity;
             if (isDoorWithinReach(player, door) && gameData.getKeys().isPressed(GameKeys.INTERACT)) {
 
-                if (player.getInventory().contains(door.getRequiredKey())) {
+                if (player instanceof IHasInventory iHasInventory && iHasInventory.getInventory().has(door.getRequiredKey())) {
                     // Show unlock popup
                     gameData.setQuestPane("Unlocked", "Door unlocked with the "+door.getRequiredKey()+"!");
 
                     // Unlock door
-                    player.getInventory().remove(door.getRequiredKey());
+                    iHasInventory.getInventory().remove(door.getRequiredKey());
                     world.removeEntity(door);
                 } else {
                     // Show locked popup

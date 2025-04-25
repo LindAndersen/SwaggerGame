@@ -1,8 +1,6 @@
 package dk.sdu.smp4.common.data;
 
-import dk.sdu.smp4.common.GUIelements.HealthBar;
-import dk.sdu.smp4.common.GUIelements.PausePopup;
-import dk.sdu.smp4.common.GUIelements.QuestPopup;
+import dk.sdu.smp4.common.GUIelements.*;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -22,6 +20,7 @@ public class GameData {
     private final Pane lightLayer = new Pane();
     private final StackPane root = new StackPane();
     private final HealthBar healthBar = new HealthBar();
+    private final InventoryHUD inventoryHUD = new InventoryHUD();
 
     private boolean isPaused;
 
@@ -55,6 +54,9 @@ public class GameData {
 
         backgroundLayer.setBackground(new Background(backgroundImage));
         textLayer.getChildren().add(healthBar);
+        inventoryHUD.layoutXProperty().bind(root.widthProperty().subtract(inventoryHUD.widthProperty()).divide(2));
+        inventoryHUD.setLayoutY(displayHeight - 70);
+        textLayer.getChildren().add(inventoryHUD);
     }
 
     public void setQuestPane(String title, String description) {
@@ -143,5 +145,9 @@ public class GameData {
 
     public Pane getLightLayer() {
         return lightLayer;
+    }
+
+    public InventoryHUD getInventoryHUD() {
+        return inventoryHUD;
     }
 }

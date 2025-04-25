@@ -9,6 +9,8 @@ import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.GameOverEvent;
 import dk.sdu.smp4.common.events.UpdateHUDLifeEvent;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
+import dk.sdu.smp4.commonplayerlight.data.CommonPlayerLight;
+import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -63,6 +65,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         primaryStage = stage;
         Font.loadFont(getClass().getResource("/fonts/was.ttf").toExternalForm(), 10);
+        Font.loadFont(getClass().getResource("/fonts/SpecialElite-Regular.ttf").toExternalForm(), 10);
 
         Scene scene = new Scene(gameWindow, gameData.getDisplayWidth(), gameData.getDisplayHeight());
         scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
@@ -142,6 +145,10 @@ public class Main extends Application {
         double entityY = entity.getY();
 
         for (Entity lightEntity : world.getEntities(CommonLightSource.class)) {
+            if (lightEntity instanceof IToggleableLight iToggleableLight && !iToggleableLight.isToggled())
+            {
+                continue;
+            }
             Polygon lightPoly = new Polygon(lightEntity.getPolygonCoordinates());
             handlePolygonCoordsPreDrawing(lightPoly, lightEntity);
 
@@ -177,6 +184,11 @@ public class Main extends Application {
 
         gcLight.setFill(Color.color(1, 1, 1, 1));
         for (Entity entity : world.getEntities(CommonLightSource.class)) {
+            if (entity instanceof IToggleableLight && !((IToggleableLight)entity).isToggled())
+            {
+                continue;
+            }
+
             double[] coords = entity.getPolygonCoordinates();
             Polygon poly = new Polygon(coords);
             handlePolygonCoordsPreDrawing(poly, entity);
@@ -277,7 +289,7 @@ public class Main extends Application {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                double base = 0.65 + rand.nextDouble() * 0.3;
+                double base = 0.2 + rand.nextDouble() * 0.3;
                 pw.setColor(x, y, Color.color(base, base * 0.8, base * 0.6, 1.0));
             }
         }
