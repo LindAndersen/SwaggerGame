@@ -7,7 +7,7 @@ import javafx.scene.paint.Paint;
 import java.io.Serializable;
 import java.util.*;
 
-public class Entity implements Serializable {
+public abstract class Entity implements Serializable {
 
     private final UUID ID = UUID.randomUUID();
     
