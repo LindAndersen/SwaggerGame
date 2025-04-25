@@ -29,6 +29,15 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             //update mouse position
             player.setRotation(Math.toDegrees(Math.atan2(GameKeys.mouseY - player.getY(), GameKeys.mouseX - player.getX())));
+            // Update position
+            player.setPreviousX(player.getX());
+            player.setPreviousY(player.getY());
+            player.setX(player.getX() + player.getVelocityX());
+            player.setY(player.getY() + player.getVelocityY());
+
+            // Out of bounds checks
+            player.setX(Math.min(Math.max(player.getX(), 0), gameData.getDisplayWidth()));
+            player.setY(Math.min(Math.max(player.getY(), 0), gameData.getDisplayHeight()));
 
             // Adjust velocity
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
@@ -50,11 +59,11 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setVelocityY(Math.min(player.getVelocityY() + acceleration, maxSpeed));
             }
 
-            if(gameData.getKeys().isDown(GameKeys.SPACE)) {
-                for(IToggleableLight toggleableLight : getPlayerToggleableLights(world))
-                {
+            if (gameData.getKeys().isDown(GameKeys.SPACE)) {
+                for (IToggleableLight toggleableLight : getPlayerToggleableLights(world)) {
                     toggleableLight.toggle();
                 }
+            }
 
             // Apply friction
             if (!gameData.getKeys().isDown(GameKeys.LEFT) && !gameData.getKeys().isDown(GameKeys.RIGHT)) {
@@ -65,35 +74,22 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setVelocityY(approachZero(player.getVelocityY(), friction));
             }
 
-            // Update position
-            player.setPreviousX(player.getX());
-            player.setPreviousY(player.getY());
-            player.setX(player.getX() + player.getVelocityX());
-            player.setY(player.getY() + player.getVelocityY());
-
-            // Out of bounds checks
-            player.setX(Math.min(Math.max(player.getX(), 0), gameData.getDisplayWidth()));
-            player.setY(Math.min(Math.max(player.getY(), 0), gameData.getDisplayHeight()));
-
             EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
 
-            for (IPlayerLightProcessor spi : getEntityPlayerLights()) {
+            for (IPlayerLightProcessor spi : getEntityPlayerLightProcessors()) {
                 spi.processPlayerLight(player, gameData, world);
             }
 
-            if(gameData.getKeys().isDown(GameKeys.INTERACT)) {
-                for(IQuestInteractable interactable : getEntityQuestInteractables()) {
+            if (gameData.getKeys().isDown(GameKeys.INTERACT)) {
+                for (IQuestInteractable interactable : getEntityQuestInteractables()) {
                     interactable.interact(player, gameData, world);
                 }
             }
 
             EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
-            for (IPlayerLightProcessor spi : getEntityPlayerLightProcessors())
-            {
-                spi.processPlayerLight(player, gameData, world);
-            }
         }
     }
+
     //Prevent instant stop
     private float approachZero(float value, float decrement) {
         if (value > 0) {
