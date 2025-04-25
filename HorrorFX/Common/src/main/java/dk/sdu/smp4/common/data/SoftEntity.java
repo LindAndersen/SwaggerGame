@@ -27,4 +27,8 @@ public class SoftEntity extends Entity {
     public void setPreviousY(double previousY) {
         this.previousY = previousY;
     }
+
+    @Override
+    public void collide(World world, Entity entity) {
+    }
 }

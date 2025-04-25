@@ -112,8 +112,7 @@ public abstract class Entity implements Serializable {
         this.paint = color;
     }
 
-    public void collide(World world, Entity entity) {
-    }
+    public abstract void collide(World world, Entity entity);
 
     public boolean isShouldRotateAlternative() {
         return shouldRotateAlternative;

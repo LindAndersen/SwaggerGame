@@ -12,7 +12,8 @@ import javafx.scene.image.Image;
 public class Player extends SoftEntity {
     private final Image moveLeftImage = new Image(getClass().getResourceAsStream("/move_left.gif"));
     private final Image moveRightImage = new Image(getClass().getResourceAsStream("/move_right.gif"));
-    private int lives = 2;
+    private int lives = 3;
+    private int maxLives = 3;
     private boolean isDead = false;
 
     public Player()
@@ -24,8 +25,8 @@ public class Player extends SoftEntity {
                 if (isDead()) return;
 
                 loseLife();
-                System.out.println("Player hit! Lives left: " + getLives());
-                EventBus.post(new UpdateHUDLifeEvent(getLives()));
+                System.out.println("Player hit! Lives left: " + lives);
+                EventBus.post(new UpdateHUDLifeEvent(lives, maxLives));
 
                 if (getLives() <= 0) {
                     setDead(true); // blokerer flere hits
@@ -43,16 +44,20 @@ public class Player extends SoftEntity {
         return moveRightImage;
     }
 
-    @Override
-    public void collide(World world, Entity entity) {
-    }
-
     public int getLives() {
         return lives;
     }
 
     public void setLives(int lives) {
         this.lives = lives;
+    }
+
+    public int getMaxLives() {
+        return maxLives;
+    }
+
+    public void setMaxLives(int maxLives) {
+        this.maxLives = maxLives;
     }
 
     public void loseLife() {
