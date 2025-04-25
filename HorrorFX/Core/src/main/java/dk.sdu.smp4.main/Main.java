@@ -105,20 +105,16 @@ public class Main extends Application {
 
         getPluginServices().forEach(plugin -> plugin.start(gameData, world));
 
-        initLifeHUD();
-
         render();
         EventBus.subscribe(GameOverEvent.class, event -> {
             showGameOverScreen();
         });
-        EventBus.subscribe(UpdateHUDLifeEvent.class, event -> {
-            updateLifeHUD(event.getLives());
-        });
+
     }
 
     private void render() {
         final long[] lastFrameTime = {0};
-        final long frameDuration = 1_000_000_000 / 60; // nanoseconds per frame (~16.67ms)
+        final long frameDuration = 1_000_000_000 / 900000; // nanoseconds per frame (~16.67ms)
 
         timer = new AnimationTimer() {
             @Override
@@ -353,27 +349,5 @@ public class Main extends Application {
         }
 
         start(primaryStage);
-    }
-
-    private final HBox lifeBox = new HBox(5);
-    private final int maxLives = 2;
-
-    private void initLifeHUD() {
-        lifeBox.setPadding(new Insets(10));
-        lifeBox.setAlignment(Pos.TOP_LEFT);
-        updateLifeHUD(maxLives);
-
-        gameData.getTextLayer().getChildren().add(lifeBox);
-    }
-
-    private void updateLifeHUD(int lives) {
-        lifeBox.getChildren().clear();
-        for (int i = 0; i < maxLives; i++) {
-            Image heartImage = new Image(getClass().getResourceAsStream(
-                    i < lives ? "/coreImages/heart_full.png" : "/coreImages/heart_empty.png"
-            ), 32, 32, true, true);
-            ImageView heartView = new ImageView(heartImage);
-            lifeBox.getChildren().add(heartView);
-        }
     }
 }

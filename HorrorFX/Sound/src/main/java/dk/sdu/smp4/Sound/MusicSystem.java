@@ -5,6 +5,7 @@ import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.events.EventBus;
+import dk.sdu.smp4.common.events.PlayerHitEvent;
 import dk.sdu.smp4.common.events.PlayerPositionEvent;
 import dk.sdu.smp4.common.events.SpiderPositionEvent;
 
@@ -26,6 +27,9 @@ public class MusicSystem {
             spiderX = event.getX();
             spiderY = event.getY();
         });
+        EventBus.subscribe(PlayerHitEvent.class, event -> {
+            SoundService.playSound(HIT_SOUND);
+        });
     }
 
     public static MusicSystem getInstance(){
@@ -38,12 +42,9 @@ public class MusicSystem {
             return;
         }
 
-        boolean overlap = Math.abs(spiderX - playerX) < 20 && Math.abs(spiderY - playerY) < 20;
         boolean close = Math.abs(spiderX - playerX) < 200 && Math.abs(spiderY - playerY) < 200;
 
-        if (overlap) {
-            SoundService.playSound(HIT_SOUND);
-        } else if (close) {
+        if (close) {
             SoundService.playSound(PROXIMITY_SOUND);
             SoundService.stopSound(DEFAULT_SOUND);
         } else {

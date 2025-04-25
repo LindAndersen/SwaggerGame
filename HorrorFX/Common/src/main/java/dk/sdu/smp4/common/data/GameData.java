@@ -1,5 +1,6 @@
 package dk.sdu.smp4.common.data;
 
+import dk.sdu.smp4.common.GUIelements.HealthBar;
 import dk.sdu.smp4.common.GUIelements.PausePopup;
 import dk.sdu.smp4.common.GUIelements.QuestPopup;
 import javafx.geometry.Pos;
@@ -20,6 +21,7 @@ public class GameData {
     private final Pane textLayer = new Pane();
     private final Pane lightLayer = new Pane();
     private final StackPane root = new StackPane();
+    private final HealthBar healthBar = new HealthBar();
 
     private boolean isPaused;
 
@@ -52,6 +54,7 @@ public class GameData {
         );
 
         backgroundLayer.setBackground(new Background(backgroundImage));
+        textLayer.getChildren().add(healthBar);
     }
 
     public void setQuestPane(String title, String description) {
