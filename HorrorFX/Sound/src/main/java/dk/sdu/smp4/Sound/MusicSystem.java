@@ -1,19 +1,13 @@
 package dk.sdu.smp4.Sound;
 
-import dk.sdu.smp4.common.Services.IEntityProcessingService;
-import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
-import dk.sdu.smp4.common.data.GameData;
-import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.common.events.EventBus;
-import dk.sdu.smp4.common.events.PlayerHitEvent;
-import dk.sdu.smp4.common.events.PlayerPositionEvent;
-import dk.sdu.smp4.common.events.SpiderPositionEvent;
+import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
 
 public class MusicSystem {
 
     private static final String HIT_SOUND = "/background/man-scream.wav";
     private static final String PROXIMITY_SOUND = "/background/cropped_aggressive_scary.wav";
     private static final String DEFAULT_SOUND = "/background/chill_scary.wav";
+    private static final String RELOAD_SOUND = "/Player/reload_torch.wav";
     private double playerX, playerY, spiderX, spiderY;
     private static final MusicSystem INSTANCE = new MusicSystem();
 
@@ -29,6 +23,13 @@ public class MusicSystem {
         });
         EventBus.subscribe(PlayerHitEvent.class, event -> {
             SoundService.playSound(HIT_SOUND);
+        });
+
+        EventBus.subscribe(InventoryUpdateEvent.class, event -> {
+            if (event.getType().equals(InventorySlotItems.RESIN))
+            {
+                SoundService.playSound(RELOAD_SOUND);
+            }
         });
     }
 

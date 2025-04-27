@@ -23,7 +23,10 @@
     <module>Sound</module>
     <module>LightPhysics</module>
     <module>Inventory</module>
-      <module>CommonQuest</module>
+    <module>CommonQuest</module>
+    <module>Events</module>
+    <module>CommonEvents</module>
+    <module>CommonGUIElements</module>
   </modules>
 
   <properties>

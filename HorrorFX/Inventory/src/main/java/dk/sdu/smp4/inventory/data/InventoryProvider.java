@@ -26,9 +26,9 @@ public class InventoryProvider implements InventorySPI {
     }
 
     @Override
-    public void remove(Entity receiver, InventorySlotItems itemType) {
+    public void remove(Entity receiver, InventorySlotItems itemType, int amount) {
         InventoryManager inventoryManager = InventoryManager.getInstance();
-        Optional.ofNullable(inventoryManager.getInventory(receiver)).ifPresent(inventory -> inventory.remove(itemType));
+        Optional.ofNullable(inventoryManager.getInventory(receiver)).ifPresent(inventory -> inventory.remove(itemType, amount));
     }
 
     @Override

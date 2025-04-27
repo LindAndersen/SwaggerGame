@@ -1,6 +1,5 @@
 package dk.sdu.smp4.common.data;
 
-import dk.sdu.smp4.common.GUIelements.*;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;

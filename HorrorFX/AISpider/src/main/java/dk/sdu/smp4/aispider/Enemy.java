@@ -1,11 +1,11 @@
 package dk.sdu.smp4.aispider;
 
-import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.Entity;
+import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.enemy.services.EnemyTargetsSPI;
-import dk.sdu.smp4.common.events.EventBus;
-import dk.sdu.smp4.common.events.PlayerHitEvent;
+import dk.sdu.smp4.common.events.data.PlayerHitEvent;
+import dk.sdu.smp4.common.events.services.IEventBus;
 import javafx.scene.image.Image;
 
 import java.util.Collection;
@@ -34,10 +34,13 @@ public class Enemy extends SoftEntity {
 
     @Override
     public void collide(World world, Entity entity) {
+        IEventBus eventBus = getEventBusSPI().stream().findFirst().orElse(null);
+        if(eventBus == null){return;}
+
         // Define what happens when the enemy collides with another entity (e.g., damage player).
         if (entity instanceof EnemyTargetsSPI && !isInCooldown()) {
             System.out.println("Updated player hit bus");
-            EventBus.post(new PlayerHitEvent(entity));
+            eventBus.post(new PlayerHitEvent(entity));
             setLastHitTime();
         }
     }
@@ -50,8 +53,8 @@ public class Enemy extends SoftEntity {
         this.lastHitTime = System.currentTimeMillis();
     }
 
-    private Collection<? extends EnemyTargetsSPI> getEnemyTargetsSPI() {
-        return ServiceLoader.load(EnemyTargetsSPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    private Collection<? extends IEventBus> getEventBusSPI() {
+        return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }
 

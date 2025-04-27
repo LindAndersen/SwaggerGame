@@ -7,6 +7,6 @@ public interface InventorySPI {
     void addInventoryForEntity(Entity entity);
     boolean containsInventoryForEntity(Entity entity);
     void add(Entity receiver, Entity inventoryItem, InventorySlotItems itemType);
-    void remove(Entity receiver, InventorySlotItems itemType);
+    void remove(Entity receiver, InventorySlotItems itemType, int amount);
     boolean contains(Entity receiver, InventorySlotItems itemType);
 }

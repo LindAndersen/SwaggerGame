@@ -11,10 +11,15 @@ public class PlayerConeLightProcessor implements IPlayerLightProcessor {
     public void processPlayerLight(SoftEntity player, GameData gameData, World world) {
 
         for (Entity lightEntity : world.getEntities(ConeLight.class)) {
-            lightEntity.setX(player.getX());
-            lightEntity.setY(player.getY());
-            lightEntity.setRotation(player.getRotation());
-            lightEntity.setShouldRotateAlternative(true);
+            ConeLight coneLight = (ConeLight) lightEntity;
+            coneLight.setX(player.getX());
+            coneLight.setY(player.getY());
+            coneLight.setRotation(player.getRotation());
+            coneLight.setShouldRotateAlternative(true);
+
+            coneLight.tick();
+
+            System.out.println(coneLight.getFlashLightCurrentTime());
         }
     }
 }

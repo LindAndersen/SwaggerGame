@@ -4,5 +4,6 @@ public enum InventorySlotItems {
     SILVER_KEY,
     GOLDEN_KEY,
     BRONZE_KEY,
-    GREY_KEY
+    GREY_KEY,
+    RESIN
 }

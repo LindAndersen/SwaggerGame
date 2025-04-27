@@ -5,7 +5,6 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.common.events.*;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
 import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
@@ -83,6 +82,12 @@ public class PlayerControlSystem implements IEntityProcessingService {
             if (gameData.getKeys().isDown(GameKeys.INTERACT)) {
                 for (IQuestInteractable interactable : getEntityQuestInteractables()) {
                     interactable.interact(player, gameData, world);
+                }
+            }
+
+            if (gameData.getKeys().isDown(GameKeys.RELOAD)) {
+                for (IToggleableLight toggleableLight : getPlayerToggleableLights(world)) {
+                    toggleableLight.reload(player);
                 }
             }
 

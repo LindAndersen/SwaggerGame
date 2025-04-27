@@ -7,14 +7,11 @@ import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.*;
 import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.GameOverEvent;
-import dk.sdu.smp4.common.events.UpdateHUDLifeEvent;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
-import dk.sdu.smp4.commonplayerlight.data.CommonPlayerLight;
 import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -27,23 +24,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
-import java.security.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import java.time.LocalTime;
 
 public class Main extends Application {
     private GameData gameData = new GameData();
@@ -145,7 +135,7 @@ public class Main extends Application {
         double entityY = entity.getY();
 
         for (Entity lightEntity : world.getEntities(CommonLightSource.class)) {
-            if (lightEntity instanceof IToggleableLight iToggleableLight && !iToggleableLight.isToggled())
+            if (lightEntity instanceof IToggleableLight iToggleableLight && !iToggleableLight.isOn())
             {
                 continue;
             }
@@ -184,7 +174,7 @@ public class Main extends Application {
 
         gcLight.setFill(Color.color(1, 1, 1, 1));
         for (Entity entity : world.getEntities(CommonLightSource.class)) {
-            if (entity instanceof IToggleableLight && !((IToggleableLight)entity).isToggled())
+            if (entity instanceof IToggleableLight && !((IToggleableLight)entity).isOn())
             {
                 continue;
             }
@@ -304,6 +294,7 @@ public class Main extends Application {
         if (code == KeyCode.SPACE) gameData.getKeys().setKey(GameKeys.SPACE, pressed);
         if (code == KeyCode.S) gameData.getKeys().setKey(GameKeys.DOWN, pressed);
         if (code == KeyCode.E) gameData.getKeys().setKey(GameKeys.INTERACT, pressed);
+        if (code == KeyCode.R) gameData.getKeys().setKey(GameKeys.RELOAD, pressed);
     }
 
     private Collection<? extends IGamePluginService> getPluginServices() {

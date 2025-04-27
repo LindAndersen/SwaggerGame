@@ -27,7 +27,7 @@ public class DoorControlSystem implements IQuestInteractable {
                     gameData.setQuestPane("Unlocked", "Door unlocked with the "+door.getRequiredKey()+"!");
 
                     // Unlock door
-                    inventorySPI.remove(player, door.getRequiredKey());
+                    inventorySPI.remove(player, door.getRequiredKey(), 1);
                     world.removeEntity(door);
                 } else {
                     // Show locked popup

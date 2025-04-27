@@ -4,17 +4,24 @@ import dk.sdu.smp4.common.Services.IEntityProcessingService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.common.events.EventBus;
-import dk.sdu.smp4.common.events.PlayerPositionEvent;
-import dk.sdu.smp4.common.events.SpiderPositionEvent;
+import dk.sdu.smp4.common.events.data.PlayerPositionEvent;
+import dk.sdu.smp4.common.events.data.SpiderPositionEvent;
+import dk.sdu.smp4.common.events.services.IEventBus;
+
+import java.util.Collection;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
     private double lastKnownPlayerX = -1;
     private double lastKnownPlayerY = -1;
+    IEventBus eventBus;
 
     public EnemyControlSystem() {
-        EventBus.subscribe(PlayerPositionEvent.class, event -> {
+        eventBus = getEventBusSPI().stream().findFirst().orElse(null);
+        assert eventBus != null;
+        eventBus.subscribe(PlayerPositionEvent.class, event -> {
             lastKnownPlayerX = event.getX();
             lastKnownPlayerY = event.getY();
         });
@@ -41,7 +48,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
 
             handleImage(enemy, dx);
-            EventBus.post(new SpiderPositionEvent(entity, entity.getX(), entity.getY()));
+            eventBus.post(new SpiderPositionEvent(entity, entity.getX(), entity.getY()));
         }
     }
 
@@ -52,5 +59,9 @@ public class EnemyControlSystem implements IEntityProcessingService {
         } else {
             enemy.setMoveRight();
         }
+    }
+
+    private Collection<? extends IEventBus> getEventBusSPI() {
+        return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }

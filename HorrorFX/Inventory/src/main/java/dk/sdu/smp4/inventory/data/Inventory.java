@@ -22,26 +22,29 @@ public class Inventory {
         {
             InventorySlot slot = inventory.get(name);
             slot.amount++;
-            EventBus.post(new InventoryUpdateEvent(slot.index, entity.getImage(), slot.amount));
+            EventBus.post(new InventoryUpdateEvent(slot.index, entity.getImage(), slot.amount, name));
         }else if (inventory.size() < SIZE +1)
         {
             InventorySlot slot = new InventorySlot(entity, 1);
             inventory.put(name, slot);
-            EventBus.post(new InventoryUpdateEvent(slot.index, entity.getImage(), slot.amount));
+            EventBus.post(new InventoryUpdateEvent(slot.index, entity.getImage(), slot.amount, name));
         } else
         {
             System.out.println("Too many things in inventory!");
         }
     }
 
-    public void remove(InventorySlotItems name)
+    public void remove(InventorySlotItems name, int amount)
     {
         if(inventory.containsKey(name)){
             InventorySlot slot = inventory.get(name);
-            slot.remove();
+            slot.remove(amount);
             if (slot.amount == 0)
             {
-                EventBus.post(new InventoryUpdateEvent(slot.index, null, 0));
+                EventBus.post(new InventoryUpdateEvent(slot.index, null, 0, name));
+            } else
+            {
+                EventBus.post(new InventoryUpdateEvent(slot.index, null, slot.amount, name));
             }
         }
     }
@@ -66,9 +69,9 @@ public class Inventory {
             globalIndex++;
         }
 
-        void remove()
+        void remove(int amount)
         {
-            amount--;
+            this.amount -= amount;
             if (amount == 0)
             {
                 entity = null;
