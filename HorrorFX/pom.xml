@@ -19,15 +19,13 @@
     <module>PlayerCircleLight</module>
     <module>CommonPlayerLight</module>
     <module>PlayerConeLight</module>
-    <module>Door</module>
-    <module>Key</module>
-
+    <module>KeyDoor</module>
     <module>Sound</module>
-
     <module>LightPhysics</module>
-      <module>Inventory</module>
-
+    <module>Inventory</module>
+      <module>CommonQuest</module>
   </modules>
+
   <properties>
     <java>java</java>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

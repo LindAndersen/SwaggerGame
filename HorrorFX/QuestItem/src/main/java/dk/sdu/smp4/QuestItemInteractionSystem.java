@@ -6,6 +6,7 @@ import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.GameOverEvent;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
+import dk.sdu.smp4.commonquest.data.Utility;
 
 public class QuestItemInteractionSystem implements IQuestInteractable {
     QuestManager questManager = new QuestManager();
@@ -17,7 +18,7 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
         {
             QuestItem _questItem = (QuestItem) questItem;
 
-            if (isQuestItemWithinReach(player, questItem))
+            if (Utility.isEntitiesWithinReach(player, questItem))
             {
                 if(!questManager.isSubQuest(_questItem) && !questManager.isActiveQuest(_questItem))
                 {
@@ -39,13 +40,6 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
     @Override
     public void consume(GameData gameData, World world) {
 
-    }
-
-    private boolean isQuestItemWithinReach(Entity questItem, Entity player)
-    {   // Check if player is within distance
-        double distancePlayerToQuest = Math.sqrt(Math.pow(questItem.getX() - player.getX(), 2) + Math.pow(questItem.getY() - player.getY(), 2));
-
-        return distancePlayerToQuest < 10;
     }
 
     private void displayQuestPopup(GameData gameData, QuestItem questItem) {

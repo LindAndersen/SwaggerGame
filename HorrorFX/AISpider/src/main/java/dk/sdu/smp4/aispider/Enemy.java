@@ -1,12 +1,16 @@
 package dk.sdu.smp4.aispider;
 
-import dk.sdu.smp4.common.Services.IPlayer;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.enemy.services.EnemyTargetsSPI;
 import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.PlayerHitEvent;
 import javafx.scene.image.Image;
+
+import java.util.Collection;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 public class Enemy extends SoftEntity {
     private Image moveLeft;
@@ -31,7 +35,7 @@ public class Enemy extends SoftEntity {
     @Override
     public void collide(World world, Entity entity) {
         // Define what happens when the enemy collides with another entity (e.g., damage player).
-        if (entity instanceof IPlayer && !isInCooldown()) {
+        if (entity instanceof EnemyTargetsSPI && !isInCooldown()) {
             System.out.println("Updated player hit bus");
             EventBus.post(new PlayerHitEvent(entity));
             setLastHitTime();
@@ -44,6 +48,10 @@ public class Enemy extends SoftEntity {
 
     public void setLastHitTime() {
         this.lastHitTime = System.currentTimeMillis();
+    }
+
+    private Collection<? extends EnemyTargetsSPI> getEnemyTargetsSPI() {
+        return ServiceLoader.load(EnemyTargetsSPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }
 

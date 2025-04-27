@@ -4,11 +4,14 @@ import dk.sdu.smp4.common.Services.IGamePluginService;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.interactable.Services.InventorySPI;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
 import javafx.scene.paint.Color;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -21,6 +24,11 @@ public class PlayerPlugin implements IGamePluginService {
 
         for(IPlayerLightPlugin lightPlugin : getEntityPlayerLights()) {
             lightPlugin.createPlayerLight(player, gameData, world);
+        }
+
+        for(InventorySPI inventorySPI : getInventorySPIs())
+        {
+            inventorySPI.addInventoryForEntity(player);
         }
     }
 
@@ -47,5 +55,9 @@ public class PlayerPlugin implements IGamePluginService {
 
     private Collection<? extends IPlayerLightPlugin> getEntityPlayerLights() {
         return ServiceLoader.load(IPlayerLightPlugin.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends InventorySPI> getInventorySPIs() {
+        return ServiceLoader.load(InventorySPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }

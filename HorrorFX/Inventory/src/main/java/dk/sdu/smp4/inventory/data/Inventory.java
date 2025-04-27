@@ -3,19 +3,20 @@ package dk.sdu.smp4.inventory.data;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.InventoryUpdateEvent;
+import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Inventory {
-    private Map<String, InventorySlot> inventory;
+    private Map<InventorySlotItems, InventorySlot> inventory;
     private static final int SIZE = 8;
 
     public Inventory() {
-        inventory = new HashMap<String, InventorySlot>();
+        inventory = new HashMap<>();
     }
 
-    public void add(String name, Entity entity)
+    public void add(InventorySlotItems name, Entity entity)
     {
         if (inventory.containsKey(name))
         {
@@ -33,7 +34,7 @@ public class Inventory {
         }
     }
 
-    public void remove(String name)
+    public void remove(InventorySlotItems name)
     {
         if(inventory.containsKey(name)){
             InventorySlot slot = inventory.get(name);
@@ -45,7 +46,7 @@ public class Inventory {
         }
     }
 
-    public boolean has(String name)
+    public boolean contains(InventorySlotItems name)
     {
         return inventory.containsKey(name);
     }

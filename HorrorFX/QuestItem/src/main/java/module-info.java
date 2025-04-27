@@ -4,6 +4,7 @@ import dk.sdu.smp4.QuestItemPlugin;
 module QuestItem {
     requires CommonInteractable;
     requires Common;
+    requires CommonQuest;
     requires java.desktop;
     requires java.management;
     requires javafx.controls;

@@ -7,10 +7,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>QuestItem</artifactId>
+    <artifactId>KeyDoor</artifactId>
     <packaging>jar</packaging>
 
-    <name>QuestItem</name>
+    <name>KeyDoor</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -25,10 +25,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>dk.sdu.smp4</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>Common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -40,15 +39,17 @@
             <artifactId>CommonQuest</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dk.sdu.smp4</groupId>
-            <artifactId>CommonQuest</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

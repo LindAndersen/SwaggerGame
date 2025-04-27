@@ -1,33 +1,24 @@
 package dk.sdu.smp4.player;
 
-import dk.sdu.smp4.common.Services.IPlayer;
 import dk.sdu.smp4.common.data.SoftEntity;
-import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.enemy.services.EnemyTargetsSPI;
 import dk.sdu.smp4.common.events.EventBus;
 import dk.sdu.smp4.common.events.GameOverEvent;
 import dk.sdu.smp4.common.events.PlayerHitEvent;
 import dk.sdu.smp4.common.events.UpdateHUDLifeEvent;
-import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
-import dk.sdu.smp4.inventory.services.IHasInventory;
-import dk.sdu.smp4.inventory.data.Inventory;
 import javafx.scene.image.Image;
 
-import java.util.Map;
-
-public class Player extends SoftEntity implements IHasInventory, IPlayer {
+public class Player extends SoftEntity implements EnemyTargetsSPI {
     private final Image moveLeftImage = new Image(getClass().getResourceAsStream("/move_left.gif"));
     private final Image moveRightImage = new Image(getClass().getResourceAsStream("/move_right.gif"));
     private int lives = 3;
     private int maxLives = 3;
     private boolean isDead = false;
-    private Inventory inventory;
     private float velocityX = 0;
     private float velocityY = 0;
 
     public Player()
     {
-        inventory = new Inventory();
         this.setImage(moveRightImage);
 
         EventBus.subscribe(PlayerHitEvent.class, event -> {
@@ -96,10 +87,5 @@ public class Player extends SoftEntity implements IHasInventory, IPlayer {
 
     public void setVelocityY(float velocityY) {
         this.velocityY = velocityY;
-    }
-
-    @Override
-    public Inventory getInventory() {
-        return inventory;
     }
 }
