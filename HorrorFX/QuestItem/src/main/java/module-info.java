@@ -1,5 +1,6 @@
 import dk.sdu.smp4.QuestItemInteractionSystem;
 import dk.sdu.smp4.QuestItemPlugin;
+import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 
 module QuestItem {
     requires CommonInteractable;
@@ -8,7 +9,7 @@ module QuestItem {
     requires java.desktop;
     requires java.management;
     requires javafx.controls;
-    provides dk.sdu.smp4.common.Services.IGamePluginService with QuestItemPlugin;
+    provides IGamePluginService with QuestItemPlugin;
     provides dk.sdu.smp4.common.interactable.Services.IQuestInteractable with QuestItemInteractionSystem;
 
 

@@ -1,6 +1,6 @@
 package dk.sdu.smp4.structureSystem;
 
-import dk.sdu.smp4.common.Services.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.data.*;
 import dk.sdu.smp4.common.events.DoorCreationEvent;
 import dk.sdu.smp4.common.events.EventBus;

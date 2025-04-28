@@ -1,6 +1,6 @@
 package dk.sdu.smp4.aispider;
 
-import dk.sdu.smp4.common.Services.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
@@ -12,7 +12,6 @@ public class EnemyPlugin implements IGamePluginService {
     public void start(GameData gameData, World world) {
         enemy = createEnemy(gameData);
         world.addEntity(enemy);
-        //System.out.println(" Enemy added to world with ID " + enemy.getID());
     }
 
     @Override

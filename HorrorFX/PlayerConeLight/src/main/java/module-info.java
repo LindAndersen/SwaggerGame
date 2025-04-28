@@ -1,4 +1,4 @@
-import dk.sdu.smp4.common.Services.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.playerconelight.*;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;

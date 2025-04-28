@@ -1,6 +1,6 @@
 package dk.sdu.smp4.aispider;
 
-import dk.sdu.smp4.common.Services.IEntityProcessingService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;

@@ -1,12 +1,11 @@
 package dk.sdu.smp4.main;
 
-import dk.sdu.smp4.common.GUIelements.StartMenu;
-import dk.sdu.smp4.common.Services.IEntityProcessingService;
-import dk.sdu.smp4.common.Services.IGamePluginService;
-import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
+import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.*;
-import dk.sdu.smp4.common.events.EventBus;
-import dk.sdu.smp4.common.events.GameOverEvent;
+import dk.sdu.smp4.common.gui.GUIManager;
+import dk.sdu.smp4.common.gui.StartMenu;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
 import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 import javafx.animation.AnimationTimer;
@@ -37,6 +36,7 @@ import java.util.stream.Collectors;
 
 public class Main extends Application {
     private GameData gameData = new GameData();
+    private GUIManager guiManager = new GUIManager(gameData);
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();

@@ -1,6 +1,6 @@
 package dk.sdu.smp4.keyanddoor.door;
 
-import dk.sdu.smp4.common.Services.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.data.InventorySlotItems;

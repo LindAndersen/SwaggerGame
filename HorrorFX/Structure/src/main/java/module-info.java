@@ -1,5 +1,4 @@
-import dk.sdu.smp4.structureSystem.StructurePlugin;
-import dk.sdu.smp4.common.Services.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 
 module Structure {
     exports dk.sdu.smp4.structureSystem;

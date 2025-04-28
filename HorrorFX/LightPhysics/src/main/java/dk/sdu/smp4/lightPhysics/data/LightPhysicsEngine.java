@@ -1,9 +1,8 @@
 package dk.sdu.smp4.lightPhysics.data;
 
-import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
+import dk.sdu.smp4.common.Services.GameLoop.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.*;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 import java.util.*;

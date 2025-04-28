@@ -1,4 +1,4 @@
-package dk.sdu.smp4.common.Services;
+package dk.sdu.smp4.common.Services.GameLoop;
 
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;

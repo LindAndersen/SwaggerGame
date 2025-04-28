@@ -1,11 +1,15 @@
+import dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
+import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IPostEntityProcessingService;
+
 module Core {
-    requires javafx.graphics;
-    requires Common;
     requires CommonLightSource;
-    requires javafx.controls;
     requires CommonPlayerLight;
+    requires Common;
+    requires CommonGUIElements;
+    requires javafx.controls;
     opens dk.sdu.smp4.main to javafx.graphics;
-    uses dk.sdu.smp4.common.Services.IGamePluginService;
-    uses dk.sdu.smp4.common.Services.IEntityProcessingService;
-    uses dk.sdu.smp4.common.Services.IPostEntityProcessingService;
+    uses IGamePluginService;
+    uses IEntityProcessingService;
+    uses IPostEntityProcessingService;
 }

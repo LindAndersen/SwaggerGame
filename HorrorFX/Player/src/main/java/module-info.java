@@ -1,6 +1,6 @@
 import dk.sdu.smp4.commonplayerlight.services.*;
-import dk.sdu.smp4.common.Services.IGamePluginService;
-import dk.sdu.smp4.common.Services.IEntityProcessingService;
+import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.player.PlayerPlugin;
 import dk.sdu.smp4.player.PlayerControlSystem;

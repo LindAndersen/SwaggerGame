@@ -1,15 +1,13 @@
 package dk.sdu.smp4.player;
 
-import dk.sdu.smp4.common.Services.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.Services.InventorySPI;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
-import javafx.scene.paint.Color;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
