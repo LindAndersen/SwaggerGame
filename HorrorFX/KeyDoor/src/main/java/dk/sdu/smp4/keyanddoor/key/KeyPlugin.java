@@ -1,5 +1,6 @@
 package dk.sdu.smp4.keyanddoor.key;
 
+import dk.sdu.smp4.common.Services.GUI.PolygonColor;
 import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
@@ -12,14 +13,14 @@ public class KeyPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        Entity goldenKey = createKey(gameData, 400, 400, "golden_key", "gold");
-        Entity bronzeKey = createKey(gameData, 400, 600, "bronze_key", "blue");
+        Entity goldenKey = createKey(gameData, 400, 400, "golden_key", PolygonColor.GOLD);
+        Entity bronzeKey = createKey(gameData, 400, 600, "bronze_key", PolygonColor.BLUE);
 
         world.addEntity(goldenKey);
         world.addEntity(bronzeKey);
     }
 
-    private Entity createKey(GameData gameData, int x, int y, String keyId, String color) {
+    private Entity createKey(GameData gameData, int x, int y, String keyId, PolygonColor color) {
         Key key = new Key(keyId);
 //        float randomX = random.nextFloat(0.1F,0.7F) * gameData.getDisplayWidth();
 //        float value1 = random.nextFloat() * (0.3f - 0.2f) + 0.2f;

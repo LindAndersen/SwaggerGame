@@ -1,7 +1,12 @@
-package dk.sdu.smp4.common.gui;
+package dk.sdu.smp4.common.gui.elements;
 
+import dk.sdu.smp4.common.Services.GUI.EntityImage;
+import dk.sdu.smp4.common.Services.GUI.IInventoryHUD;
+import dk.sdu.smp4.common.events.data.InventoryUpdateEvent;
+import dk.sdu.smp4.common.events.services.IEventBus;
+import dk.sdu.smp4.common.gui.util.EntityImageConverter;
+import dk.sdu.smp4.commonplayer.CommonPlayer;
 import javafx.geometry.Pos;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -9,15 +14,19 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class InventoryHUD extends HBox {
+public class InventoryHUD extends HBox implements IInventoryHUD {
 
     private static final int SLOT_SIZE = 48;
     private static final int SLOT_COUNT = 8;
 
     private final List<StackPane> slots = new ArrayList<>();
+    private IEventBus eventBus;
 
     public InventoryHUD() {
+        eventBus = getEventBusSPI().stream().findFirst().orElse(null);
+
         setSpacing(10);
         setAlignment(Pos.CENTER);
         setStyle("-fx-padding: 10;");
@@ -28,7 +37,7 @@ public class InventoryHUD extends HBox {
             getChildren().add(slot);
         }
 
-        EventBus.subscribe(InventoryUpdateEvent.class, event -> {
+        eventBus.subscribe(InventoryUpdateEvent.class, event -> {
             setItemInSlot(event.getIndex(), event.getIcon(), event.getQuantity());
         });
     }
@@ -58,7 +67,7 @@ public class InventoryHUD extends HBox {
         return slot;
     }
 
-    public void setItemInSlot(int index, Image icon, int quantity) {
+    public void setItemInSlot(int index, EntityImage icon, int quantity) {
         if (index < 0 || index >= slots.size()) return;
 
         StackPane slot = slots.get(index);
@@ -66,8 +75,16 @@ public class InventoryHUD extends HBox {
         ImageView itemImage = (ImageView) slot.lookup("#itemImage");
         Text quantityText = (Text) slot.lookup("#quantityText");
 
-        itemImage.setImage(icon);
+        itemImage.setImage(EntityImageConverter.convertEntityImage(icon, CommonPlayer.class));
         quantityText.setText(quantity > 1 ? String.valueOf(quantity) : "");
     }
 
+    private Collection<? extends IEventBus> getEventBusSPI() {
+        return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateInventoryDisplay() {
+
+    }
 }

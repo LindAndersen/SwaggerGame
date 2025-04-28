@@ -11,11 +11,12 @@ module Player {
     uses IQuestInteractable;
     uses IToggleableLight;
     uses dk.sdu.smp4.common.interactable.Services.InventorySPI;
+    uses dk.sdu.smp4.common.events.services.IEventBus;
     requires Common;
     requires CommonEnemy;
     requires CommonPlayerLight;
     requires CommonInteractable;
-    requires javafx.graphics;
+    requires CommonEvents;
     provides IGamePluginService with PlayerPlugin;
     provides IEntityProcessingService with PlayerControlSystem;
 }

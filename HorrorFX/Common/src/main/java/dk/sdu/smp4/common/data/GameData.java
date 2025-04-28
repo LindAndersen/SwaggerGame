@@ -34,4 +34,5 @@ public class GameData {
     public void setPaused(boolean paused) {
         isPaused = paused;
     }
+
 }

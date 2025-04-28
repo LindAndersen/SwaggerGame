@@ -27,6 +27,7 @@
     <module>Events</module>
     <module>CommonEvents</module>
     <module>CommonGUIElements</module>
+    <module>CommonPlayer</module>
   </modules>
 
   <properties>

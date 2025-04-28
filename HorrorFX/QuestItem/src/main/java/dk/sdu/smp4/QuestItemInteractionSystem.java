@@ -1,12 +1,17 @@
 package dk.sdu.smp4;
 
+import dk.sdu.smp4.common.Services.GUI.IGUIManager;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.common.events.EventBus;
-import dk.sdu.smp4.common.events.GameOverEvent;
+import dk.sdu.smp4.common.events.data.GameOverEvent;
+import dk.sdu.smp4.common.events.services.IEventBus;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.commonquest.data.Utility;
+
+import java.util.Collection;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 public class QuestItemInteractionSystem implements IQuestInteractable {
     QuestManager questManager = new QuestManager();
@@ -43,16 +48,27 @@ public class QuestItemInteractionSystem implements IQuestInteractable {
     }
 
     private void displayQuestPopup(GameData gameData, QuestItem questItem) {
+        IEventBus eventBus = getEventBusSPI().stream().findFirst().orElse(null);
+        IGUIManager guiManager = getGUIManagers().stream().findFirst().orElse(null);
         // Display a pop-up with quest details
-        gameData.setQuestPane("Quest Description", questItem.getQuestDescription());
+        assert guiManager != null;
+        guiManager.setQuestPane("Quest Description", questItem.getQuestDescription());
         // ONLY FOR DEMO, SHOULD 100% REMOVE THIS GARBAGE EVENT HANDLING XD
         if (questItem.getQuestName().equals("Victory!"))
         {
-            EventBus.post(new GameOverEvent());
+            assert eventBus != null;
+            eventBus.post(new GameOverEvent());
         }
 
     }
 
+    private Collection<? extends IEventBus> getEventBusSPI() {
+        return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
+
+    private Collection<? extends IGUIManager> getGUIManagers() {
+        return ServiceLoader.load(IGUIManager.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
 }
 
 

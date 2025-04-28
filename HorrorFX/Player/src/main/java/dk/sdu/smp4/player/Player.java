@@ -1,47 +1,54 @@
 package dk.sdu.smp4.player;
 
+import dk.sdu.smp4.common.Services.GUI.EntityImage;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.enemy.services.EnemyTargetsSPI;
-import dk.sdu.smp4.common.events.EventBus;
-import dk.sdu.smp4.common.events.GameOverEvent;
-import dk.sdu.smp4.common.events.PlayerHitEvent;
-import dk.sdu.smp4.common.events.UpdateHUDLifeEvent;
-import javafx.scene.image.Image;
+import dk.sdu.smp4.common.events.data.GameOverEvent;
+import dk.sdu.smp4.common.events.data.PlayerHitEvent;
+import dk.sdu.smp4.common.events.data.UpdateHUDLifeEvent;
+import dk.sdu.smp4.common.events.services.IEventBus;
+
+import java.util.Collection;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
+
 
 public class Player extends SoftEntity implements EnemyTargetsSPI {
-    private final Image moveLeftImage = new Image(getClass().getResourceAsStream("/move_left.gif"));
-    private final Image moveRightImage = new Image(getClass().getResourceAsStream("/move_right.gif"));
+    private final EntityImage moveLeftImage = new EntityImage("/move_left.gif",50,48,true,true,Player.class);
+    private final EntityImage moveRightImage = new EntityImage("/move_right.gif", 50, 48, true,true,Player.class);
     private int lives = 3;
     private int maxLives = 3;
     private boolean isDead = false;
     private float velocityX = 0;
     private float velocityY = 0;
+    private IEventBus eventBus;
 
     public Player()
     {
         this.setImage(moveRightImage);
-
-        EventBus.subscribe(PlayerHitEvent.class, event -> {
+        eventBus = getEventBusSPI().stream().findFirst().orElse(null);
+        assert eventBus != null;
+        eventBus.subscribe(PlayerHitEvent.class, event -> {
             if (event.getPlayer() instanceof Player ) {
                 if (isDead()) return;
 
                 loseLife();
                 System.out.println("Player hit! Lives left: " + lives);
-                EventBus.post(new UpdateHUDLifeEvent(lives, maxLives));
+                eventBus.post(new UpdateHUDLifeEvent(lives, maxLives));
 
                 if (getLives() <= 0) {
                     setDead(true); // blokerer flere hits
-                    EventBus.post(new GameOverEvent());
+                    eventBus.post(new GameOverEvent());
                 }
             }
         });
     }
 
-    public Image getMoveLeftImage() {
+    public EntityImage getMoveLeftImage() {
         return moveLeftImage;
     }
 
-    public Image getMoveRightImage() {
+    public EntityImage getMoveRightImage() {
         return moveRightImage;
     }
 
@@ -87,5 +94,9 @@ public class Player extends SoftEntity implements EnemyTargetsSPI {
 
     public void setVelocityY(float velocityY) {
         this.velocityY = velocityY;
+    }
+
+    private Collection<? extends IEventBus> getEventBusSPI() {
+        return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }

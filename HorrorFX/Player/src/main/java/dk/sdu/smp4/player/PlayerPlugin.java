@@ -1,5 +1,6 @@
 package dk.sdu.smp4.player;
 
+import dk.sdu.smp4.common.Services.GUI.PolygonColor;
 import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.GameData;
@@ -47,7 +48,7 @@ public class PlayerPlugin implements IGamePluginService {
         player.setY(gameData.getDisplayHeight() /5);
         player.setRadius(8);
         player.setSolid(true);
-        player.setPaint("blue");
+        player.setPaint(PolygonColor.BLUE);
         return player;
     }
 

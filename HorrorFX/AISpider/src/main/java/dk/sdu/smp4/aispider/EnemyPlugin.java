@@ -1,5 +1,6 @@
 package dk.sdu.smp4.aispider;
 
+import dk.sdu.smp4.common.Services.GUI.PolygonColor;
 import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.GameData;
@@ -26,7 +27,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setY(/*Math.random() **/ gameData.getDisplayHeight()/1.3);
         enemy.setRadius(8);
         enemy.setSolid(true);
-        enemy.setPaint("red");
+        enemy.setPaint(PolygonColor.RED);
         return enemy;
 
     }

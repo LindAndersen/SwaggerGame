@@ -1,4 +1,4 @@
-package dk.sdu.smp4.common.gui;
+package dk.sdu.smp4.common.gui.elements;
 
 public class QuestPopup extends GamePopup {
 

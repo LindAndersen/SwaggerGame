@@ -1,26 +1,27 @@
 package dk.sdu.smp4.aispider;
 
+import dk.sdu.smp4.common.Services.GUI.EntityImage;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.enemy.services.EnemyTargetsSPI;
 import dk.sdu.smp4.common.events.data.PlayerHitEvent;
 import dk.sdu.smp4.common.events.services.IEventBus;
-import javafx.scene.image.Image;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 public class Enemy extends SoftEntity {
-    private Image moveLeft;
-    private Image moveRight;
+    private EntityImage moveLeft;
+    private EntityImage moveRight;
     private long lastHitTime = 0;
 
     public Enemy()
     {
-        moveLeft = new Image(getClass().getResourceAsStream("/moveLeft.gif"), 80, 80, true, true);
-        moveRight = new Image(getClass().getResourceAsStream("/moveRight.gif"), 80, 80, true, true);
+        moveLeft = new EntityImage("/moveLeft.gif", 80, 80, true, true, getClass());
+        moveRight = new EntityImage("/moveRight.gif", 80, 80, true, true, getClass());
         setImage(moveLeft);
     }
 

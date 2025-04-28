@@ -7,7 +7,6 @@ import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 
 module PlayerConeLight {
     uses dk.sdu.smp4.common.interactable.Services.InventorySPI;
-    requires javafx.graphics;
     requires Common;
     requires CommonLightSource;
     requires CommonPlayerLight;

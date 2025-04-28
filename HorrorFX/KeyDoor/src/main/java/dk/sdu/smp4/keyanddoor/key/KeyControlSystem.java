@@ -1,5 +1,6 @@
 package dk.sdu.smp4.keyanddoor.key;
 
+import dk.sdu.smp4.common.Services.GUI.IGUIManager;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
@@ -16,12 +17,14 @@ public class KeyControlSystem implements IQuestInteractable {
     @Override
     public void interact(Entity player, GameData gameData, World world) {
         InventorySPI inventorySPI = getInventorySPIs().stream().findFirst().orElse(null);
-        if (inventorySPI == null) {return;}
+        if (inventorySPI == null) { return; }
 
-        if (!inventorySPI.containsInventoryForEntity(player))
-        {
+        if (!inventorySPI.containsInventoryForEntity(player)) {
             return;
         }
+
+        IGUIManager guiManager = getGUIManagers().stream().findFirst().orElse(null);
+        if (guiManager == null) { return; }
 
         for (Entity keyIn : world.getEntities(Key.class)) {
             Key key = (Key) keyIn;
@@ -33,12 +36,13 @@ public class KeyControlSystem implements IQuestInteractable {
 
                 // Show popup
                 String displayKeyName = prettifyKeyName(String.valueOf(keyId));
-                gameData.setQuestPane("Key Acquired", "You picked up a " + displayKeyName + ".");
+                guiManager.setQuestPane("Key Acquired", "You picked up a " + displayKeyName + ".");
 
                 break;
             }
         }
     }
+
 
 
     @Override
@@ -52,5 +56,9 @@ public class KeyControlSystem implements IQuestInteractable {
 
     private Collection<? extends InventorySPI> getInventorySPIs() {
         return ServiceLoader.load(InventorySPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
+
+    private Collection<? extends IGUIManager> getGUIManagers() {
+        return ServiceLoader.load(IGUIManager.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }

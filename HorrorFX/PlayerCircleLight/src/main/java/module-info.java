@@ -6,7 +6,6 @@ import dk.sdu.smp4.playercirclelight.PlayerCircleLightProcessor;
 module PlayerCircleLight {
     requires Common;
     requires CommonPlayerLight;
-    requires javafx.graphics;
     requires CommonLightSource;
     provides IPlayerLightPlugin with PlayerCircleLightPlugin;
     provides IPlayerLightProcessor with PlayerCircleLightProcessor;

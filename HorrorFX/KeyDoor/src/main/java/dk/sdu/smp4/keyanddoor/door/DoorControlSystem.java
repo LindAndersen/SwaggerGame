@@ -1,5 +1,6 @@
 package dk.sdu.smp4.keyanddoor.door;
 
+import dk.sdu.smp4.common.Services.GUI.IGUIManager;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
@@ -18,26 +19,30 @@ public class DoorControlSystem implements IQuestInteractable {
         InventorySPI inventorySPI = getInventorySPIs().stream().findFirst().orElse(null);
         if (inventorySPI == null) {return;}
 
+        IGUIManager guiManager = getGUIManagers().stream().findFirst().orElse(null);
+        if (guiManager == null) {return;}
+
         for (Entity doorEntity : world.getEntities(Door.class)) {
             Door door = (Door) doorEntity;
             if (Utility.isEntitiesWithinReach(player, door)) {
 
                 if (inventorySPI.containsInventoryForEntity(player) && inventorySPI.contains(player, door.getRequiredKey())) {
                     // Show unlock popup
-                    gameData.setQuestPane("Unlocked", "Door unlocked with the "+door.getRequiredKey()+"!");
+                    guiManager.setQuestPane("Unlocked", "Door unlocked with the " + door.getRequiredKey() + "!");
 
                     // Unlock door
                     inventorySPI.remove(player, door.getRequiredKey(), 1);
                     world.removeEntity(door);
                 } else {
                     // Show locked popup
-                    gameData.setQuestPane("Locked", "The door is locked. You need a "+door.getRequiredKey()+"!");
+                    guiManager.setQuestPane("Locked", "The door is locked. You need a " + door.getRequiredKey() + "!");
                 }
 
                 break;
             }
         }
     }
+
 
     @Override
     public void consume(GameData gameData, World world) {
@@ -46,5 +51,9 @@ public class DoorControlSystem implements IQuestInteractable {
 
     private Collection<? extends InventorySPI> getInventorySPIs() {
         return ServiceLoader.load(InventorySPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
+
+    private Collection<? extends IGUIManager> getGUIManagers() {
+        return ServiceLoader.load(IGUIManager.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }

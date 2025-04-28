@@ -1,8 +1,7 @@
 package dk.sdu.smp4.common.data;
 
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import dk.sdu.smp4.common.Services.GUI.EntityImage;
+import dk.sdu.smp4.common.Services.GUI.PolygonColor;
 
 import java.io.Serializable;
 import java.util.*;
@@ -15,23 +14,23 @@ public abstract class Entity implements Serializable {
     private double x;
     private double y;
     private double rotation;
-    private Paint paint;
+    private PolygonColor paint;
     private boolean shouldRotateAlternative;
     private boolean solid;
-    private Image image;
+    private EntityImage image;
 
     public Entity()
     {
-        paint = Color.BLACK;
+        paint = PolygonColor.BLACK;
         shouldRotateAlternative = false;
 
     }
 
-    public void setImage(Image image) {
+    public void setImage(EntityImage image) {
         this.image = image;
     }
 
-    public Image getImage() {
+    public EntityImage getImage() {
         return image;
     }
 
@@ -81,16 +80,11 @@ public abstract class Entity implements Serializable {
         return rotation;
     }
 
-    public Paint getPaint() {
+    public PolygonColor getPaint() {
         return paint;
     }
 
-    public void setPaint(String color) {
-        this.paint = Color.web(color);
-    }
-
-    public void setPaint(Color color)
-    {
+    public void setPaint(PolygonColor color) {
         this.paint = color;
     }
 

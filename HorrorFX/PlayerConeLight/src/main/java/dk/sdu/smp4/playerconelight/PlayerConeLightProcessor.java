@@ -19,7 +19,7 @@ public class PlayerConeLightProcessor implements IPlayerLightProcessor {
 
             coneLight.tick();
 
-            System.out.println(coneLight.getFlashLightCurrentTime());
+            //System.out.println(coneLight.getFlashLightCurrentTime());
         }
     }
 }

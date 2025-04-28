@@ -5,12 +5,15 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.events.data.PlayerPositionEvent;
+import dk.sdu.smp4.common.events.services.IEventBus;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
 import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -22,6 +25,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
         float acceleration = 0.3f;
         float maxSpeed = 2.0f;
         float friction = 0.1f; //how quickly player stops
+        IEventBus eventBus = getEventBusSPI().stream().findFirst().orElse(null);
+        assert eventBus != null;
 
         for (Entity entity : world.getEntities(Player.class)) {
             Player player = (Player) entity;
@@ -73,7 +78,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setVelocityY(approachZero(player.getVelocityY(), friction));
             }
 
-            EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
+            eventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
 
             for (IPlayerLightProcessor spi : getEntityPlayerLightProcessors()) {
                 spi.processPlayerLight(player, gameData, world);
@@ -91,7 +96,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 }
             }
 
-            EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
+            eventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
         }
     }
 
@@ -115,5 +120,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     private Collection<? extends IQuestInteractable> getEntityQuestInteractables() {
         return ServiceLoader.load(IQuestInteractable.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends IEventBus> getEventBusSPI() {
+        return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }

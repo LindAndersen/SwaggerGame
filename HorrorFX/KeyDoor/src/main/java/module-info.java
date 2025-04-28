@@ -6,10 +6,10 @@ import dk.sdu.smp4.common.interactable.Services.InventorySPI;
 
 module KeyDoor {
     uses InventorySPI;
+    uses dk.sdu.smp4.common.Services.GUI.IGUIManager;
     requires Common;
     requires CommonQuest;
     requires CommonInteractable;
-    requires javafx.graphics;
     provides IQuestInteractable with DoorControlSystem, KeyControlSystem;
     provides IGamePluginService with DoorPlugin, KeyPlugin;
 }

@@ -3,12 +3,12 @@ import dk.sdu.smp4.QuestItemPlugin;
 import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 
 module QuestItem {
+    uses dk.sdu.smp4.common.events.services.IEventBus;
+    uses dk.sdu.smp4.common.Services.GUI.IGUIManager;
     requires CommonInteractable;
     requires Common;
     requires CommonQuest;
-    requires java.desktop;
-    requires java.management;
-    requires javafx.controls;
+    requires CommonEvents;
     provides IGamePluginService with QuestItemPlugin;
     provides dk.sdu.smp4.common.interactable.Services.IQuestInteractable with QuestItemInteractionSystem;
 

@@ -1,14 +1,14 @@
 package dk.sdu.smp4.keyanddoor.key;
 
+import dk.sdu.smp4.common.Services.GUI.EntityImage;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
-import javafx.scene.image.Image;
 
 public class Key extends SoftEntity {
-    private static final Image bronzeKey = new Image(Key.class.getResourceAsStream("/bronze.png"),20, 20, true, true);
-    private static final Image goldKey = new Image(Key.class.getResourceAsStream("/gold.png"),20, 20, true, true);
-    private static final Image greyKey = new Image(Key.class.getResourceAsStream("/grey.png"),20, 20, true, true);
-    private static final Image silverKey = new Image(Key.class.getResourceAsStream("/silver.png"),20, 20, true, true);
+    private static final EntityImage bronzeKey = new EntityImage("/bronze.png",20, 20, true, true, Key.class);
+    private static final EntityImage goldKey = new EntityImage("/gold.png",20, 20, true, true, Key.class);
+    private static final EntityImage greyKey = new EntityImage("/grey.png",20, 20, true, true, Key.class);
+    private static final EntityImage silverKey = new EntityImage("/silver.png",20, 20, true, true, Key.class);
 
     private InventorySlotItems inventoryIdentifier;
 

@@ -1,8 +1,9 @@
 package dk.sdu.smp4.common.Services.GUI;
 
 public interface IGUIManager {
-    void showQuestPopup(String title, String description);
-    void showPausePopup();
+    void setQuestPane(String title, String description);
+    void setPausedBox();
     IHealthBar getHealthBar();
     IInventoryHUD getInventoryHUD();
+
 }

@@ -1,5 +1,6 @@
 package dk.sdu.smp4.keyanddoor.door;
 
+import dk.sdu.smp4.common.Services.GUI.PolygonColor;
 import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
@@ -38,7 +39,7 @@ public class DoorPlugin implements IGamePluginService {
         door.setWidth(width);
         door.setHeight(height);
         door.setSolid(true);
-        door.setPaint("brown");
+        door.setPaint(PolygonColor.BROWN);
         door.setRequiredKey(requiredKey);
         return door;
     }
