@@ -14,8 +14,10 @@ import java.util.stream.Collectors;
 
 
 public class Player extends SoftEntity implements EnemyTargetsSPI {
-    private final EntityImage moveLeftImage = new EntityImage("/move_left.gif",50,48,true,true,Player.class);
-    private final EntityImage moveRightImage = new EntityImage("/move_right.gif", 50, 48, true,true,Player.class);
+    public final static EntityImage moveLeftImage = new EntityImage("/move_left.gif",50,48,true,true,Player.class);
+    public final static EntityImage moveRightImage = new EntityImage("/move_right.gif", 50, 48, true,true,Player.class);
+    public final static EntityImage idleRightImage = new EntityImage("/idle_right.png", 50, 48, true,true,Player.class);
+    public final static EntityImage idleLeftImage = new EntityImage("/idle_left.png", 50, 48, true,true,Player.class);
     private int lives = 3;
     private int maxLives = 3;
     private boolean isDead = false;
@@ -25,7 +27,7 @@ public class Player extends SoftEntity implements EnemyTargetsSPI {
 
     public Player()
     {
-        this.setImage(moveRightImage);
+        setImage(moveRightImage);
         eventBus = getEventBusSPI().stream().findFirst().orElse(null);
         assert eventBus != null;
         eventBus.subscribe(PlayerHitEvent.class, event -> {
@@ -42,14 +44,6 @@ public class Player extends SoftEntity implements EnemyTargetsSPI {
                 }
             }
         });
-    }
-
-    public EntityImage getMoveLeftImage() {
-        return moveLeftImage;
-    }
-
-    public EntityImage getMoveRightImage() {
-        return moveRightImage;
     }
 
     public int getLives() {

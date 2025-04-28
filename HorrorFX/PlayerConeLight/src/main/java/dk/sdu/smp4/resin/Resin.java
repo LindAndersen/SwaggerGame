@@ -1,10 +1,8 @@
-package dk.sdu.smp4.playerconelight;
+package dk.sdu.smp4.resin;
 
 import dk.sdu.smp4.common.Services.GUI.EntityImage;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
-
-import java.util.Objects;
 
 public class Resin extends SoftEntity {
     private static final EntityImage resinImage = new EntityImage("/resin_placeholder.gif",20, 20, true, true, Resin.class);

@@ -5,6 +5,7 @@ import dk.sdu.smp4.common.interactable.Services.InventorySPI;
 import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
 import dk.sdu.smp4.commonplayerlight.data.CommonPlayerLight;
 import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
+import dk.sdu.smp4.resin.Resin;
 
 import java.util.Collection;
 import java.util.ServiceLoader;

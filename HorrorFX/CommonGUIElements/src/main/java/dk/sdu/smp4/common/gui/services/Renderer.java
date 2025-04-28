@@ -19,10 +19,8 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Random;
-import java.util.ServiceLoader;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -34,6 +32,8 @@ public class Renderer {
     private final Canvas lightMaskCanvas;
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
+    private final Map<EntityImage, Image> imageCache = new HashMap<>();
+
 
     public Renderer(World world, GameData gameData, GUIManager guiManager) {
         this.world = world;
@@ -148,11 +148,12 @@ public class Renderer {
         guiManager.getLightLayer().getChildren().setAll(lightMaskCanvas);
     }
 
-    private void draw() {
-        drawLightingMask();
+    private void updatePolygonAndImageMap()
+    {
+        Collection<Entity> worldEntities = world.getEntities();
 
         for (Entity polygonEntity : polygons.keySet()) {
-            if (!world.getEntities().contains(polygonEntity)) {
+            if (!worldEntities.contains(polygonEntity)) {
                 guiManager.getPolygonLayer().getChildren().remove(polygons.get(polygonEntity));
                 polygons.remove(polygonEntity);
 
@@ -162,7 +163,10 @@ public class Renderer {
                 }
             }
         }
+    }
 
+    private void drawEntities()
+    {
         for (Entity entity : world.getEntities()) {
             boolean isVisible;
             if (entity instanceof CommonLightSource) continue;
@@ -178,6 +182,7 @@ public class Renderer {
             polygon.setVisible(isVisible);
 
             EntityImage entityImage = entity.getImage();
+
             if (entityImage != null) {
                 ImageView imageView = images.get(entity);
                 if (imageView == null) {
@@ -186,21 +191,24 @@ public class Renderer {
                     guiManager.getPolygonLayer().getChildren().add(imageView);
                 }
 
-                if (imageView.getImage() == null) {
-                    Image fxImage = EntityImageConverter.convertEntityImage(entityImage, entityImage.getResourceClass());
+                Image fxImage = imageCache.computeIfAbsent(entityImage, e -> EntityImageConverter.convertEntityImage(e, e.getResourceClass()));
+
+                if (imageView.getImage() == null || !imageView.getImage().equals(fxImage)) {
                     imageView.setImage(fxImage);
                 }
 
-                imageView.setTranslateX(entity.getX() - imageView.getImage().getWidth() / 2);
-                imageView.setTranslateY(entity.getY() - imageView.getImage().getHeight() / 2);
+                imageView.setTranslateX(entity.getX() - fxImage.getWidth() / 2);
+                imageView.setTranslateY(entity.getY() - fxImage.getHeight() / 2);
                 imageView.setVisible(isVisible);
-            } else {
-                ImageView imageView = images.remove(entity);
-                if (imageView != null) {
-                    guiManager.getPolygonLayer().getChildren().remove(imageView);
-                }
             }
+
         }
+    }
+
+    private void draw() {
+        updatePolygonAndImageMap();
+        drawLightingMask();
+        drawEntities();
     }
 
     private void handlePolygonCoordsPreDrawing(Polygon polygon, Entity entity) {

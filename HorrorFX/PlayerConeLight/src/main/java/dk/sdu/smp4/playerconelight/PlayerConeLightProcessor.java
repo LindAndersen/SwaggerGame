@@ -17,7 +17,7 @@ public class PlayerConeLightProcessor implements IPlayerLightProcessor {
             coneLight.setRotation(player.getRotation());
             coneLight.setShouldRotateAlternative(true);
 
-            coneLight.tick();
+            //coneLight.tick();
 
             //System.out.println(coneLight.getFlashLightCurrentTime());
         }

@@ -39,7 +39,7 @@ public class DoorPlugin implements IGamePluginService {
         door.setWidth(width);
         door.setHeight(height);
         door.setSolid(true);
-        door.setPaint(PolygonColor.BROWN);
+        door.setPaint(PolygonColor.RED);
         door.setRequiredKey(requiredKey);
         return door;
     }

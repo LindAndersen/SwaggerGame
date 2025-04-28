@@ -1,3 +1,6 @@
+import dk.sdu.smp4.common.Services.GUI.IGUIManager;
+import dk.sdu.smp4.common.gui.services.GUIManagerProvider;
+
 module CommonGUIElements {
     uses dk.sdu.smp4.common.events.services.IEventBus;
     uses dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
@@ -12,4 +15,6 @@ module CommonGUIElements {
     requires CommonPlayer;
     requires CommonPlayerLight;
     requires CommonLightSource;
+
+    provides IGUIManager with GUIManagerProvider;
 }

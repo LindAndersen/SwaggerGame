@@ -75,7 +75,7 @@ public class InventoryHUD extends HBox implements IInventoryHUD {
         ImageView itemImage = (ImageView) slot.lookup("#itemImage");
         Text quantityText = (Text) slot.lookup("#quantityText");
 
-        itemImage.setImage(EntityImageConverter.convertEntityImage(icon, CommonPlayer.class));
+        itemImage.setImage(EntityImageConverter.convertEntityImage(icon, icon.getResourceClass()));
         quantityText.setText(quantity > 1 ? String.valueOf(quantity) : "");
     }
 

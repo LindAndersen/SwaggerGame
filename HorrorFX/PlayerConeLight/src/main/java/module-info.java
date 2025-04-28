@@ -4,6 +4,8 @@ import dk.sdu.smp4.playerconelight.*;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
 import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
+import dk.sdu.smp4.resin.ResinControlSystem;
+import dk.sdu.smp4.resin.ResinPlugin;
 
 module PlayerConeLight {
     uses dk.sdu.smp4.common.interactable.Services.InventorySPI;

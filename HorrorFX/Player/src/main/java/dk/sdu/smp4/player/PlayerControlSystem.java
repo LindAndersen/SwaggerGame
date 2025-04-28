@@ -46,14 +46,14 @@ public class PlayerControlSystem implements IEntityProcessingService {
             // Adjust velocity
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 player.setVelocityX(Math.max(player.getVelocityX() - acceleration, -maxSpeed));
-                if (player.getImage() != null && !player.getImage().equals(player.getMoveLeftImage())) {
-                    player.setImage(player.getMoveLeftImage());
+                if (player.getImage() != null && !player.getImage().equals(Player.moveLeftImage)) {
+                    player.setImage(Player.moveLeftImage);
                 }
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 player.setVelocityX(Math.min(player.getVelocityX() + acceleration, maxSpeed));
-                if (player.getImage() != null && !player.getImage().equals(player.getMoveRightImage())) {
-                    player.setImage(player.getMoveRightImage());
+                if (player.getImage() != null && !player.getImage().equals(Player.moveRightImage)) {
+                    player.setImage(Player.moveRightImage);
                 }
             }
             if (gameData.getKeys().isDown(GameKeys.UP)) {
@@ -72,6 +72,12 @@ public class PlayerControlSystem implements IEntityProcessingService {
             // Apply friction
             if (!gameData.getKeys().isDown(GameKeys.LEFT) && !gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 player.setVelocityX(approachZero(player.getVelocityX(), friction));
+                if (player.getImage() != null && player.getImage().equals(Player.moveLeftImage)) {
+                    player.setImage(Player.idleLeftImage);
+                } else if (player.getImage() != null && player.getImage().equals(Player.moveRightImage))
+                {
+                    player.setImage(Player.idleRightImage);
+                }
 
             }
             if (!gameData.getKeys().isDown(GameKeys.UP) && !gameData.getKeys().isDown(GameKeys.DOWN)) {

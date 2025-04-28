@@ -1,4 +1,4 @@
-package dk.sdu.smp4.playerconelight;
+package dk.sdu.smp4.resin;
 
 import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.data.Entity;

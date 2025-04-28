@@ -23,8 +23,9 @@ import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
-public class GUIManager implements IGUIManager {
-    private GameData gameData;
+public class GUIManager {
+    private final Runnable startGameCallback;
+    private final GameData gameData;
     private final Stage stage;
     private final Pane backgroundLayer = new Pane();
     private final Pane polygonLayer = new Pane();
@@ -34,12 +35,13 @@ public class GUIManager implements IGUIManager {
     private final IHealthBar healthBar = new HealthBar();
     private final IInventoryHUD inventoryHUD = new InventoryHUD();
 
-    public GUIManager(final GameData gameData, Stage stage) {
+    public GUIManager(GameData gameData, Stage stage, Runnable startGameCallback) {
         this.gameData = gameData;
         this.stage = stage;
+        this.startGameCallback = startGameCallback;
         setupFonts();
         start();
-        setupInputs();
+        handleInputs();
         setupEventHandling();
 
         stage.show();
@@ -98,13 +100,14 @@ public class GUIManager implements IGUIManager {
         Region inventoryNode = (Region) inventoryHUD;
 
         backgroundLayer.setBackground(new Background(backgroundImage));
-        textLayer.getChildren().add(inventoryNode);
         inventoryNode.layoutXProperty().bind(root.widthProperty().subtract(inventoryNode.widthProperty()).divide(2));
         inventoryNode.setLayoutY(gameData.getDisplayHeight() - 70);
         textLayer.getChildren().add(inventoryNode);
+
+        startGameCallback.run();
     }
 
-    private void setupInputs()
+    public void handleInputs()
     {
         stage.getScene().setOnMouseMoved(event -> {
             gameData.getKeys().setMouseMoved(true);
@@ -169,7 +172,6 @@ public class GUIManager implements IGUIManager {
         gameOverBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/style.css")).toExternalForm());
     }
 
-    @Override
     public void setQuestPane(String title, String description) {
         gameData.setPaused(true);
 
@@ -184,7 +186,6 @@ public class GUIManager implements IGUIManager {
         textLayer.getChildren().add(popup);
     }
 
-    @Override
     public void setPausedBox() {
         if (gameData.isPaused()) return;
 
@@ -227,7 +228,6 @@ public class GUIManager implements IGUIManager {
         return lightLayer;
     }
 
-    @Override
     public IHealthBar getHealthBar() {
         return healthBar;
     }
