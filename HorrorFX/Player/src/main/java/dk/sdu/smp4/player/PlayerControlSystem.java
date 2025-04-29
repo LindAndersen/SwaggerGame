@@ -8,6 +8,8 @@ import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.events.data.PlayerPositionEvent;
 import dk.sdu.smp4.common.events.services.IEventBus;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
+import dk.sdu.smp4.common.interactable.Services.InventorySPI;
+import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
 import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 
@@ -96,7 +98,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 }
             }
 
-            if (gameData.getKeys().isDown(GameKeys.RELOAD)) {
+            InventorySPI inventorySPI = getInventorySPI().stream().findFirst().orElse(null);
+
+            if (gameData.getKeys().isDown(GameKeys.RELOAD) && inventorySPI != null && inventorySPI.contains(player, InventorySlotItems.RESIN)) {
                 for (IToggleableLight toggleableLight : getPlayerToggleableLights(world)) {
                     toggleableLight.reload(player);
                 }
@@ -130,5 +134,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     private Collection<? extends IEventBus> getEventBusSPI() {
         return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
+
+    private Collection<? extends InventorySPI> getInventorySPI() {
+        return ServiceLoader.load(InventorySPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }

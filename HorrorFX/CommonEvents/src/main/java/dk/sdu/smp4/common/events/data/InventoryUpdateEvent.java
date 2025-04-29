@@ -7,14 +7,16 @@ public class InventoryUpdateEvent {
     private int index;
     private EntityImage icon;
     private int quantity;
+    private boolean wasPickedup;
     private InventorySlotItems type;
 
-    public InventoryUpdateEvent(int index, EntityImage icon, int quantity, InventorySlotItems type)
+    public InventoryUpdateEvent(int index, EntityImage icon, int quantity, boolean wasPickedup, InventorySlotItems type)
     {
         this.index = index;
         this.icon = icon;
         this.quantity = quantity;
         this.type = type;
+        this.wasPickedup = wasPickedup;
     }
 
     public int getIndex() {
@@ -27,6 +29,10 @@ public class InventoryUpdateEvent {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public boolean getWasPickedup() {
+        return wasPickedup;
     }
 
     public InventorySlotItems getType() {
