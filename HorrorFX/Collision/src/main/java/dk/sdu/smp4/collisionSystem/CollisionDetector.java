@@ -1,6 +1,6 @@
 package dk.sdu.smp4.collisionSystem;
 
-import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
+import dk.sdu.smp4.common.Services.GameLoop.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;

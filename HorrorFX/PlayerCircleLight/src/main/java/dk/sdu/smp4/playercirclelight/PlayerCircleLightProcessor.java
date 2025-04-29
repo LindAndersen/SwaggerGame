@@ -5,7 +5,6 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
-import javafx.scene.shape.Circle;
 
 public class PlayerCircleLightProcessor implements IPlayerLightProcessor {
     @Override

@@ -1,7 +1,6 @@
 package dk.sdu.smp4.commonplayerlight.data;
 
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
-import javafx.scene.paint.Color;
 
 public class CommonPlayerLight extends CommonLightSource {
     public CommonPlayerLight()

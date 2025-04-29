@@ -1,9 +1,11 @@
-import dk.sdu.smp4.Sound.MusicSystem;
 import dk.sdu.smp4.Sound.MusicSystemProvider;
+import dk.sdu.smp4.common.Services.GameLoop.IPostEntityProcessingService;
 
 module Sound {
+    uses dk.sdu.smp4.common.events.services.IEventBus;
     requires Common;
     requires java.desktop;
-
-    provides dk.sdu.smp4.common.Services.IPostEntityProcessingService with MusicSystemProvider;
+    requires CommonInteractable;
+    requires CommonEvents;
+    provides IPostEntityProcessingService with MusicSystemProvider;
 }

@@ -1,17 +1,19 @@
 package dk.sdu.smp4.player;
 
-import dk.sdu.smp4.common.Services.IEntityProcessingService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.GameKeys;
 import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.common.events.*;
+import dk.sdu.smp4.common.events.data.PlayerPositionEvent;
+import dk.sdu.smp4.common.events.services.IEventBus;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
 import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -23,6 +25,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
         float acceleration = 0.3f;
         float maxSpeed = 2.0f;
         float friction = 0.1f; //how quickly player stops
+        IEventBus eventBus = getEventBusSPI().stream().findFirst().orElse(null);
+        assert eventBus != null;
 
         for (Entity entity : world.getEntities(Player.class)) {
             Player player = (Player) entity;
@@ -42,14 +46,14 @@ public class PlayerControlSystem implements IEntityProcessingService {
             // Adjust velocity
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 player.setVelocityX(Math.max(player.getVelocityX() - acceleration, -maxSpeed));
-                if (player.getImage() != null && !player.getImage().equals(player.getMoveLeftImage())) {
-                    player.setImage(player.getMoveLeftImage());
+                if (player.getImage() != null && !player.getImage().equals(Player.moveLeftImage)) {
+                    player.setImage(Player.moveLeftImage);
                 }
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 player.setVelocityX(Math.min(player.getVelocityX() + acceleration, maxSpeed));
-                if (player.getImage() != null && !player.getImage().equals(player.getMoveRightImage())) {
-                    player.setImage(player.getMoveRightImage());
+                if (player.getImage() != null && !player.getImage().equals(Player.moveRightImage)) {
+                    player.setImage(Player.moveRightImage);
                 }
             }
             if (gameData.getKeys().isDown(GameKeys.UP)) {
@@ -68,13 +72,19 @@ public class PlayerControlSystem implements IEntityProcessingService {
             // Apply friction
             if (!gameData.getKeys().isDown(GameKeys.LEFT) && !gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 player.setVelocityX(approachZero(player.getVelocityX(), friction));
+                if (player.getImage() != null && player.getImage().equals(Player.moveLeftImage)) {
+                    player.setImage(Player.idleLeftImage);
+                } else if (player.getImage() != null && player.getImage().equals(Player.moveRightImage))
+                {
+                    player.setImage(Player.idleRightImage);
+                }
 
             }
             if (!gameData.getKeys().isDown(GameKeys.UP) && !gameData.getKeys().isDown(GameKeys.DOWN)) {
                 player.setVelocityY(approachZero(player.getVelocityY(), friction));
             }
 
-            EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
+            eventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
 
             for (IPlayerLightProcessor spi : getEntityPlayerLightProcessors()) {
                 spi.processPlayerLight(player, gameData, world);
@@ -86,7 +96,13 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 }
             }
 
-            EventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
+            if (gameData.getKeys().isDown(GameKeys.RELOAD)) {
+                for (IToggleableLight toggleableLight : getPlayerToggleableLights(world)) {
+                    toggleableLight.reload(player);
+                }
+            }
+
+            eventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
         }
     }
 
@@ -110,5 +126,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     private Collection<? extends IQuestInteractable> getEntityQuestInteractables() {
         return ServiceLoader.load(IQuestInteractable.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends IEventBus> getEventBusSPI() {
+        return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }

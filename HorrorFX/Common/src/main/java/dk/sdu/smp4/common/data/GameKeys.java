@@ -5,13 +5,14 @@ public class GameKeys {
     private static boolean[] keys;
     private static boolean[] pkeys;
 
-    private static final int NUM_KEYS = 6;
+    private static final int NUM_KEYS = 7;
     public static final int UP = 0;
     public static final int LEFT = 1;
     public static final int RIGHT = 2;
     public static final int DOWN = 3;
     public static final int SPACE = 4;
     public static final int INTERACT = 5;
+    public static final int RELOAD = 6;
     public static double mouseY;
     public static double mouseX;
     public static boolean mouseMoved;

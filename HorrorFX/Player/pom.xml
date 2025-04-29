@@ -37,7 +37,19 @@
         </dependency>
         <dependency>
             <groupId>dk.sdu.smp4</groupId>
-            <artifactId>Inventory</artifactId>
+            <artifactId>CommonEnemy</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.smp4</groupId>
+            <artifactId>CommonEvents</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.smp4</groupId>
+            <artifactId>Events</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

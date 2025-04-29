@@ -1,53 +1,66 @@
 package dk.sdu.smp4.inventory.data;
 
 import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.events.EventBus;
-import dk.sdu.smp4.common.events.InventoryUpdateEvent;
+import dk.sdu.smp4.common.events.data.InventoryUpdateEvent;
+import dk.sdu.smp4.common.events.services.IEventBus;
+import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 public class Inventory {
-    private Map<String, InventorySlot> inventory;
+    private Map<InventorySlotItems, InventorySlot> inventory;
     private static final int SIZE = 8;
+    private IEventBus eventBus;
 
     public Inventory() {
-        inventory = new HashMap<String, InventorySlot>();
+        eventBus = getEventBusSPI().stream().findFirst().orElse(null);
+        inventory = new HashMap<>();
     }
 
-    public void add(String name, Entity entity)
+    public void add(InventorySlotItems name, Entity entity)
     {
         if (inventory.containsKey(name))
         {
             InventorySlot slot = inventory.get(name);
             slot.amount++;
-            EventBus.post(new InventoryUpdateEvent(slot.index, entity.getImage(), slot.amount));
+            eventBus.post(new InventoryUpdateEvent(slot.index, entity.getImage(), slot.amount, name));
         }else if (inventory.size() < SIZE +1)
         {
             InventorySlot slot = new InventorySlot(entity, 1);
             inventory.put(name, slot);
-            EventBus.post(new InventoryUpdateEvent(slot.index, entity.getImage(), slot.amount));
+            eventBus.post(new InventoryUpdateEvent(slot.index, entity.getImage(), slot.amount, name));
         } else
         {
             System.out.println("Too many things in inventory!");
         }
     }
 
-    public void remove(String name)
+    public void remove(InventorySlotItems name, int amount)
     {
         if(inventory.containsKey(name)){
             InventorySlot slot = inventory.get(name);
-            slot.remove();
+            slot.remove(amount);
             if (slot.amount == 0)
             {
-                EventBus.post(new InventoryUpdateEvent(slot.index, null, 0));
+                eventBus.post(new InventoryUpdateEvent(slot.index, null, 0, name));
+            } else
+            {
+                eventBus.post(new InventoryUpdateEvent(slot.index, null, slot.amount, name));
             }
         }
     }
 
-    public boolean has(String name)
+    public boolean contains(InventorySlotItems name)
     {
         return inventory.containsKey(name);
+    }
+
+    private Collection<? extends IEventBus> getEventBusSPI() {
+        return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 
     static class InventorySlot
@@ -65,9 +78,9 @@ public class Inventory {
             globalIndex++;
         }
 
-        void remove()
+        void remove(int amount)
         {
-            amount--;
+            this.amount -= amount;
             if (amount == 0)
             {
                 entity = null;

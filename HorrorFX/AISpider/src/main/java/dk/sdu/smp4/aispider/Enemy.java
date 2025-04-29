@@ -1,22 +1,27 @@
 package dk.sdu.smp4.aispider;
 
-import dk.sdu.smp4.common.Services.IPlayer;
-import dk.sdu.smp4.common.data.SoftEntity;
+import dk.sdu.smp4.common.Services.GUI.EntityImage;
 import dk.sdu.smp4.common.data.Entity;
+import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.common.events.EventBus;
-import dk.sdu.smp4.common.events.PlayerHitEvent;
-import javafx.scene.image.Image;
+import dk.sdu.smp4.common.enemy.services.EnemyTargetsSPI;
+import dk.sdu.smp4.common.events.data.PlayerHitEvent;
+import dk.sdu.smp4.common.events.services.IEventBus;
+
+import java.util.Collection;
+import java.util.Objects;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 public class Enemy extends SoftEntity {
-    private Image moveLeft;
-    private Image moveRight;
+    private EntityImage moveLeft;
+    private EntityImage moveRight;
     private long lastHitTime = 0;
 
     public Enemy()
     {
-        moveLeft = new Image(getClass().getResourceAsStream("/moveLeft.gif"), 80, 80, true, true);
-        moveRight = new Image(getClass().getResourceAsStream("/moveRight.gif"), 80, 80, true, true);
+        moveLeft = new EntityImage("/moveLeft.gif", 80, 80, true, true, getClass());
+        moveRight = new EntityImage("/moveRight.gif", 80, 80, true, true, getClass());
         setImage(moveLeft);
     }
 
@@ -30,10 +35,13 @@ public class Enemy extends SoftEntity {
 
     @Override
     public void collide(World world, Entity entity) {
+        IEventBus eventBus = getEventBusSPI().stream().findFirst().orElse(null);
+        if(eventBus == null){return;}
+
         // Define what happens when the enemy collides with another entity (e.g., damage player).
-        if (entity instanceof IPlayer && !isInCooldown()) {
+        if (entity instanceof EnemyTargetsSPI && !isInCooldown()) {
             System.out.println("Updated player hit bus");
-            EventBus.post(new PlayerHitEvent(entity));
+            eventBus.post(new PlayerHitEvent(entity));
             setLastHitTime();
         }
     }
@@ -44,6 +52,10 @@ public class Enemy extends SoftEntity {
 
     public void setLastHitTime() {
         this.lastHitTime = System.currentTimeMillis();
+    }
+
+    private Collection<? extends IEventBus> getEventBusSPI() {
+        return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }
 

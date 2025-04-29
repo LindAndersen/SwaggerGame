@@ -1,34 +1,46 @@
 package dk.sdu.smp4.Sound;
 
-import dk.sdu.smp4.common.Services.IEntityProcessingService;
-import dk.sdu.smp4.common.Services.IPostEntityProcessingService;
-import dk.sdu.smp4.common.data.GameData;
-import dk.sdu.smp4.common.data.World;
-import dk.sdu.smp4.common.events.EventBus;
-import dk.sdu.smp4.common.events.PlayerHitEvent;
-import dk.sdu.smp4.common.events.PlayerPositionEvent;
-import dk.sdu.smp4.common.events.SpiderPositionEvent;
+import dk.sdu.smp4.common.events.data.InventoryUpdateEvent;
+import dk.sdu.smp4.common.events.data.PlayerHitEvent;
+import dk.sdu.smp4.common.events.data.PlayerPositionEvent;
+import dk.sdu.smp4.common.events.data.SpiderPositionEvent;
+import dk.sdu.smp4.common.events.services.IEventBus;
+import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
+
+import java.util.Collection;
+import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 public class MusicSystem {
 
     private static final String HIT_SOUND = "/background/man-scream.wav";
     private static final String PROXIMITY_SOUND = "/background/cropped_aggressive_scary.wav";
     private static final String DEFAULT_SOUND = "/background/chill_scary.wav";
+    private static final String RELOAD_SOUND = "/Player/reload_torch.wav";
     private double playerX, playerY, spiderX, spiderY;
     private static final MusicSystem INSTANCE = new MusicSystem();
 
     public MusicSystem() {
-        EventBus.subscribe(PlayerPositionEvent.class, event -> {
+        IEventBus eventBus = getEventBusSPI().stream().findFirst().orElse(null);
+        assert eventBus != null;
+        eventBus.subscribe(PlayerPositionEvent.class, event -> {
             playerX = event.getX();
             playerY = event.getY();
         });
 
-        EventBus.subscribe(SpiderPositionEvent.class, event -> {
+        eventBus.subscribe(SpiderPositionEvent.class, event -> {
             spiderX = event.getX();
             spiderY = event.getY();
         });
-        EventBus.subscribe(PlayerHitEvent.class, event -> {
+        eventBus.subscribe(PlayerHitEvent.class, event -> {
             SoundService.playSound(HIT_SOUND);
+        });
+
+        eventBus.subscribe(InventoryUpdateEvent.class, event -> {
+            if (event.getType().equals(InventorySlotItems.RESIN))
+            {
+                SoundService.playSound(RELOAD_SOUND);
+            }
         });
     }
 
@@ -51,5 +63,9 @@ public class MusicSystem {
             SoundService.playSound(DEFAULT_SOUND);
             SoundService.stopSound(PROXIMITY_SOUND);
         }
+    }
+
+    private Collection<? extends IEventBus> getEventBusSPI() {
+        return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }
