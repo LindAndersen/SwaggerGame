@@ -18,6 +18,7 @@ public class GameManager {
         this.stage = stage;
         this.world = new World();
         this.gameData = new GameData();
+        this.generator = new MapGenerator(gameData, world);
         this.guiManager = new GUIManager(gameData, stage, this::startGame, this::resetGame);
         this.renderer = new Renderer(world, gameData, guiManager, generator);
         GUIManagerProvider.setInstance(guiManager);
