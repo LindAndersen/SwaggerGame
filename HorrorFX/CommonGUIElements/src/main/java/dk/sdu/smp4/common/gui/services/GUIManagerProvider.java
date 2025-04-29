@@ -39,7 +39,7 @@ public class GUIManagerProvider implements IGUIManager {
 
     @Override
     public IInventoryHUD getInventoryHUD() {
-        return null;
+        return getInstance().getInventoryHUD();
     }
 }
 
