@@ -32,7 +32,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
             Player player = (Player) entity;
 
             //update mouse position
-            player.setRotation(Math.toDegrees(Math.atan2(GameKeys.mouseY - player.getY(), GameKeys.mouseX - player.getX())));
+            if (gameData.getKeys().isMouseMoved()){
+                player.setRotation(Math.toDegrees(Math.atan2(GameKeys.mouseY- player.getY(), GameKeys.mouseX - player.getX())));
+            }
+            gameData.getKeys().setMouseMoved(false);
             // Update position
             player.setPreviousX(player.getX());
             player.setPreviousY(player.getY());
