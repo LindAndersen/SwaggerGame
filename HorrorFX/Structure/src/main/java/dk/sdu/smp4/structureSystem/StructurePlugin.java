@@ -1,6 +1,7 @@
 package dk.sdu.smp4.structureSystem;
 
 import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IStructurePluginService;
 import dk.sdu.smp4.common.data.*;
 
 import java.util.Random;
@@ -9,7 +10,7 @@ import java.util.Random;
  * Hello world!
  *
  */
-public class StructurePlugin implements IGamePluginService
+public class StructurePlugin implements IStructurePluginService
 {
     private Room room, room2;
 

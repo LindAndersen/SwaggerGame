@@ -2,11 +2,12 @@ package dk.sdu.smp4.keyanddoor.door;
 
 import dk.sdu.smp4.common.Services.GUI.PolygonColor;
 import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IStructurePluginService;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
 
-public class DoorPlugin implements IGamePluginService {
+public class DoorPlugin implements IStructurePluginService {
 
     private Door door, door2;
 

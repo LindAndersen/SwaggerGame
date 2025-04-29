@@ -9,14 +9,16 @@ public class GameManager {
     private GameData gameData;
     private GUIManager guiManager;
     private Renderer renderer;
+    private MapGenerator generator;
 
     public GameManager() {}
 
     public void init(Stage stage) {
         this.world = new World();
         this.gameData = new GameData();
+        this.generator = new MapGenerator(gameData, world);
         this.guiManager = new GUIManager(gameData, stage, this::startGame);
-        this.renderer = new Renderer(world, gameData, guiManager);
+        this.renderer = new Renderer(world, gameData, guiManager, generator);
         GUIManagerProvider.setInstance(guiManager);
     }
 

@@ -28,6 +28,7 @@ public class Renderer {
     private final World world;
     private final GameData gameData;
     private final GUIManager guiManager;
+    private final MapGenerator generator;
     private final Image noiseImage;
     private final Canvas lightMaskCanvas;
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
@@ -35,10 +36,11 @@ public class Renderer {
     private final Map<EntityImage, Image> imageCache = new HashMap<>();
 
 
-    public Renderer(World world, GameData gameData, GUIManager guiManager) {
+    public Renderer(World world, GameData gameData, GUIManager guiManager, MapGenerator generator) {
         this.world = world;
         this.gameData = gameData;
         this.guiManager = guiManager;
+        this.generator = generator;
         noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
     }
@@ -66,6 +68,7 @@ public class Renderer {
     }
 
     private void render(AnimationTimer timer) {
+        generator.generate();
         getPluginServices().forEach(plugin -> plugin.start(gameData, world));
         timer.start();
     }
