@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class World {
 
     private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
-    private int tileSize = 20;
+    private int tileSize = 40;
     private int[][] map;
 
 
