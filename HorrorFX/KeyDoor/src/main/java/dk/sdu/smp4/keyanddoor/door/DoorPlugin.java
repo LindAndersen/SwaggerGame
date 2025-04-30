@@ -9,12 +9,18 @@ import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
 
 public class DoorPlugin implements IStructurePluginService {
 
+    private final int mapCode = 2;
     private Door door, door2;
 
     @Override
-    public void start(GameData gameData, World world) {
-        door = createDoor(400, 300, 40,20, InventorySlotItems.BRONZE_KEY);
-        door2 = createDoor(300, 100, 40,20, InventorySlotItems.GOLDEN_KEY);
+    public void render(World world, int x, int y) {
+        world.addEntity(createDoor(world.getTileSize(), x, y, InventorySlotItems.BRONZE_KEY));
+    }
+
+
+    /*public void start(GameData gameData, World world) {
+        door = createDoor(400, 300, 40, 20, InventorySlotItems.BRONZE_KEY);
+        door2 = createDoor(300, 100, 40, 20, InventorySlotItems.GOLDEN_KEY);
         world.addEntity(door);
         world.addEntity(door2);
 //        System.out.println("DoorPlugin started");
@@ -25,20 +31,20 @@ public class DoorPlugin implements IStructurePluginService {
 //            System.out.println("Door created at (" + door.getX() + ", " + door.getY() + ") and added to world");
 //        });
     }
+        */
 
-    private Door createDoor(float x, float y, float width, float height, InventorySlotItems requiredKey) {
+    private Door createDoor(int tileSize, int x, int y, InventorySlotItems requiredKey) {
         Door door = new Door();
 
         door.setPolygonCoordinates(
-                -width / 2, -height / 2,   // Top left
-                width / 2, -height / 2,    // Top right
-                width / 2, height / 2,     // Bottom right
-                -width / 2, height / 2     // Bottom left
+                -tileSize / 2, -tileSize / 2,   // Top left
+                tileSize / 2, -tileSize / 2,    // Top right
+                tileSize / 2, tileSize / 2,     // Bottom right
+                -tileSize / 2, tileSize / 2     // Bottom left
         );
-        door.setX(x);
-        door.setY(y);
-        door.setWidth(width);
-        door.setHeight(height);
+        door.setX(x*tileSize);
+        door.setY(y*tileSize);
+        door.setSize(tileSize);
         door.setSolid(true);
         door.setPaint(PolygonColor.RED);
         door.setRequiredKey(requiredKey);
@@ -46,7 +52,7 @@ public class DoorPlugin implements IStructurePluginService {
     }
 
     @Override
-    public void stop(GameData gameData, World world) {
-        world.removeEntity(door);
+    public int getMapCode() {
+        return mapCode;
     }
 }

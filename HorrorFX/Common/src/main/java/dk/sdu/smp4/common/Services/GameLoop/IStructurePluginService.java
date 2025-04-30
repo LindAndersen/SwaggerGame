@@ -4,6 +4,6 @@ import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 
 public interface IStructurePluginService {
-    void start(GameData gameData, World world);
-    void stop(GameData gameData, World world);
+    int getMapCode();
+    void render(World world, int x, int y);
 }

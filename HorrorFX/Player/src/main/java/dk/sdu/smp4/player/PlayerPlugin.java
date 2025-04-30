@@ -43,8 +43,8 @@ public class PlayerPlugin implements IGamePluginService {
                 12, 0,  // tip (front middle point)
                 6, 8,   // near front bottom-right
                 -8, 8  );
-        player.setX(gameData.getDisplayWidth() /5);
-        player.setY(gameData.getDisplayHeight() /5);
+        player.setX(50);
+        player.setY(350);
         player.setRadius(8);
         player.setSolid(true);
         player.setPaint(PolygonColor.BLUE);

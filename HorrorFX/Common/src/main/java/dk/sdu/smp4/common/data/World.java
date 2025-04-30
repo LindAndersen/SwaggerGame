@@ -9,6 +9,21 @@ import java.util.concurrent.ConcurrentHashMap;
 public class World {
 
     private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
+    private int tileSize = 20;
+    private int[][] map;
+
+
+    public void setMap(int[][] map) {
+        this.map = map;
+    }
+
+    public int[][] getMap() {
+        return map;
+    }
+
+    public int getTileSize(){
+        return tileSize;
+    }
 
     public String addEntity(Entity entity) {
         entityMap.put(entity.getID(), entity);

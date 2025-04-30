@@ -1,51 +1,81 @@
 package dk.sdu.smp4.common.gui.services;
 
 import dk.sdu.smp4.common.Services.GameLoop.IStructurePluginService;
-import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 
-import java.util.Collection;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 public class MapGenerator {
-    private int[][] map;
-    private GameData gameData;
     private World world;
 
-
-    public MapGenerator(GameData gameData, World world){
-        this.gameData = gameData;
+    public MapGenerator(World world){
         this.world = world;
     }
 
-    public void generate() {
-        map = generateMap();
-        try {
-            drawMap();
-        } catch (InterruptedException e){
-            e.printStackTrace();
-        }
-    }
+    private int[][] loadMapFromCSV(String absolutePath) {
+        List<int[]> rows = new ArrayList<>();
 
-    private int[][] generateMap(){
-        map = new int[200][200];
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                map[i][j] = Math.random() < 0.3 ? 1 : 0;
+        try (InputStream is = MapGenerator.class.getResourceAsStream(absolutePath);
+             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] toks = line.split(",");
+                int[] row = new int[toks.length];
+                for (int i = 0; i < toks.length; i++) {
+                    row[i] = Integer.parseInt(toks[i].trim());
+                }
+                rows.add(row);
+            }
+        } catch (IOException | NumberFormatException e) {
+            throw new RuntimeException("Failed to load CSV " + absolutePath, e);
+        }
+
+        if (rows.isEmpty()) {
+            return new int[0][0];
+        }
+
+        int rowCount = rows.size();
+        int colCount = rows.get(0).length;
+        int[][] map = new int[colCount][rowCount];          // transpose dimensions
+
+        for (int r = 0; r < rowCount; r++) {
+            int[] srcRow = rows.get(r);
+            for (int c = 0; c < colCount; c++) {
+                map[c][r] = srcRow[c];                      // transpose
             }
         }
         return map;
     }
 
-    private void drawMap() throws InterruptedException {
-        getStructures().forEach(entity -> {
-            entity.start(gameData, world);
-        });
+
+    public void generate() {
+        int[][] map = loadMapFromCSV("/maps/map.csv");
+        world.setMap(map);
+
+        Map<Integer, IStructurePluginService> structurePluginMap = getPlugins();
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                if (map[i][j] == 0 | structurePluginMap.get(map[i][j]) == null){
+                    continue;
+                }
+                structurePluginMap.get(map[i][j]).render(world, i, j);
+            }
+
+        }
+
     }
 
-    private Collection<? extends IStructurePluginService> getStructures(){
-        return ServiceLoader.load(IStructurePluginService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    private Map<Integer, IStructurePluginService> getPlugins() {
+        return ServiceLoader.load(IStructurePluginService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toMap(
+                        IStructurePluginService::getMapCode,
+                        plugin -> plugin
+                ));
     }
 
 }
