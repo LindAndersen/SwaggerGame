@@ -1,5 +1,6 @@
 package dk.sdu.smp4.common.gui.services;
 
+import dk.sdu.smp4.common.Services.GUI.IFlashlightBar;
 import dk.sdu.smp4.common.Services.GUI.IGUIManager;
 import dk.sdu.smp4.common.Services.GUI.IHealthBar;
 import dk.sdu.smp4.common.Services.GUI.IInventoryHUD;
@@ -7,9 +8,7 @@ import dk.sdu.smp4.common.Services.GUI.IInventoryHUD;
 public class GUIManagerProvider implements IGUIManager {
     private static GUIManager instance;
 
-    public GUIManagerProvider() {
-        // no-arg constructor needed for ServiceLoader
-    }
+    public GUIManagerProvider() {}
 
     public static void setInstance(GUIManager guiManager) {
         instance = guiManager;
@@ -40,6 +39,11 @@ public class GUIManagerProvider implements IGUIManager {
     @Override
     public IInventoryHUD getInventoryHUD() {
         return getInstance().getInventoryHUD();
+    }
+
+    @Override
+    public IFlashlightBar getFlashlightBar() {
+        return getInstance().getFlashlightBar();
     }
 }
 

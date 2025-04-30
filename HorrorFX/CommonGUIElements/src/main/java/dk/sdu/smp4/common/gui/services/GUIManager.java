@@ -36,6 +36,7 @@ public class GUIManager {
     private StackPane root = new StackPane();
     private final IHealthBar healthBar = new HealthBar();
     private final IInventoryHUD inventoryHUD = new InventoryHUD();
+    private final IFlashlightBar flashlightBar = new FlashlightBar();
 
     public GUIManager(GameData gameData, Stage stage, Runnable startGameCallback, Runnable resetGameCallback) {
         this.gameData = gameData;
@@ -101,11 +102,20 @@ public class GUIManager {
         );
 
         Region inventoryNode = (Region) inventoryHUD;
+        Region flashlightBarNode = (Region) flashlightBar;
 
         backgroundLayer.setBackground(new Background(backgroundImage));
+
         inventoryNode.layoutXProperty().bind(root.widthProperty().subtract(inventoryNode.widthProperty()).divide(2));
         inventoryNode.setLayoutY(gameData.getDisplayHeight() - 70);
-        textLayer.getChildren().addAll(inventoryNode, (Node)healthBar);
+
+        // Position flashlightBarNode 20px from the top and right
+        flashlightBarNode.layoutXProperty().bind(
+                root.widthProperty().subtract(flashlightBarNode.widthProperty()).subtract(20)
+        );
+        flashlightBarNode.setLayoutY(20); // 20px from top
+
+        textLayer.getChildren().addAll(inventoryNode, (Node)healthBar, flashlightBarNode);
 
         startGameCallback.run();
     }
@@ -237,6 +247,11 @@ public class GUIManager {
 
     public IInventoryHUD getInventoryHUD() {
         return inventoryHUD;
+    }
+
+    public IFlashlightBar getFlashlightBar()
+    {
+        return flashlightBar;
     }
 
     private Collection<? extends IEventBus> getEventBusSPI() {

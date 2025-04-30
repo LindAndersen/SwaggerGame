@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 
 public class ConeLight extends CommonPlayerLight implements IToggleableLight {
     private static int TOGGLE_COOLDOWN = 300;
-    private static long FLASHLIGHT_START_TIME = 60_000;
+    private static long FLASHLIGHT_START_TIME = 20_000;
+    private static long FLASHLIGHT_MAX_TIME = 120_000;
     private long flashlightCurrentTime;
     private long timeReference;
     private long lastToggle = 0;
@@ -64,17 +65,20 @@ public class ConeLight extends CommonPlayerLight implements IToggleableLight {
 
     public void tick()
     {
+        long now = System.currentTimeMillis();
         // time left - (current time - last time since change)
-        flashlightCurrentTime -= (System.currentTimeMillis() - timeReference);
+        flashlightCurrentTime -= (now - timeReference);
+        flashlightCurrentTime = Math.max(flashlightCurrentTime, 0);
+        timeReference = now;
         if(flashlightCurrentTime <= 0 && isOn()){
             toggle();
             toggleLocked = true;
         }
     }
 
-    public long getFlashLightCurrentTime()
+    public double getPercentLifeTime()
     {
-        return flashlightCurrentTime;
+        return (double) flashlightCurrentTime/FLASHLIGHT_MAX_TIME;
     }
 
     private Collection<? extends InventorySPI> getInventorySPIs() {
