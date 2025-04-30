@@ -33,6 +33,7 @@ public class Renderer {
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
     private final Map<EntityImage, Image> imageCache = new HashMap<>();
+    private long lastTime = System.nanoTime();
 
 
     public Renderer(World world, GameData gameData, GUIManager guiManager) {
@@ -45,22 +46,21 @@ public class Renderer {
 
     public void start()
     {
-        final long[] lastFrameTime = {0};
-        final long frameDuration = 1_000_000_000 / 900000; // nanoseconds per frame (~16.67ms)
-
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (now - lastFrameTime[0] >= frameDuration) {
-                    if (!gameData.isPaused()) {
-                        update();
-                        draw();
-                        gameData.getKeys().update();
-                    }
-                    lastFrameTime[0] = now;
+                float delta = (now - lastTime) / 1_000_000_000.0f;
+                lastTime = now;
+                gameData.setDelta(delta);
+
+                if (!gameData.isPaused()) {
+                    update();
+                    draw();
+                    gameData.getKeys().update();
                 }
             }
         };
+
 
         render(timer);
     }
