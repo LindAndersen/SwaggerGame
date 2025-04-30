@@ -42,8 +42,8 @@ public class DoorPlugin implements IStructurePluginService {
                 tileSize / 2, tileSize / 2,     // Bottom right
                 -tileSize / 2, tileSize / 2     // Bottom left
         );
-        door.setX(x*tileSize);
-        door.setY(y*tileSize);
+        door.setX(x*tileSize+tileSize/2);
+        door.setY(y*tileSize+tileSize/2);
         door.setSize(tileSize);
         door.setSolid(true);
         door.setPaint(PolygonColor.RED);

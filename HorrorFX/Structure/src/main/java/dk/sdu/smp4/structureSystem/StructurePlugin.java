@@ -61,8 +61,8 @@ public class StructurePlugin implements IStructurePluginService
                 -halfWidth, halfHeight,
                 halfWidth, halfHeight
         );
-        structure.setX(x*tileSize);
-        structure.setY(y*tileSize);
+        structure.setX(x*tileSize+tileSize/2);
+        structure.setY(y*tileSize+tileSize/2);
         structure.setSize(tileSize);
         structure.setSolid(true);
         return structure;
