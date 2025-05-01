@@ -5,5 +5,5 @@ public interface IGUIManager {
     void setPausedBox();
     IHealthBar getHealthBar();
     IInventoryHUD getInventoryHUD();
-
+    IFlashlightBar getFlashlightBar();
 }
