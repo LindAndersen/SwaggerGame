@@ -38,9 +38,7 @@ public class Enemy extends SoftEntity {
         IEventBus eventBus = getEventBusSPI().stream().findFirst().orElse(null);
         if(eventBus == null){return;}
 
-        // Define what happens when the enemy collides with another entity (e.g., damage player).
         if (entity instanceof EnemyTargetsSPI && !isInCooldown()) {
-            System.out.println("Updated player hit bus");
             eventBus.post(new PlayerHitEvent(entity));
             setLastHitTime();
         }

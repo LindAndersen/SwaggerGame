@@ -28,6 +28,7 @@
     <module>CommonEvents</module>
     <module>CommonGUIElements</module>
     <module>CommonPlayer</module>
+      <module>PathFinding</module>
   </modules>
 
   <properties>
