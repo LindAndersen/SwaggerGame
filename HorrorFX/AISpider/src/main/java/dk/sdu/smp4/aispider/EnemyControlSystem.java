@@ -50,7 +50,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
             int playerTileX = (int) (lastKnownPlayerX / tileSize);
             int playerTileY = (int) (lastKnownPlayerY / tileSize);
 
-            System.out.println();
             List<INode> path = pathFinder.findPath(world, spiderTileX, spiderTileY, playerTileX, playerTileY);
 
             if (path != null && path.size() > 1) {
