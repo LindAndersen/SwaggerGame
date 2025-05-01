@@ -19,20 +19,18 @@ public class AstarPathFinder implements IPathFinder {
 
         //Already visited nodes
         Set<INode> closedSet = new HashSet<>();
-        //Potential nodes. Automatically sorts from lowest to highest f cost
-        PriorityQueue<INode> openSet = new PriorityQueue<>(Comparator.comparingDouble(INode::getFCost));
-        Map<INode, NodeRecord> nodeRecords = new HashMap<>();
+        //Potential nodes. Automatically sorts from lowest to highest f cost, if same fcost, sort from highest to lowest hcost
+        PriorityQueue<INode> openSet = new PriorityQueue<>(Comparator.comparingDouble(INode::getFCost).thenComparingDouble(INode::getHCost));
 
-        NodeRecord startRecord = new NodeRecord(startNode, null, 0, heuristic(startNode, goalNode));
-        nodeRecords.put(startNode, startRecord);
+        startNode.setGCost(0);
+        startNode.setHCost(heuristic(startNode, goalNode));
         openSet.add(startNode);
 
         while (!openSet.isEmpty()) {
             INode current = openSet.poll();
-            NodeRecord currentRecord = nodeRecords.get(current);
 
             if (current.equals(goalNode)) {
-                return reconstructPath(current, nodeRecords);
+                return reconstructPath(current);
             }
 
             closedSet.add(current);
@@ -43,13 +41,13 @@ public class AstarPathFinder implements IPathFinder {
 
                 //Dont get misled, we just use heuristic method because its euclidian distance
                 double relativeG = heuristic(neighbor, current);
-                double tentativeG = currentRecord.gCost + relativeG;
-                NodeRecord neighborRecord = nodeRecords.get(neighbor);
+                double tentativeG = current.getGCost() + relativeG;
 
-                if (neighborRecord == null || tentativeG < neighborRecord.gCost) {
+                if (tentativeG < neighbor.getGCost()) {
                     double hCost = heuristic(neighbor, goalNode);
-                    neighborRecord = new NodeRecord(neighbor, current, tentativeG, hCost);
-                    nodeRecords.put(neighbor, neighborRecord);
+                    neighbor.setParent(current);
+                    neighbor.setGCost(tentativeG);
+                    neighbor.setHCost(hCost);
 
                     if (!openSet.contains(neighbor)) {
                         openSet.add(neighbor);
@@ -68,44 +66,26 @@ public class AstarPathFinder implements IPathFinder {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    private List<INode> reconstructPath(INode endNode, Map<INode, NodeRecord> nodeRecords) {
+    private List<INode> reconstructPath(INode endNode) {
         List<INode> path = new ArrayList<>();
-        NodeRecord current = nodeRecords.get(endNode);
+        INode current = endNode;
 
         while (current != null) {
-            path.add(current.node);
-            current = nodeRecords.get(current.parent);
+            path.add(current);
+            current = current.getParent();
         }
 
         Collections.reverse(path);
         return path;
     }
 
-    private static class NodeRecord {
-        INode node;
-        INode parent;
-        double gCost;
-        double hCost;
-
-        NodeRecord(INode node, INode parent, double gCost, double hCost) {
-            this.node = node;
-            this.parent = parent;
-            this.gCost = gCost;
-            this.hCost = hCost;
-        }
-
-        double getFCost() {
-            return gCost + hCost;
-        }
-    }
-
-    public static class BasicNode implements INode {
+    public static class Node implements INode {
         private final int x, y;
         private final boolean walkable;
         private double gCost, hCost;
         private INode parent;
 
-        public BasicNode(int x, int y, boolean walkable) {
+        public Node(int x, int y, boolean walkable) {
             this.x = x;
             this.y = y;
             this.walkable = walkable;
@@ -126,16 +106,16 @@ public class AstarPathFinder implements IPathFinder {
 
     public static class WalkableGrid implements IWalkableGrid {
         private final int width, height;
-        private final BasicNode[][] nodes;
+        private final Node[][] nodes;
 
         public WalkableGrid(boolean[][] walkableMap) {
             this.width = walkableMap.length;
             this.height = walkableMap[0].length;
-            this.nodes = new BasicNode[width][height];
+            this.nodes = new Node[width][height];
 
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    nodes[x][y] = new BasicNode(x, y, walkableMap[x][y]);
+                    nodes[x][y] = new Node(x, y, walkableMap[x][y]);
                 }
             }
         }
