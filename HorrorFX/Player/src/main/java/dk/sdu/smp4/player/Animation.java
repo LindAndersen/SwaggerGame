@@ -18,7 +18,6 @@ public class Animation {
         if (elapsedTime >= frameDuration) {
             currentFrame = (currentFrame + 1) % frames.length;
             elapsedTime = 0;
-            System.out.println("Animation advanced to frame: " + currentFrame);
         }
     }
 

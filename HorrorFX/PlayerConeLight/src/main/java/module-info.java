@@ -9,6 +9,7 @@ import dk.sdu.smp4.resin.ResinPlugin;
 
 module PlayerConeLight {
     uses dk.sdu.smp4.common.interactable.Services.InventorySPI;
+    uses dk.sdu.smp4.common.Services.GUI.IGUIManager;
     requires Common;
     requires CommonLightSource;
     requires CommonPlayerLight;

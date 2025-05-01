@@ -34,7 +34,7 @@ public class Player extends SoftEntity implements EnemyTargetsSPI {
     public static Animation idleWestAnimation;
     public static Animation idleNorthWestAnimation;
 
-    // Track last movement direction
+    // Track last direction moved
     private static Direction lastDirection = Direction.SOUTH;
     public static Direction getLastDirection() {
         return lastDirection;

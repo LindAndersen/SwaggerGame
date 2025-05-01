@@ -5,7 +5,6 @@ import dk.sdu.smp4.common.Services.GUI.IInventoryHUD;
 import dk.sdu.smp4.common.events.data.InventoryUpdateEvent;
 import dk.sdu.smp4.common.events.services.IEventBus;
 import dk.sdu.smp4.common.gui.util.EntityImageConverter;
-import dk.sdu.smp4.commonplayer.CommonPlayer;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -71,18 +70,20 @@ public class InventoryHUD extends HBox implements IInventoryHUD {
         if (index < 0 || index >= slots.size()) return;
 
         StackPane slot = slots.get(index);
-
         ImageView itemImage = (ImageView) slot.lookup("#itemImage");
         Text quantityText = (Text) slot.lookup("#quantityText");
 
-        if (icon == null)
+        if (icon == null || quantity <= 0)
         {
             itemImage.setImage(null);
+            itemImage.setVisible(false);
+            quantityText.setText("");
         }else
         {
             itemImage.setImage(EntityImageConverter.convertEntityImage(icon, icon.getResourceClass()));
+            itemImage.setVisible(true);
+            quantityText.setText(quantity > 1 ? String.valueOf(quantity) : "");
         }
-        quantityText.setText(quantity > 1 ? String.valueOf(quantity) : "");
     }
 
     private Collection<? extends IEventBus> getEventBusSPI() {

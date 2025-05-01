@@ -8,6 +8,7 @@ import dk.sdu.smp4.common.events.services.IEventBus;
 import dk.sdu.smp4.common.gui.elements.*;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 public class GUIManager {
     private final Runnable startGameCallback;
+    private final Runnable resetGameCallback;
     private final GameData gameData;
     private final Stage stage;
     private final Pane backgroundLayer = new Pane();
@@ -34,11 +36,13 @@ public class GUIManager {
     private StackPane root = new StackPane();
     private final IHealthBar healthBar = new HealthBar();
     private final IInventoryHUD inventoryHUD = new InventoryHUD();
+    private final IFlashlightBar flashlightBar = new FlashlightBar();
 
-    public GUIManager(GameData gameData, Stage stage, Runnable startGameCallback) {
+    public GUIManager(GameData gameData, Stage stage, Runnable startGameCallback, Runnable resetGameCallback) {
         this.gameData = gameData;
         this.stage = stage;
         this.startGameCallback = startGameCallback;
+        this.resetGameCallback = resetGameCallback;
         setupFonts();
         start();
         handleInputs();
@@ -98,11 +102,20 @@ public class GUIManager {
         );
 
         Region inventoryNode = (Region) inventoryHUD;
+        Region flashlightBarNode = (Region) flashlightBar;
 
         backgroundLayer.setBackground(new Background(backgroundImage));
+
         inventoryNode.layoutXProperty().bind(root.widthProperty().subtract(inventoryNode.widthProperty()).divide(2));
         inventoryNode.setLayoutY(gameData.getDisplayHeight() - 70);
-        textLayer.getChildren().add(inventoryNode);
+
+        // Position flashlightBarNode 20px from the top and right
+        flashlightBarNode.layoutXProperty().bind(
+                root.widthProperty().subtract(flashlightBarNode.widthProperty()).subtract(20)
+        );
+        flashlightBarNode.setLayoutY(20); // 20px from top
+
+        textLayer.getChildren().addAll(inventoryNode, (Node)healthBar, flashlightBarNode);
 
         startGameCallback.run();
     }
@@ -158,7 +171,7 @@ public class GUIManager {
         goAgainButton.getStyleClass().add("menu-button");
         goAgainButton.setOnAction(e -> {
             getTextLayer().getChildren().remove(gameOverBox);
-            //restartGame();
+            resetGameCallback.run();
         });
 
         Button quitButton = new Button("Quit");
@@ -234,6 +247,11 @@ public class GUIManager {
 
     public IInventoryHUD getInventoryHUD() {
         return inventoryHUD;
+    }
+
+    public IFlashlightBar getFlashlightBar()
+    {
+        return flashlightBar;
     }
 
     private Collection<? extends IEventBus> getEventBusSPI() {

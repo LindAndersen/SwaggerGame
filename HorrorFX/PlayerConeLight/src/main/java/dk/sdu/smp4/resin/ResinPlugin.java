@@ -11,7 +11,7 @@ public class ResinPlugin implements IGamePluginService {
     @Override
     public void start(GameData gameData, World world) {
         Random random = new Random();
-        for (int i=0;i<8;i++)
+        for (int i=0;i<12;i++)
         {
             int y = random.nextInt(50, gameData.getDisplayHeight()-50);
             int x = random.nextInt(50, gameData.getDisplayWidth()-50);
