@@ -1,6 +1,6 @@
 package dk.sdu.smp4.common.gui.services;
 
-import dk.sdu.smp4.common.Services.GameLoop.IStructurePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.data.World;
 
 import java.io.*;
@@ -58,7 +58,7 @@ public class MapGenerator {
         int[][] map = loadMapFromCSV("/maps/map.csv");
         world.setMap(map);
 
-        Map<Integer, IStructurePluginService> structurePluginMap = getPlugins();
+        Map<Integer, IEntityLoaderService> structurePluginMap = getPlugins();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] == 0 | structurePluginMap.get(map[i][j]) == null){
@@ -71,9 +71,9 @@ public class MapGenerator {
 
     }
 
-    private Map<Integer, IStructurePluginService> getPlugins() {
-        return ServiceLoader.load(IStructurePluginService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toMap(
-                        IStructurePluginService::getMapCode,
+    private Map<Integer, IEntityLoaderService> getPlugins() {
+        return ServiceLoader.load(IEntityLoaderService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toMap(
+                        IEntityLoaderService::getMapCode,
                         plugin -> plugin
                 ));
     }

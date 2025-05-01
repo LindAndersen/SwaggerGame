@@ -1,7 +1,6 @@
-import dk.sdu.smp4.common.Services.GameLoop.IStructurePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.keyanddoor.key.*;
 import dk.sdu.smp4.keyanddoor.door.*;
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.common.interactable.Services.InventorySPI;
 
@@ -12,6 +11,5 @@ module KeyDoor {
     requires CommonQuest;
     requires CommonInteractable;
     provides IQuestInteractable with DoorControlSystem, KeyControlSystem;
-    provides IStructurePluginService with DoorPlugin;
-    provides IGamePluginService with KeyPlugin;
+    provides IEntityLoaderService with DoorPlugin, KeyPlugin;
 }

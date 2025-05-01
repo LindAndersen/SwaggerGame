@@ -1,6 +1,6 @@
 import dk.sdu.smp4.aispider.EnemyControlSystem;
 import dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.enemy.services.EnemyTargetsSPI;
 import dk.sdu.smp4.common.events.services.IEventBus;
 
@@ -12,6 +12,6 @@ module AISpider {
     requires CommonEnemy;
     requires CommonEvents;
     provides IEntityProcessingService with EnemyControlSystem;
-    provides IGamePluginService with dk.sdu.smp4.aispider.EnemyPlugin;
+    provides IEntityLoaderService with dk.sdu.smp4.aispider.EnemyPlugin;
 
 }

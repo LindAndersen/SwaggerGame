@@ -7,7 +7,7 @@ import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
 
 public class PlayerConeLightPlugin implements IPlayerLightPlugin {
     @Override
-    public void createPlayerLight(SoftEntity player, GameData gameData, World world) {
+    public void createPlayerLight(SoftEntity player, World world) {
         ConeLight lightEntity = new ConeLight();
 
         lightEntity.setX(player.getX());

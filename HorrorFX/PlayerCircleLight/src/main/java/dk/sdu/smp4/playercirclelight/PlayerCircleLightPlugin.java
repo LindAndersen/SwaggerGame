@@ -9,7 +9,7 @@ import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
 public class PlayerCircleLightPlugin implements IPlayerLightPlugin {
 
     @Override
-    public void createPlayerLight(SoftEntity player, GameData gameData, World world) {
+    public void createPlayerLight(SoftEntity player, World world) {
         CircleLight lightEntity = new CircleLight();
 
         lightEntity.setX(player.getX());

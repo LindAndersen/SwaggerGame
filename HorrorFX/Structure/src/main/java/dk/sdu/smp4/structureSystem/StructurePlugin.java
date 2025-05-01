@@ -1,15 +1,13 @@
 package dk.sdu.smp4.structureSystem;
 
-import dk.sdu.smp4.common.Services.GameLoop.IStructurePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.data.*;
-
-import java.util.Random;
 
 /**
  * Hello world!
  *
  */
-public class StructurePlugin implements IStructurePluginService
+public class StructurePlugin implements IEntityLoaderService
 {
     private final int mapCode = 1;
     private Room room, room2;

@@ -1,4 +1,5 @@
 import dk.sdu.smp4.common.Services.GUI.IGUIManager;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.gui.services.GUIManagerProvider;
 
 module CommonGUIElements {
@@ -6,7 +7,7 @@ module CommonGUIElements {
     uses dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
     uses dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
     uses dk.sdu.smp4.common.Services.GameLoop.IPostEntityProcessingService;
-    uses dk.sdu.smp4.common.Services.GameLoop.IStructurePluginService;
+    uses IEntityLoaderService;
     exports dk.sdu.smp4.common.gui.elements;
     exports dk.sdu.smp4.common.gui.services;
     requires javafx.graphics;
