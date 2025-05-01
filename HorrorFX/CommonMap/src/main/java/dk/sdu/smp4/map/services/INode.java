@@ -1,4 +1,4 @@
-package dk.sdu.smp4.common.enemy.services;
+package dk.sdu.smp4.map.services;
 
 public interface INode {
     int getX();

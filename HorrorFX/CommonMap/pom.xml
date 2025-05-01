@@ -7,10 +7,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>PathFinding</artifactId>
+    <artifactId>CommonMap</artifactId>
     <packaging>jar</packaging>
 
-    <name>PathFinding</name>
+    <name>CommonMap</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -27,12 +27,6 @@
         <dependency>
             <groupId>dk.sdu.smp4</groupId>
             <artifactId>Common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>dk.sdu.smp4</groupId>
-            <artifactId>CommonMap</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

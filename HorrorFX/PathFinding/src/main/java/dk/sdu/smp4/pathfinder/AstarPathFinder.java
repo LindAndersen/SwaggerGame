@@ -1,21 +1,39 @@
 package dk.sdu.smp4.pathfinder;
 
-import dk.sdu.smp4.common.enemy.services.IPathFinder;
-import dk.sdu.smp4.common.enemy.services.IWalkableGrid;
-import dk.sdu.smp4.common.enemy.services.INode;
+import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.map.services.INode;
+import dk.sdu.smp4.map.services.IPathFinder;
+import dk.sdu.smp4.map.services.IWalkableGrid;
 
 import java.util.*;
 
 public class AstarPathFinder implements IPathFinder {
 
     @Override
-    public List<INode> findPath(IWalkableGrid grid, int startX, int startY, int goalX, int goalY) {
+    public List<INode> findPath(World world, int startX, int startY, int goalX, int goalY) {
+        IWalkableGrid grid = new WalkableGrid(world.getWalkableTiles());
+
+//        System.out.printf("Start: (%d, %d), Goal: (%d, %d)\n", startX, startY, goalX, goalY);
+//        System.out.println("Grid size: " + grid.getWidth() + " x " + grid.getHeight());
+
         INode startNode = grid.getNode(startX, startY);
         INode goalNode = grid.getNode(goalX, goalY);
+
+//        if (startNode == null) System.out.println("Start node is null.");
+//        if (goalNode == null) System.out.println("Goal node is null.");
+//        if (goalNode != null && !goalNode.isWalkable()) System.out.println("Goal node is not walkable.");
 
         if (startNode == null || goalNode == null || !goalNode.isWalkable()) {
             return null;
         }
+
+//        System.out.println("Start node walkable: " + startNode.isWalkable());
+//        System.out.println("Goal node walkable: " + goalNode.isWalkable());
+//        System.out.println("Neighbors of start node:");
+//        for (INode n : grid.getNeighbors(startNode)) {
+//            System.out.println("- " + n.getX() + "," + n.getY() + " walkable=" + n.isWalkable());
+//        }
+
 
         //Already visited nodes
         Set<INode> closedSet = new HashSet<>();
@@ -28,6 +46,8 @@ public class AstarPathFinder implements IPathFinder {
 
         while (!openSet.isEmpty()) {
             INode current = openSet.poll();
+
+//            System.out.println("Visiting: " + current.getX() + "," + current.getY());
 
             if (current.equals(goalNode)) {
                 return reconstructPath(current);
@@ -88,6 +108,7 @@ public class AstarPathFinder implements IPathFinder {
         public Node(int x, int y, boolean walkable) {
             this.x = x;
             this.y = y;
+            this.gCost = Double.POSITIVE_INFINITY;
             this.walkable = walkable;
         }
 
@@ -152,6 +173,14 @@ public class AstarPathFinder implements IPathFinder {
                 }
             }
             return neighbors;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public int getWidth() {
+            return width;
         }
     }
 }
