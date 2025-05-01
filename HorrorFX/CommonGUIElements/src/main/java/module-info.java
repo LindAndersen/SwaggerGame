@@ -8,6 +8,7 @@ module CommonGUIElements {
     uses dk.sdu.smp4.common.Services.GameLoop.IPostEntityProcessingService;
     exports dk.sdu.smp4.common.gui.elements;
     exports dk.sdu.smp4.common.gui.services;
+
     requires javafx.graphics;
     requires javafx.controls;
     requires CommonEvents;
@@ -15,6 +16,7 @@ module CommonGUIElements {
     requires CommonPlayer;
     requires CommonPlayerLight;
     requires CommonLightSource;
+    uses dk.sdu.smp4.common.Services.GameLoop.ICamera;
 
     provides IGUIManager with GUIManagerProvider;
 }
