@@ -21,10 +21,10 @@ public class EnemyPlugin implements IGamePluginService {
     }
 
     private SoftEntity createEnemy(GameData gameData) {
-        enemy = new Enemy();
-        enemy.setPolygonCoordinates(-8, -8, 8, -8, 8, 8, -8, 8); // Simple square
+        enemy = new AISpider();
+        enemy.setPolygonCoordinates(-25, -25, 25, -25, 25, 25, -25, 25); // Simple square
         enemy.setX(300);  // Spawn at a random location
-        enemy.setY(600);
+        enemy.setY(700);
         enemy.setRadius(8);
         enemy.setSolid(true);
         enemy.setPaint(PolygonColor.RED);

@@ -9,16 +9,15 @@ import dk.sdu.smp4.common.events.data.PlayerHitEvent;
 import dk.sdu.smp4.common.events.services.IEventBus;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
-public class Enemy extends SoftEntity {
+public class AISpider extends SoftEntity {
     private EntityImage moveLeft;
     private EntityImage moveRight;
     private long lastHitTime = 0;
 
-    public Enemy()
+    public AISpider()
     {
         moveLeft = new EntityImage("/moveLeft.gif", 80, 80, true, true, getClass());
         moveRight = new EntityImage("/moveRight.gif", 80, 80, true, true, getClass());
@@ -38,9 +37,7 @@ public class Enemy extends SoftEntity {
         IEventBus eventBus = getEventBusSPI().stream().findFirst().orElse(null);
         if(eventBus == null){return;}
 
-        // Define what happens when the enemy collides with another entity (e.g., damage player).
         if (entity instanceof EnemyTargetsSPI && !isInCooldown()) {
-            System.out.println("Updated player hit bus");
             eventBus.post(new PlayerHitEvent(entity));
             setLastHitTime();
         }
