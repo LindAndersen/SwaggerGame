@@ -9,17 +9,17 @@ import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
 public class PlayerPlugin implements IEntityLoaderService {
     private SoftEntity player;
-    private int mapCode = 4;
 
 
     @Override
-    public void render(World world, int x, int y) {
+    public void render(World world, int x, int y, int mapCode) {
         player = CreatePlayer(world.getTileSize(), x, y);
         world.addEntity(player);
         for(IPlayerLightPlugin lightPlugin : getEntityPlayerLights()) {
@@ -57,7 +57,13 @@ public class PlayerPlugin implements IEntityLoaderService {
     }
 
     @Override
-    public int getMapCode() {
-        return mapCode;
+    public Set<Integer> getMapCodes() {
+        return Set.of(4);
     }
+
+    @Override
+    public void stop(World world){
+        world.removeEntity(player);
+    }
+
 }

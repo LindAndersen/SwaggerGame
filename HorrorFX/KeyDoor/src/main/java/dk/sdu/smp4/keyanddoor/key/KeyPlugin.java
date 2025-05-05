@@ -6,14 +6,23 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.World;
 
 import java.util.Random;
+import java.util.Set;
 
 public class KeyPlugin implements IEntityLoaderService {
-    private Random random = new Random();
-    private int mapCode = 6;
 
     @Override
-    public void render(World world, int x, int y) {
-        world.addEntity(createKey(world.getTileSize(), x, y, "bronze_key", PolygonColor.BLUE));
+    public void render(World world, int x, int y, int mapCode) {
+        switch (mapCode){
+            case 6:
+                world.addEntity(createKey(world.getTileSize(), x, y, "bronze_key", PolygonColor.BLUE));
+                break;
+            case 7:
+                world.addEntity(createKey(world.getTileSize(), x, y, "golden_key", PolygonColor.GOLD));
+                break;
+        }
+
+
+
     }
 
     /*public void start(GameData gameData, World world) {
@@ -26,12 +35,6 @@ public class KeyPlugin implements IEntityLoaderService {
 
     private Entity createKey(int tileSize, int x, int y, String keyId, PolygonColor color) {
         Key key = new Key(keyId);
-//        float randomX = random.nextFloat(0.1F,0.7F) * gameData.getDisplayWidth();
-//        float value1 = random.nextFloat() * (0.3f - 0.2f) + 0.2f;
-//        float value2 = random.nextFloat() * (0.8f - 0.7f) + 0.7f;
-//
-//        float result = random.nextBoolean() ? value1 : value2;
-//        float randomY = result * gameData.getDisplayHeight();
 
         key.setPolygonCoordinates(
                 // Teeth (blocky bit)
@@ -60,14 +63,14 @@ public class KeyPlugin implements IEntityLoaderService {
         return key;
     }
 
-    /*
-    @Override
-    public void stop(GameData gameData, World world) {
-        world.getEntities(Key.class).forEach(world::removeEntity);
-    }*/
 
     @Override
-    public int getMapCode() {
-        return mapCode;
+    public void stop(World world) {
+        world.getEntities(Key.class).forEach(world::removeEntity);
+    }
+
+    @Override
+    public Set<Integer> getMapCodes() {
+        return Set.of(6, 7);
     }
 }

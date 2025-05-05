@@ -15,7 +15,7 @@
     <module>CommonLightSource</module>
     <module>QuestItem</module>
     <module>Collision</module>
-    <module>Structure</module>
+    <module>Wall</module>
     <module>PlayerCircleLight</module>
     <module>CommonPlayerLight</module>
     <module>PlayerConeLight</module>

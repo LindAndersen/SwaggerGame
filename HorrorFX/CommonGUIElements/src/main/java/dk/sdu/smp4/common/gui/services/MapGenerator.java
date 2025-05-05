@@ -4,10 +4,7 @@ import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.data.World;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MapGenerator {
@@ -58,24 +55,33 @@ public class MapGenerator {
         int[][] map = loadMapFromCSV("/maps/map.csv");
         world.setMap(map);
 
-        Map<Integer, IEntityLoaderService> structurePluginMap = getPlugins();
+        Map<Integer, IEntityLoaderService> IDToPluginMap = getPluginMap();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] == 0 | structurePluginMap.get(map[i][j]) == null){
+                if (map[i][j] == 0 | IDToPluginMap.get(map[i][j]) == null){
                     continue;
                 }
-                structurePluginMap.get(map[i][j]).render(world, i, j);
+                IDToPluginMap.get(map[i][j]).render(world, i, j, map[i][j]);
             }
 
         }
 
     }
 
-    private Map<Integer, IEntityLoaderService> getPlugins() {
-        return ServiceLoader.load(IEntityLoaderService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toMap(
-                        IEntityLoaderService::getMapCode,
-                        plugin -> plugin
-                ));
+
+    private Collection<? extends IEntityLoaderService> getPlugins() {
+        return ServiceLoader.load(IEntityLoaderService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
+
+    private Map<Integer, IEntityLoaderService> getPluginMap() {
+        Map<Integer, IEntityLoaderService> IDToPluginMap = new HashMap<>();
+        for (IEntityLoaderService plugin : getPlugins()){
+            for (Integer key : plugin.getMapCodes()) {
+                IDToPluginMap.put(key, plugin);
+                System.out.println("Key: "+key+", Plugin: "+plugin.getClass().getSimpleName());
+            }
+        }
+        return IDToPluginMap;
     }
 
 }

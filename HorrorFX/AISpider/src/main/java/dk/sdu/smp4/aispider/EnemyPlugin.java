@@ -5,12 +5,13 @@ import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.World;
 
+import java.util.Set;
+
 public class EnemyPlugin implements IEntityLoaderService {
     private SoftEntity enemy;
-    private int mapCode = 5;
 
     @Override
-    public void render(World world, int x, int y) {
+    public void render(World world, int x, int y, int mapCode) {
         world.addEntity(createEnemy(world.getTileSize(), x, y));
     }
 
@@ -27,8 +28,12 @@ public class EnemyPlugin implements IEntityLoaderService {
     }
 
     @Override
-    public int getMapCode() {
-        return mapCode;
+    public Set<Integer> getMapCodes() {
+        return Set.of(5);
     }
 
+    @Override
+    public void stop(World world) {
+        world.removeEntity(enemy);
+    }
 }

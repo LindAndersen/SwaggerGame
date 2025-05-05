@@ -8,6 +8,8 @@ import dk.sdu.smp4.common.data.World;
 public class QuestItemPlugin implements IGamePluginService {
 
     private Entity QuestNote;
+    private int mapCode = 9;
+
     @Override
     public void start(GameData gameData, World world) {
         //QuestItem childQuest2 = CreateQuest("child2", "poke my eyes", 500, 100, 8);

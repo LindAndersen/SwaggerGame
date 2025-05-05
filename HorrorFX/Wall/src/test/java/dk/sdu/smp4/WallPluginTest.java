@@ -7,7 +7,7 @@ import junit.framework.TestSuite;
 /**
  * Unit test for simple App.
  */
-public class StructurePluginTest
+public class WallPluginTest
     extends TestCase
 {
     /**
@@ -15,7 +15,7 @@ public class StructurePluginTest
      *
      * @param testName name of the test case
      */
-    public StructurePluginTest(String testName )
+    public WallPluginTest(String testName )
     {
         super( testName );
     }
@@ -25,7 +25,7 @@ public class StructurePluginTest
      */
     public static Test suite()
     {
-        return new TestSuite( StructurePluginTest.class );
+        return new TestSuite( WallPluginTest.class );
     }
 
     /**
