@@ -51,8 +51,11 @@ public class MapGenerator implements IMapGenerator {
 
     @Override
     public void generate(World world) {
-        int[][] map = loadMapFromCSV("/maps/map.csv");
+        int[][] map = loadMapFromCSV("/maps/map2.csv");
         world.setMap(map);
+
+        world.setMapWidth(map.length);
+        world.setMapHeight(map[0].length);
 
         Map<Integer, IEntityLoaderService> IDToPluginMap = getPluginMap();
         for (int i = 0; i < map.length; i++) {
@@ -64,7 +67,6 @@ public class MapGenerator implements IMapGenerator {
             }
 
         }
-
     }
 
 

@@ -11,7 +11,24 @@ public class World {
     private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
     private int tileSize = 40;
     private int[][] map;
-    
+    private int mapHeight, mapWidth;
+
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public void setMapWidth(int mapWidth) {
+        this.mapWidth = mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public void setMapHeight(int mapHeight) {
+        this.mapHeight = mapHeight;
+    }
+
 
     public void setMap(int[][] map) {
         this.map = map;
