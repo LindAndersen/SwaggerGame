@@ -10,7 +10,6 @@ module CommonGUIElements {
     uses dk.sdu.smp4.map.services.IMapGenerator;
     exports dk.sdu.smp4.common.gui.elements;
     exports dk.sdu.smp4.common.gui.services;
-
     requires javafx.graphics;
     requires javafx.controls;
     requires CommonEvents;

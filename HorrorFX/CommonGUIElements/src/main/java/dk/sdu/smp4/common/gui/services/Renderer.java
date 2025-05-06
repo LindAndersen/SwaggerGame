@@ -34,13 +34,13 @@ public class Renderer {
     private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
     private final Map<EntityImage, Image> imageCache = new HashMap<>();
 
+
     public Renderer(World world, GameData gameData, GUIManager guiManager) {
         this.world = world;
         this.gameData = gameData;
         this.guiManager = guiManager;
         noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-
     }
 
     public void start()
@@ -213,10 +213,8 @@ public class Renderer {
 
     private void handlePolygonCoordsPreDrawing(Polygon polygon, Entity entity) {
         polygon.getTransforms().clear();
-
         polygon.setTranslateX(entity.getX());
         polygon.setTranslateY(entity.getY());
-
         if (entity.isShouldRotateAlternative()) {
             //polygon.getTransforms().add(new Rotate(entity.getRotation(), 0, 0));
         } else {

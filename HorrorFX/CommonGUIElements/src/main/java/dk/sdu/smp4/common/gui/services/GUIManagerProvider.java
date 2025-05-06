@@ -45,11 +45,5 @@ public class GUIManagerProvider implements IGUIManager {
     public IFlashlightBar getFlashlightBar() {
         return getInstance().getFlashlightBar();
     }
-
-    @Override
-    public void updateCamera(double zoomX, double zoomY, double offsetX, double offsetY)
-    {
-        getInstance().updateCamera(zoomX, zoomY, offsetX, offsetY);
-    }
 }
 

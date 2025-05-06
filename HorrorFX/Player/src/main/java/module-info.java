@@ -1,4 +1,3 @@
-import dk.sdu.smp4.commonplayer.services.ICameraProcessor;
 import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.commonplayerlight.services.*;
 import dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
@@ -13,13 +12,11 @@ module Player {
     uses IToggleableLight;
     uses dk.sdu.smp4.common.interactable.Services.InventorySPI;
     uses dk.sdu.smp4.common.events.services.IEventBus;
-    uses ICameraProcessor;
+    requires Common;
     requires CommonEnemy;
     requires CommonPlayerLight;
     requires CommonInteractable;
     requires CommonEvents;
-    requires CommonPlayer;
-    requires Common;
     provides IEntityLoaderService with PlayerPlugin;
     provides IEntityProcessingService with PlayerControlSystem;
 }
