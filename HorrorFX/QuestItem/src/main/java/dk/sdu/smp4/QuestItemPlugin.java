@@ -1,23 +1,39 @@
 package dk.sdu.smp4;
 
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 
-public class QuestItemPlugin implements IGamePluginService {
+import java.util.Set;
 
-    private Entity QuestNote;
-    private int mapCode = 9;
+public class QuestItemPlugin implements IEntityLoaderService {
+    QuestItem quest1, quest2, quest3;
 
     @Override
-    public void start(GameData gameData, World world) {
-        //QuestItem childQuest2 = CreateQuest("child2", "poke my eyes", 500, 100, 8);
-        QuestItem parentQuest = CreateQuest("Find the bronze key","Find the bronze key, to open the room in the middle",gameData.getDisplayWidth() /5, (gameData.getDisplayHeight()/5)+20, 8);
-        QuestItem childQuest1 = CreateQuest("Escape!", "You found the golden key! Now you can escape the castle", 360, 400, 8);
-        QuestItem childQuest2 = CreateQuest("Victory!", "You escaped the castle, congratulations!", 300, 50, 8);
-        //QuestItem parentQuest2 = CreateQuest("Main Quest2tihi","Go save the world again",450, 600, 8);
+    public void render(World world, int x, int y, int mapCode) {
+        switch (mapCode){
+            case 9:
+                quest1 = CreateQuest("Find the bronze key","Find the bronze key, to open the room in the middle", world.getTileSize(), x, y, 8);
+                world.addEntity(quest1);
+                break;
+            case 10:
+                quest2 = CreateQuest("Escape!", "You found the golden key! Now you can escape the castle", world.getTileSize(), x, y, 8);
+                break;
+            case 11:
+                quest3 = CreateQuest("Victory!", "You escaped the castle, congratulations!", world.getTileSize(), x, y, 8);
+                break;
+            default:
+                break;
+        }
+        if (quest1 != null && quest2 != null && quest3 != null){
+            quest1.addChildQuest(quest2);
+            quest2.addChildQuest(quest3);
+        }
+    }
 
+    /*
         //Define Quest relationships.
         parentQuest.addChildQuest(childQuest1);
         //parentQuest2.addChildQuest(childQuest2);
@@ -27,22 +43,26 @@ public class QuestItemPlugin implements IGamePluginService {
 
         childQuest1.addChildQuest(childQuest2);
         //world.addEntity(parentQuest2);
-    }
-
-    @Override
-    public void stop(GameData gameData, World world) {
-        world.removeEntity(QuestNote);
-    }
-
-    private QuestItem CreateQuest(String questName, String questDescription, int questX, int questY, int questRadius) {
+    */
+    private QuestItem CreateQuest(String questName, String questDescription, int tileSize, int questX, int questY, int questRadius) {
 
         QuestItem quest = new QuestItem(questName, questDescription, questX, questY, questRadius);
         quest.setPolygonCoordinates(-5,-5,5,0,-5,5, 10, 10);
 
-        quest.setX(questX);
-        quest.setY(questY);
+        quest.setX(questX * tileSize + tileSize / 2.0);
+        quest.setY(questY * tileSize + tileSize / 2.0);
 
         quest.setRadius(questRadius);
         return quest;
+    }
+
+    @Override
+    public Set<Integer> getMapCodes() {
+        return Set.of(9, 10, 11);
+    }
+
+    @Override
+    public void stop(World world) {
+        world.getEntities(QuestItem.class).forEach(world::removeEntity);
     }
 }

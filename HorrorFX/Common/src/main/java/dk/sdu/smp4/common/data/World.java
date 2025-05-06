@@ -32,7 +32,7 @@ public class World {
             tiles[i] = new boolean[map[i].length];
 
             for (int j = 0; j < tiles[i].length; j++) {
-                tiles[i][j] = map[i][j] == 0;
+                tiles[i][j] = map[i][j] != 1 && map[i][j] != 2 && map[i][j] != 3;
             }
         }
         return tiles;

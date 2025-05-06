@@ -5,5 +5,6 @@ public enum PolygonColor {
     RED,
     BROWN,
     GOLD,
-    DARKSLATEBLUE, BLUE
+    DARKSLATEBLUE, BLUE,
+    MEDIUMPURPLE
 }

@@ -229,6 +229,7 @@ public class Renderer {
         }
 
         polygon.setFill(ColorConverter.toJavaFXColor(entity.getPaint()));
+
     }
 
     private Image generateNoiseImage(int width, int height) {

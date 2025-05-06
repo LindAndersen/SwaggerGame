@@ -78,7 +78,6 @@ public class MapGenerator {
         for (IEntityLoaderService plugin : getPlugins()){
             for (Integer key : plugin.getMapCodes()) {
                 IDToPluginMap.put(key, plugin);
-                System.out.println("Key: "+key+", Plugin: "+plugin.getClass().getSimpleName());
             }
         }
         return IDToPluginMap;

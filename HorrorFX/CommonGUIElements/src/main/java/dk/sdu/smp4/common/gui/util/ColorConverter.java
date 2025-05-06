@@ -8,6 +8,8 @@ public class ColorConverter {
         return switch (polygonColor) {
             case RED -> Color.RED;
             case BLACK -> Color.BLACK;
+            case GOLD -> Color.GOLD;
+            case DARKSLATEBLUE -> Color.DARKSLATEBLUE;
             default -> Color.GREEN;
         };
     }
