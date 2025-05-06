@@ -147,6 +147,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     private Collection<? extends ICameraProcessor> getCameraSPI() {
         return ServiceLoader.load(ICameraProcessor.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
   
     private Collection<? extends InventorySPI> getInventorySPI() {
         return ServiceLoader.load(InventorySPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
