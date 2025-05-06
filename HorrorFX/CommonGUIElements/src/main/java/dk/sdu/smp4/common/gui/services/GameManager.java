@@ -10,7 +10,6 @@ public class GameManager {
     private GUIManager guiManager;
     private Renderer renderer;
     private Stage stage;
-    private MapGenerator generator;
 
     public GameManager() {}
 
@@ -18,9 +17,8 @@ public class GameManager {
         this.stage = stage;
         this.world = new World();
         this.gameData = new GameData();
-        this.generator = new MapGenerator(world);
         this.guiManager = new GUIManager(gameData, stage, this::startGame, this::resetGame);
-        this.renderer = new Renderer(world, gameData, guiManager, generator);
+        this.renderer = new Renderer(world, gameData, guiManager);
         GUIManagerProvider.setInstance(guiManager);
     }
 

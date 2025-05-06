@@ -8,6 +8,7 @@ import dk.sdu.smp4.common.gui.util.ColorConverter;
 import dk.sdu.smp4.common.gui.util.EntityImageConverter;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
 import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
+import dk.sdu.smp4.map.services.IMapGenerator;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -27,7 +28,6 @@ public class Renderer {
     private final World world;
     private final GameData gameData;
     private final GUIManager guiManager;
-    private final MapGenerator generator;
     private final Image noiseImage;
     private final Canvas lightMaskCanvas;
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
@@ -35,11 +35,10 @@ public class Renderer {
     private final Map<EntityImage, Image> imageCache = new HashMap<>();
 
 
-    public Renderer(World world, GameData gameData, GUIManager guiManager, MapGenerator generator) {
+    public Renderer(World world, GameData gameData, GUIManager guiManager) {
         this.world = world;
         this.gameData = gameData;
         this.guiManager = guiManager;
-        this.generator = generator;
         noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
     }
@@ -67,7 +66,7 @@ public class Renderer {
     }
 
     private void render(AnimationTimer timer) {
-        generator.generate();
+        getMapGeneratorServices().stream().findFirst().ifPresent(generator -> generator.generate(world));
         timer.start();
     }
 
@@ -243,6 +242,10 @@ public class Renderer {
         }
 
         return image;
+    }
+
+    private Collection<? extends IMapGenerator> getMapGeneratorServices(){
+        return ServiceLoader.load(IMapGenerator.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {

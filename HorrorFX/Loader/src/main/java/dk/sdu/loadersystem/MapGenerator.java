@@ -1,18 +1,17 @@
-package dk.sdu.smp4.common.gui.services;
+package dk.sdu.loadersystem;
 
 import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.map.services.IMapGenerator;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MapGenerator {
-    private World world;
-
-    public MapGenerator(World world){
-        this.world = world;
-    }
+public class MapGenerator implements IMapGenerator {
 
     private int[][] loadMapFromCSV(String absolutePath) {
         List<int[]> rows = new ArrayList<>();
@@ -50,8 +49,8 @@ public class MapGenerator {
         return map;
     }
 
-
-    public void generate() {
+    @Override
+    public void generate(World world) {
         int[][] map = loadMapFromCSV("/maps/map.csv");
         world.setMap(map);
 

@@ -30,6 +30,7 @@
     <module>CommonPlayer</module>
     <module>PathFinding</module>
     <module>CommonMap</module>
+    <module>Loader</module>
   </modules>
 
   <properties>
