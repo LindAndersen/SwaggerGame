@@ -46,8 +46,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
             player.setY(player.getY() + player.getVelocityY());
 
             // Out of bounds checks
-            player.setX(Math.min(Math.max(player.getX(), 0), gameData.getDisplayWidth()));
-            player.setY(Math.min(Math.max(player.getY(), 0), gameData.getDisplayHeight()));
+            player.setX(Math.min(Math.max(player.getX(), 0), world.getMapWidth()));
+            player.setY(Math.min(Math.max(player.getY(), 0), world.getMapHeight()));
 
             // Adjust velocity
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {

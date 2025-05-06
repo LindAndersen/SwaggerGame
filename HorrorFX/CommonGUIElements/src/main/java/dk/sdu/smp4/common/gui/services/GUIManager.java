@@ -95,7 +95,7 @@ public class GUIManager {
         backgroundLayer.setMouseTransparent(false);
         textLayer.setMouseTransparent(false);
 
-        Image backgroundActualImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/main_background.png")));
+        Image backgroundActualImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/new_main_background.png")));
         BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, false, true);
         BackgroundImage backgroundImage = new BackgroundImage(
                 backgroundActualImage,

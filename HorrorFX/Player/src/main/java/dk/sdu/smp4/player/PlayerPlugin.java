@@ -35,11 +35,7 @@ public class PlayerPlugin implements IEntityLoaderService {
     private SoftEntity CreatePlayer(int tileSize, int x, int y) {
 
         SoftEntity player = new Player();
-        player.setPolygonCoordinates(-8, -8,  // back top-left
-                6, -8,  // near front top-right
-                12, 0,  // tip (front middle point)
-                6, 8,   // near front bottom-right
-                -8, 8  );
+        player.setPolygonCoordinates(-8, -8, -8, 8, 8, 8, 8, -8);
         player.setX(x*tileSize+tileSize/2);
         player.setY(y*tileSize+tileSize/2);
         player.setRadius(8);

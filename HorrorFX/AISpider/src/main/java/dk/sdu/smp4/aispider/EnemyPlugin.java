@@ -17,7 +17,7 @@ public class EnemyPlugin implements IEntityLoaderService {
 
     private SoftEntity createEnemy(int tileSize, int x, int y) {
         enemy = new AISpider();
-        enemy.setPolygonCoordinates(-25, -25, 25, -25, 25, 25, -25, 25); // Simple square
+        enemy.setPolygonCoordinates(-10, -10, -10, 10, 10, 10, 10, -10); // Simple square
         enemy.setX(x*tileSize+tileSize/2);
         enemy.setY(y*tileSize+tileSize/2);
         enemy.setRadius(8);

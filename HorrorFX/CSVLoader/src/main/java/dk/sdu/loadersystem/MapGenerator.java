@@ -54,8 +54,8 @@ public class MapGenerator implements IMapGenerator {
         int[][] map = loadMapFromCSV("/maps/map2.csv");
         world.setMap(map);
 
-        world.setMapWidth(map.length);
-        world.setMapHeight(map[0].length);
+        world.setMapWidth(map.length*world.getTileSize());
+        world.setMapHeight(map[0].length*world.getTileSize());
 
         Map<Integer, IEntityLoaderService> IDToPluginMap = getPluginMap();
         for (int i = 0; i < map.length; i++) {
@@ -67,6 +67,16 @@ public class MapGenerator implements IMapGenerator {
             }
 
         }
+    }
+
+    public void removeFromMap(World world, double x, double y)
+    {
+        int tileSize = world.getTileSize();
+
+        int xTile = (int)(x- tileSize/2)/tileSize;
+        int yTile = (int)(y- tileSize/2)/tileSize;
+
+        world.getMap()[xTile][yTile] = 0;
     }
 
 

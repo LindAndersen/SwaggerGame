@@ -2,8 +2,8 @@ package dk.sdu.smp4.aispider;
 
 import dk.sdu.smp4.common.Services.GUI.EntityImage;
 import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.enemy.data.CommonEnemy;
 import dk.sdu.smp4.common.enemy.services.EnemyTargetsSPI;
 import dk.sdu.smp4.common.events.data.PlayerHitEvent;
 import dk.sdu.smp4.common.events.services.IEventBus;
@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
-public class AISpider extends SoftEntity {
+public class AISpider extends CommonEnemy {
     private EntityImage moveLeft;
     private EntityImage moveRight;
     private long lastHitTime = 0;

@@ -28,8 +28,8 @@ public class Renderer {
     private final World world;
     private final GameData gameData;
     private final GUIManager guiManager;
-    private final Image noiseImage;
-    private final Canvas lightMaskCanvas;
+    private Image noiseImage;
+    private Canvas lightMaskCanvas;
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
     private final Map<EntityImage, Image> imageCache = new HashMap<>();
@@ -38,9 +38,6 @@ public class Renderer {
         this.world = world;
         this.gameData = gameData;
         this.guiManager = guiManager;
-        noiseImage = generateNoiseImage(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        lightMaskCanvas = new Canvas(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-
     }
 
     public void start()
@@ -67,6 +64,8 @@ public class Renderer {
 
     private void render(AnimationTimer timer) {
         getMapGeneratorServices().stream().findFirst().ifPresent(generator -> generator.generate(world));
+        noiseImage = generateNoiseImage(world.getMapWidth(), world.getMapHeight());
+        lightMaskCanvas = new Canvas(world.getMapWidth(), world.getMapHeight());
         timer.start();
     }
 
@@ -179,7 +178,9 @@ public class Renderer {
             });
 
             handlePolygonCoordsPreDrawing(polygon, entity);
-            polygon.setVisible(isVisible);
+            //DEBUGGING
+            //polygon.setVisible(isVisible);
+            polygon.setVisible(true);
 
             EntityImage entityImage = entity.getImage();
 
@@ -199,7 +200,9 @@ public class Renderer {
 
                 imageView.setTranslateX(entity.getX() - fxImage.getWidth() / 2);
                 imageView.setTranslateY(entity.getY() - fxImage.getHeight() / 2);
-                imageView.setVisible(isVisible);
+                //DEBUGGING
+                //imageView.setVisible(isVisible);
+                imageView.setVisible(false);
             }
 
         }
@@ -224,7 +227,9 @@ public class Renderer {
         }
         if(entity instanceof SoftEntity)
         {
-            polygon.setOpacity(0);
+            //DEBUGGING
+            //polygon.setOpacity(0);
+            polygon.setOpacity(1);
         }
 
         polygon.setFill(ColorConverter.toJavaFXColor(entity.getPaint()));
