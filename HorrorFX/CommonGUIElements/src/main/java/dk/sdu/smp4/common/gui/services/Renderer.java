@@ -2,7 +2,6 @@ package dk.sdu.smp4.common.gui.services;
 
 import dk.sdu.smp4.common.Services.GUI.EntityImage;
 import dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.Services.GameLoop.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.*;
 import dk.sdu.smp4.common.gui.util.ColorConverter;
@@ -69,7 +68,6 @@ public class Renderer {
 
     private void render(AnimationTimer timer) {
         generator.generate();
-        getPluginServices().forEach(plugin -> plugin.start(gameData, world));
         timer.start();
     }
 
@@ -245,10 +243,6 @@ public class Renderer {
         }
 
         return image;
-    }
-
-    private Collection<? extends IGamePluginService> getPluginServices() {
-        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {

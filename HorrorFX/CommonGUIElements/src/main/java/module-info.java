@@ -4,7 +4,6 @@ import dk.sdu.smp4.common.gui.services.GUIManagerProvider;
 
 module CommonGUIElements {
     uses dk.sdu.smp4.common.events.services.IEventBus;
-    uses dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
     uses dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
     uses dk.sdu.smp4.common.Services.GameLoop.IPostEntityProcessingService;
     uses IEntityLoaderService;

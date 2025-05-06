@@ -1,12 +1,8 @@
 package dk.sdu.smp4.resin;
 
 import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
-import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 
-import java.util.Random;
 import java.util.Set;
 
 public class ResinPlugin implements IEntityLoaderService {
