@@ -8,6 +8,7 @@ import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.events.data.PlayerPositionEvent;
 import dk.sdu.smp4.common.events.services.IEventBus;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
+import dk.sdu.smp4.commonplayer.services.ICameraProcessor;
 import dk.sdu.smp4.common.interactable.Services.InventorySPI;
 import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
@@ -95,6 +96,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 spi.processPlayerLight(player, gameData, world);
             }
 
+            for (ICameraProcessor spi : getCameraSPI()) {
+                spi.updateTarget(player, gameData, world);
+            }
+
             if (gameData.getKeys().isDown(GameKeys.INTERACT)) {
                 for (IQuestInteractable interactable : getEntityQuestInteractables()) {
                     interactable.interact(player, gameData, world);
@@ -110,6 +115,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
             eventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
+
         }
     }
 
@@ -139,6 +145,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
         return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 
+    private Collection<? extends ICameraProcessor> getCameraSPI() {
+        return ServiceLoader.load(ICameraProcessor.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+  
     private Collection<? extends InventorySPI> getInventorySPI() {
         return ServiceLoader.load(InventorySPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }

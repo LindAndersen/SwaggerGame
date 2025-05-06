@@ -28,6 +28,7 @@
     <module>CommonEvents</module>
     <module>CommonGUIElements</module>
     <module>CommonPlayer</module>
+    <module>Camera</module>
     <module>PathFinding</module>
     <module>CommonMap</module>
     <module>CSVLoader</module>
