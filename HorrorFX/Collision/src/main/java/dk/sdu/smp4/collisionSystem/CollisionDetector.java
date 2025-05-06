@@ -25,28 +25,80 @@ public class CollisionDetector implements IPostEntityProcessingService {
         }
     }
 
-    private Polygon getTranslatedPolygon(Entity entity){
-        double[] coords = entity.getPolygonCoordinates();
-        Polygon polygon = new Polygon();
+    public boolean collides(Entity a, Entity b) {
+        double[] aCoords = a.getPolygonCoordinates();
+        double[] bCoords = b.getPolygonCoordinates();
 
-        for (int i = 0; i < coords.length; i+=2) {
-            double x = coords[i] + entity.getX();
-            double y = coords[i+1] + entity.getY();
-            polygon.getPoints().addAll(x, y);
+        if (aCoords.length < 6 || bCoords.length < 6) return false; // need at least 3 points
+
+        double ax = a.getX();
+        double ay = a.getY();
+        double bx = b.getX();
+        double by = b.getY();
+
+        return polygonsCollide(aCoords, ax, ay, bCoords, bx, by);
+    }
+
+    private boolean polygonsCollide(double[] poly1, double offsetX1, double offsetY1,
+                                    double[] poly2, double offsetX2, double offsetY2) {
+        return !hasSeparatingAxis(poly1, offsetX1, offsetY1, poly2, offsetX2, offsetY2) &&
+                !hasSeparatingAxis(poly2, offsetX2, offsetY2, poly1, offsetX1, offsetY1);
+    }
+
+    private boolean hasSeparatingAxis(double[] polyA, double offsetX1, double offsetY1,
+                                      double[] polyB, double offsetX2, double offsetY2) {
+        int lenA = polyA.length;
+
+        for (int i = 0; i < lenA; i += 2) {
+            int next = (i + 2) % lenA;
+
+            double x1 = polyA[i];
+            double y1 = polyA[i + 1];
+            double x2 = polyA[next];
+            double y2 = polyA[next + 1];
+
+            // Edge vector
+            double edgeX = x2 - x1;
+            double edgeY = y2 - y1;
+
+            // Normal vector (perpendicular axis)
+            double axisX = -edgeY;
+            double axisY = edgeX;
+
+            // Normalize axis
+            double length = Math.sqrt(axisX * axisX + axisY * axisY);
+            if (length == 0) continue;  // skip degenerate edges
+            axisX /= length;
+            axisY /= length;
+
+            // Project both polygons onto axis
+            double[] projectionA = projectPolygon(polyA, offsetX1, offsetY1, axisX, axisY);
+            double[] projectionB = projectPolygon(polyB, offsetX2, offsetY2, axisX, axisY);
+
+            // Check for gap
+            if (projectionA[1] < projectionB[0] || projectionB[1] < projectionA[0]) {
+                return true; // Separating axis found
+            }
         }
 
-        return polygon;
+        return false; // No separating axis found
     }
 
-    public Boolean collides(Entity entity1, Entity entity2) {
-        Polygon poly1 = getTranslatedPolygon(entity1);
-        Polygon poly2 = getTranslatedPolygon(entity2);
-        Shape intersection = Shape.intersect(poly1, poly2);
-        return intersection.getBoundsInLocal().getWidth() > 0 && intersection.getBoundsInLocal().getHeight() > 0;
+    private double[] projectPolygon(double[] poly, double offsetX, double offsetY,
+                                    double axisX, double axisY) {
+        double min = Double.POSITIVE_INFINITY;
+        double max = Double.NEGATIVE_INFINITY;
+
+        for (int i = 0; i < poly.length; i += 2) {
+            double x = poly[i] + offsetX;
+            double y = poly[i + 1] + offsetY;
+
+            double projection = x * axisX + y * axisY;
+
+            if (projection < min) min = projection;
+            if (projection > max) max = projection;
+        }
+
+        return new double[]{min, max};
     }
-
-
-
-
-
 }

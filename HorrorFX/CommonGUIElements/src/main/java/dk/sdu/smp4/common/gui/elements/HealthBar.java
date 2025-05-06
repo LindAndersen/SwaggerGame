@@ -28,7 +28,7 @@ public class HealthBar extends HBox implements IHealthBar {
         eventBus = getEventBusSPI().stream().findFirst().orElse(null);
         assert eventBus != null;
         eventBus.subscribe(UpdateHUDLifeEvent.class, event -> {
-            setHealth(event.getLives(), defaultLives);
+            setHealth(event.getLives(), event.getMaxLives());
         });
     }
 

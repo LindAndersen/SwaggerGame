@@ -6,5 +6,5 @@ public interface IGUIManager {
     IHealthBar getHealthBar();
     IInventoryHUD getInventoryHUD();
     void updateCamera(double zoomX, double zoomY, double offsetX, double offsetY);
-
+    IFlashlightBar getFlashlightBar();
 }

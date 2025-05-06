@@ -2,13 +2,13 @@ package dk.sdu.smp4.common.gui.services;
 
 import dk.sdu.smp4.common.Services.GUI.EntityImage;
 import dk.sdu.smp4.common.Services.GameLoop.IEntityProcessingService;
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
 import dk.sdu.smp4.common.Services.GameLoop.IPostEntityProcessingService;
 import dk.sdu.smp4.common.data.*;
 import dk.sdu.smp4.common.gui.util.ColorConverter;
 import dk.sdu.smp4.common.gui.util.EntityImageConverter;
 import dk.sdu.smp4.common.lightsource.data.CommonLightSource;
 import dk.sdu.smp4.commonplayerlight.services.IToggleableLight;
+import dk.sdu.smp4.map.services.IMapGenerator;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -66,7 +66,7 @@ public class Renderer {
     }
 
     private void render(AnimationTimer timer) {
-        getPluginServices().forEach(plugin -> plugin.start(gameData, world));
+        getMapGeneratorServices().stream().findFirst().ifPresent(generator -> generator.generate(world));
         timer.start();
     }
 
@@ -228,6 +228,7 @@ public class Renderer {
         }
 
         polygon.setFill(ColorConverter.toJavaFXColor(entity.getPaint()));
+
     }
 
     private Image generateNoiseImage(int width, int height) {
@@ -245,8 +246,8 @@ public class Renderer {
         return image;
     }
 
-    private Collection<? extends IGamePluginService> getPluginServices() {
-        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    private Collection<? extends IMapGenerator> getMapGeneratorServices(){
+        return ServiceLoader.load(IMapGenerator.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {

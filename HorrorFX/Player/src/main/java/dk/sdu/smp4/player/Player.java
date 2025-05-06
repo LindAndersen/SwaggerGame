@@ -35,7 +35,6 @@ public class Player extends SoftEntity implements EnemyTargetsSPI {
                 if (isDead()) return;
 
                 loseLife();
-                System.out.println("Player hit! Lives left: " + lives);
                 eventBus.post(new UpdateHUDLifeEvent(lives, maxLives));
 
                 if (getLives() <= 0) {

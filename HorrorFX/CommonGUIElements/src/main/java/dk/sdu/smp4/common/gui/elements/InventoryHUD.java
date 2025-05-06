@@ -70,18 +70,20 @@ public class InventoryHUD extends HBox implements IInventoryHUD {
         if (index < 0 || index >= slots.size()) return;
 
         StackPane slot = slots.get(index);
-
         ImageView itemImage = (ImageView) slot.lookup("#itemImage");
         Text quantityText = (Text) slot.lookup("#quantityText");
 
-        if (icon == null)
+        if (icon == null || quantity <= 0)
         {
             itemImage.setImage(null);
+            itemImage.setVisible(false);
+            quantityText.setText("");
         }else
         {
             itemImage.setImage(EntityImageConverter.convertEntityImage(icon, icon.getResourceClass()));
+            itemImage.setVisible(true);
+            quantityText.setText(quantity > 1 ? String.valueOf(quantity) : "");
         }
-        quantityText.setText(quantity > 1 ? String.valueOf(quantity) : "");
     }
 
     private Collection<? extends IEventBus> getEventBusSPI() {

@@ -16,7 +16,8 @@ public class MusicSystem {
     private static final String HIT_SOUND = "/background/man-scream.wav";
     private static final String PROXIMITY_SOUND = "/background/cropped_aggressive_scary.wav";
     private static final String DEFAULT_SOUND = "/background/chill_scary.wav";
-    private static final String RELOAD_SOUND = "/Player/reload_torch.wav";
+    private static final String RELOAD_RESIN_SOUND = "/Player/reload_torch.wav";
+    private static final String PICKUP_ITEM = "/Player/pickup_item.wav";
     private double playerX, playerY, spiderX, spiderY;
     private static final MusicSystem INSTANCE = new MusicSystem();
 
@@ -37,9 +38,12 @@ public class MusicSystem {
         });
 
         eventBus.subscribe(InventoryUpdateEvent.class, event -> {
-            if (event.getType().equals(InventorySlotItems.RESIN))
+            if (event.getType().equals(InventorySlotItems.RESIN) && !event.getWasPickedup())
             {
-                SoundService.playSound(RELOAD_SOUND);
+                SoundService.playSound(RELOAD_RESIN_SOUND);
+            } else if(event.getWasPickedup())
+            {
+                SoundService.playSound(PICKUP_ITEM);
             }
         });
     }
