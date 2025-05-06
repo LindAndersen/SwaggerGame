@@ -15,7 +15,10 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import javafx.scene.Group;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +35,7 @@ public class GUIManager {
     private final Pane textLayer = new Pane();
     private final Pane lightLayer = new Pane();
     private StackPane root = new StackPane();
+    private final Group gameWorldGroup = new Group(backgroundLayer, polygonLayer, lightLayer);
     private final IHealthBar healthBar = new HealthBar();
     private final IInventoryHUD inventoryHUD = new InventoryHUD();
 
@@ -71,7 +75,7 @@ public class GUIManager {
         root.prefWidthProperty().bind(stage.getScene().widthProperty());
         root.prefHeightProperty().bind(stage.getScene().heightProperty());
         root.setAlignment(Pos.TOP_LEFT);
-        root.getChildren().addAll(backgroundLayer, polygonLayer, lightLayer, textLayer);
+        root.getChildren().addAll(gameWorldGroup, textLayer);
 
         for (Pane layer : List.of(backgroundLayer, polygonLayer, lightLayer, textLayer)) {
             layer.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -170,6 +174,14 @@ public class GUIManager {
         gameData.setPaused(true);
 
         gameOverBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/style.css")).toExternalForm());
+    }
+
+    public void updateCamera(double zoomX, double zoomY, double offsetX, double offsetY)
+    {
+        Scale scale = new Scale(zoomX, zoomY);
+        Translate translate = new Translate(offsetX, offsetY);
+
+        gameWorldGroup.getTransforms().setAll(scale, translate);
     }
 
     public void setQuestPane(String title, String description) {

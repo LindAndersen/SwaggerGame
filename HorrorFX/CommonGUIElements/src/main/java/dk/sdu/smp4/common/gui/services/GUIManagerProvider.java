@@ -41,5 +41,11 @@ public class GUIManagerProvider implements IGUIManager {
     public IInventoryHUD getInventoryHUD() {
         return null;
     }
+
+    @Override
+    public void updateCamera(double zoomX, double zoomY, double offsetX, double offsetY)
+    {
+        getInstance().updateCamera(zoomX, zoomY, offsetX, offsetY);
+    }
 }
 

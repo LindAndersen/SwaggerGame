@@ -3,7 +3,7 @@ package dk.sdu.smp4.common.gui.elements;
 import dk.sdu.smp4.common.Services.GUI.IHealthBar;
 import dk.sdu.smp4.common.events.data.UpdateHUDLifeEvent;
 import dk.sdu.smp4.common.events.services.IEventBus;
-import dk.sdu.smp4.commonplayer.CommonPlayer;
+import dk.sdu.smp4.commonplayer.data.CommonPlayer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;

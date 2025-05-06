@@ -1,42 +1,28 @@
 package dk.sdu.smp4.camera;
 
-import dk.sdu.smp4.common.Services.GameLoop.ICamera;
+import dk.sdu.smp4.common.data.GameData;
 
-public class Camera implements ICamera {
+public class Camera {
+    private final double cameraSizeX = 250;
+    private final double cameraSizeY = 250;
+    private static Camera Instance;
 
-    private double cameraX;
-    private double cameraY;
-    private final int screenWidth;
-    private final int screenHeight;
-    private double worldWidth = Double.MAX_VALUE;
-    private double worldHeight = Double.MAX_VALUE;
-
-    public Camera(int screenWidth, int screenHeight) {
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
+    public static Camera getInstance()
+    {
+        if (Instance == null) {
+            Instance = new Camera();
+        }
+        return Instance;
     }
 
-    @Override
-    public void updateTarget(double targetX, double targetY) {
-        cameraX = targetX - screenWidth / 2.0;
-        cameraY = targetY - screenHeight / 2.0;
-
-        cameraX = Math.max(0, Math.min(cameraX, worldWidth - screenWidth));
-        cameraY = Math.max(0, Math.min(cameraY, worldHeight - screenHeight));
+    private Camera() {
     }
 
-    @Override
-    public double translateX(double worldX) {
-        return worldX - cameraX;
+    public double getCameraSizeX() {
+        return cameraSizeX;
     }
 
-    @Override
-    public double translateY(double worldY) {
-        return worldY - cameraY;
-    }
-
-    public void setWorldSize(double width, double height) {
-        this.worldWidth = width;
-        this.worldHeight = height;
+    public double getCameraSizeY() {
+        return cameraSizeY;
     }
 }

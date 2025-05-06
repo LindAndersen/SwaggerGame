@@ -5,5 +5,6 @@ public interface IGUIManager {
     void setPausedBox();
     IHealthBar getHealthBar();
     IInventoryHUD getInventoryHUD();
+    void updateCamera(double zoomX, double zoomY, double offsetX, double offsetY);
 
 }

@@ -16,7 +16,6 @@ module CommonGUIElements {
     requires CommonPlayer;
     requires CommonPlayerLight;
     requires CommonLightSource;
-    uses dk.sdu.smp4.common.Services.GameLoop.ICamera;
 
     provides IGUIManager with GUIManagerProvider;
 }

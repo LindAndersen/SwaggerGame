@@ -28,8 +28,7 @@
     <module>CommonEvents</module>
     <module>CommonGUIElements</module>
     <module>CommonPlayer</module>
-      <module>Camera</module>
-    <module>cameratwo</module>
+    <module>Camera</module>
   </modules>
 
   <properties>

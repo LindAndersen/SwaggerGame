@@ -5,7 +5,6 @@ import dk.sdu.smp4.common.Services.GUI.IInventoryHUD;
 import dk.sdu.smp4.common.events.data.InventoryUpdateEvent;
 import dk.sdu.smp4.common.events.services.IEventBus;
 import dk.sdu.smp4.common.gui.util.EntityImageConverter;
-import dk.sdu.smp4.commonplayer.CommonPlayer;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;

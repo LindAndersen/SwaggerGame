@@ -1,15 +1,10 @@
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
-import dk.sdu.smp4.common.Services.GameLoop.ICamera;
-
+import dk.sdu.smp4.camera.CameraFollowSystem;
+import dk.sdu.smp4.commonplayer.services.ICameraProcessor;
 
 module Camera {
+    uses dk.sdu.smp4.common.Services.GUI.IGUIManager;
     requires Common;
+    requires CommonPlayer;
 
-    provides dk.sdu.smp4.common.Services.GameLoop.IGamePluginService
-            with dk.sdu.smp4.camera.CameraPlugin;
-
-    provides dk.sdu.smp4.common.Services.GameLoop.ICamera
-            with dk.sdu.smp4.camera.CameraPlugin;
-
-    exports dk.sdu.smp4.camera;
+    provides ICameraProcessor with CameraFollowSystem;
 }
