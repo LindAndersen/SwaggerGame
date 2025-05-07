@@ -5,8 +5,6 @@ import dk.sdu.smp4.common.data.SoftEntity;
 import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 
 public class CollisionDetector implements IPostEntityProcessingService {
     @Override

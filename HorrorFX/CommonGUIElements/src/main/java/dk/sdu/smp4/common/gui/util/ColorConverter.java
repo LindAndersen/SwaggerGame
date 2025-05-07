@@ -10,6 +10,7 @@ public class ColorConverter {
             case BLACK -> Color.BLACK;
             case GOLD -> Color.GOLD;
             case DARKSLATEBLUE -> Color.DARKSLATEBLUE;
+            case ORANGE -> Color.ORANGE;
             default -> Color.GREEN;
         };
     }

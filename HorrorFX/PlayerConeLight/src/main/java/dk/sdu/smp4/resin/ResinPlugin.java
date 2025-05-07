@@ -1,5 +1,6 @@
 package dk.sdu.smp4.resin;
 
+import dk.sdu.smp4.common.Services.GUI.PolygonColor;
 import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.data.World;
 
@@ -35,7 +36,8 @@ public class ResinPlugin implements IEntityLoaderService {
         resin.setX(x*tilesize+tilesize/2);
         resin.setY(y*tilesize+tilesize/2);
 
-        resin.setPolygonCoordinates(0,0);
+        resin.setPolygonCoordinates(-3, -3, -3, 3, 3, 3, 3, -3);
+        resin.setPaint(PolygonColor.ORANGE);
 
         return resin;
     }
