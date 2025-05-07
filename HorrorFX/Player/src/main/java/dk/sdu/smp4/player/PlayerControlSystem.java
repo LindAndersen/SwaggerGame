@@ -8,6 +8,7 @@ import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.events.data.PlayerPositionEvent;
 import dk.sdu.smp4.common.events.services.IEventBus;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
+import dk.sdu.smp4.commonplayer.services.ICameraProcessor;
 import dk.sdu.smp4.common.interactable.Services.InventorySPI;
 import dk.sdu.smp4.common.interactable.data.InventorySlotItems;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightProcessor;
@@ -36,6 +37,11 @@ public class PlayerControlSystem implements IEntityProcessingService {
             //update mouse position
             if (gameData.getKeys().isMouseMoved()){
                 player.setRotation(Math.toDegrees(Math.atan2(GameKeys.mouseY- player.getY(), GameKeys.mouseX - player.getX())));
+                getCameraSPI().stream().findFirst().ifPresent(spi -> {
+                    double angle = spi.getPlayerAngle(player, gameData, world, GameKeys.mouseX, GameKeys.mouseY);
+                    player.setRotation(angle);
+                });
+
             }
             gameData.getKeys().setMouseMoved(false);
             // Update position
@@ -45,8 +51,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
             player.setY(player.getY() + player.getVelocityY());
 
             // Out of bounds checks
-            player.setX(Math.min(Math.max(player.getX(), 0), gameData.getDisplayWidth()));
-            player.setY(Math.min(Math.max(player.getY(), 0), gameData.getDisplayHeight()));
+            player.setX(Math.min(Math.max(player.getX(), 0), world.getMapWidth()));
+            player.setY(Math.min(Math.max(player.getY(), 0), world.getMapHeight()));
 
             // Adjust velocity
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
@@ -95,6 +101,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 spi.processPlayerLight(player, gameData, world);
             }
 
+            for (ICameraProcessor spi : getCameraSPI()) {
+                spi.updateTarget(player, gameData, world);
+            }
+
             if (gameData.getKeys().isDown(GameKeys.INTERACT)) {
                 for (IQuestInteractable interactable : getEntityQuestInteractables()) {
                     interactable.interact(player, gameData, world);
@@ -110,6 +120,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
             eventBus.post(new PlayerPositionEvent(player, player.getX(), player.getY()));
+
         }
     }
 
@@ -139,6 +150,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
         return ServiceLoader.load(IEventBus.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 
+    private Collection<? extends ICameraProcessor> getCameraSPI() {
+        return ServiceLoader.load(ICameraProcessor.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
+  
     private Collection<? extends InventorySPI> getInventorySPI() {
         return ServiceLoader.load(InventorySPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }

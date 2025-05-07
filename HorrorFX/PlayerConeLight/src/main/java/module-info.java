@@ -1,4 +1,4 @@
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.playerconelight.*;
 import dk.sdu.smp4.commonplayerlight.services.IPlayerLightPlugin;
@@ -18,6 +18,6 @@ module PlayerConeLight {
     provides IPlayerLightPlugin with PlayerConeLightPlugin;
     provides IPlayerLightProcessor with PlayerConeLightProcessor;
     provides IToggleableLight with ConeLight;
-    provides IGamePluginService with ResinPlugin;
+    provides IEntityLoaderService with ResinPlugin;
     provides IQuestInteractable with ResinControlSystem;
 }

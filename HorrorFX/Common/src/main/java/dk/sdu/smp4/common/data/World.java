@@ -9,7 +9,53 @@ import java.util.concurrent.ConcurrentHashMap;
 public class World {
 
     private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
+    private int tileSize = 40;
+    private int[][] map;
+    private int mapHeight, mapWidth;
 
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public void setMapWidth(int mapWidth) {
+        this.mapWidth = mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public void setMapHeight(int mapHeight) {
+        this.mapHeight = mapHeight;
+    }
+
+
+    public void setMap(int[][] map) {
+        this.map = map;
+    }
+
+    public int[][] getMap() {
+        return map;
+    }
+
+    public int getTileSize(){
+        return tileSize;
+    }
+
+    public boolean[][] getWalkableTiles(){
+        boolean[][] tiles = new boolean[map.length][];
+
+        for (int i = 0; i < map.length; i++) {
+            tiles[i] = new boolean[map[i].length];
+
+            for (int j = 0; j < tiles[i].length; j++) {
+                tiles[i][j] = map[i][j] != 1 && map[i][j] != 2 && map[i][j] != 3;
+            }
+        }
+        return tiles;
+    }
+    
+    
     public String addEntity(Entity entity) {
         entityMap.put(entity.getID(), entity);
         return entity.getID();

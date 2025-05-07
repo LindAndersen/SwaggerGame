@@ -7,6 +7,7 @@ import dk.sdu.smp4.common.data.World;
 import dk.sdu.smp4.common.interactable.Services.IQuestInteractable;
 import dk.sdu.smp4.common.interactable.Services.InventorySPI;
 import dk.sdu.smp4.commonquest.data.Utility;
+import dk.sdu.smp4.map.services.IMapGenerator;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
@@ -33,6 +34,7 @@ public class DoorControlSystem implements IQuestInteractable {
                     // Unlock door
                     inventorySPI.remove(player, door.getRequiredKey(), 1);
                     world.removeEntity(door);
+                    getIMapGeneratorSPI().stream().findFirst().ifPresent(spi -> spi.removeFromMap(world, door.getX(), door.getY()));
                 } else {
                     // Show locked popup
                     guiManager.setQuestPane("Locked", "The door is locked. You need a " + door.getRequiredKey() + "!");
@@ -55,5 +57,9 @@ public class DoorControlSystem implements IQuestInteractable {
 
     private Collection<? extends IGUIManager> getGUIManagers() {
         return ServiceLoader.load(IGUIManager.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+    }
+
+    private Collection<? extends IMapGenerator> getIMapGeneratorSPI() {
+        return ServiceLoader.load(IMapGenerator.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }

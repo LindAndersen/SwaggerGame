@@ -1,30 +1,25 @@
 package dk.sdu.smp4.aispider;
 
 import dk.sdu.smp4.common.Services.GUI.PolygonColor;
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.data.SoftEntity;
-import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 
-public class EnemyPlugin implements IGamePluginService {
+import java.util.Set;
+
+public class EnemyPlugin implements IEntityLoaderService {
     private SoftEntity enemy;
 
     @Override
-    public void start(GameData gameData, World world) {
-        enemy = createEnemy(gameData);
-        world.addEntity(enemy);
+    public void render(World world, int x, int y, int mapCode) {
+        world.addEntity(createEnemy(world.getTileSize(), x, y));
     }
 
-    @Override
-    public void stop(GameData gameData, World world) {
-        world.removeEntity(enemy);
-    }
-
-    private SoftEntity createEnemy(GameData gameData) {
-        enemy = new Enemy();
-        enemy.setPolygonCoordinates(-8, -8, 8, -8, 8, 8, -8, 8); // Simple square
-        enemy.setX(/*Math.random() **/ gameData.getDisplayWidth()/5);  // Spawn at a random location
-        enemy.setY(/*Math.random() **/ gameData.getDisplayHeight()/1.3);
+    private SoftEntity createEnemy(int tileSize, int x, int y) {
+        enemy = new AISpider();
+        enemy.setPolygonCoordinates(-11, -11, -11, 11, 11, 11, 11, -11); // Simple square
+        enemy.setX(x*tileSize+tileSize/2);
+        enemy.setY(y*tileSize+tileSize/2);
         enemy.setRadius(8);
         enemy.setSolid(true);
         enemy.setPaint(PolygonColor.RED);
@@ -32,4 +27,13 @@ public class EnemyPlugin implements IGamePluginService {
 
     }
 
+    @Override
+    public Set<Integer> getMapCodes() {
+        return Set.of(5);
+    }
+
+    @Override
+    public void stop(World world) {
+        world.removeEntity(enemy);
+    }
 }

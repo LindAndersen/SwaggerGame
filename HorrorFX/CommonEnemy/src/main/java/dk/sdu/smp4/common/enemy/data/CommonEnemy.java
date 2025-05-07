@@ -1,12 +1,7 @@
 package dk.sdu.smp4.common.enemy.data;
 
 
-import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.data.World;
+import dk.sdu.smp4.common.data.SoftEntity;
 
-public class CommonEnemy extends Entity {
-    @Override
-    public void collide(World world, Entity entity) {
-
-    }
+public class CommonEnemy extends SoftEntity {
 }
