@@ -179,8 +179,8 @@ public class Renderer {
 
             handlePolygonCoordsPreDrawing(polygon, entity);
             //DEBUGGING
-            //polygon.setVisible(isVisible);
-            polygon.setVisible(true);
+            polygon.setVisible(isVisible);
+            //polygon.setVisible(true);
 
             EntityImage entityImage = entity.getImage();
 
@@ -201,8 +201,8 @@ public class Renderer {
                 imageView.setTranslateX(entity.getX() - fxImage.getWidth() / 2);
                 imageView.setTranslateY(entity.getY() - fxImage.getHeight() / 2);
                 //DEBUGGING
-                //imageView.setVisible(isVisible);
-                imageView.setVisible(false);
+                imageView.setVisible(isVisible);
+                //imageView.setVisible(false);
             }
 
         }
@@ -228,8 +228,8 @@ public class Renderer {
         if(entity instanceof SoftEntity)
         {
             //DEBUGGING
-            //polygon.setOpacity(0);
-            polygon.setOpacity(1);
+            polygon.setOpacity(0);
+            //polygon.setOpacity(1);
         }
 
         polygon.setFill(ColorConverter.toJavaFXColor(entity.getPaint()));
