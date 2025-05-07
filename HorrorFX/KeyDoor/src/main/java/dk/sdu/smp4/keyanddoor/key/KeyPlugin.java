@@ -1,33 +1,40 @@
 package dk.sdu.smp4.keyanddoor.key;
 
 import dk.sdu.smp4.common.Services.GUI.PolygonColor;
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 
 import java.util.Random;
+import java.util.Set;
 
-public class KeyPlugin implements IGamePluginService {
-    private Random random = new Random();
+public class KeyPlugin implements IEntityLoaderService {
 
     @Override
-    public void start(GameData gameData, World world) {
+    public void render(World world, int x, int y, int mapCode) {
+        switch (mapCode){
+            case 6:
+                world.addEntity(createKey(world.getTileSize(), x, y, "bronze_key", PolygonColor.BLUE));
+                break;
+            case 7:
+                world.addEntity(createKey(world.getTileSize(), x, y, "golden_key", PolygonColor.GOLD));
+                break;
+        }
+
+
+
+    }
+
+    /*public void start(GameData gameData, World world) {
         Entity goldenKey = createKey(gameData, 400, 400, "golden_key", PolygonColor.GOLD);
         Entity bronzeKey = createKey(gameData, 400, 600, "bronze_key", PolygonColor.BLUE);
 
         world.addEntity(goldenKey);
         world.addEntity(bronzeKey);
-    }
+    }*/
 
-    private Entity createKey(GameData gameData, int x, int y, String keyId, PolygonColor color) {
+    private Entity createKey(int tileSize, int x, int y, String keyId, PolygonColor color) {
         Key key = new Key(keyId);
-//        float randomX = random.nextFloat(0.1F,0.7F) * gameData.getDisplayWidth();
-//        float value1 = random.nextFloat() * (0.3f - 0.2f) + 0.2f;
-//        float value2 = random.nextFloat() * (0.8f - 0.7f) + 0.7f;
-//
-//        float result = random.nextBoolean() ? value1 : value2;
-//        float randomY = result * gameData.getDisplayHeight();
 
         key.setPolygonCoordinates(
                 // Teeth (blocky bit)
@@ -50,14 +57,20 @@ public class KeyPlugin implements IGamePluginService {
                 4, -33
         );
 
-        key.setX(x);
-        key.setY(y);
+        key.setX(x*tileSize+tileSize/2);
+        key.setY(y*tileSize+tileSize/2);
         key.setPaint(color);
         return key;
     }
 
+
     @Override
-    public void stop(GameData gameData, World world) {
+    public void stop(World world) {
         world.getEntities(Key.class).forEach(world::removeEntity);
+    }
+
+    @Override
+    public Set<Integer> getMapCodes() {
+        return Set.of(6, 7);
     }
 }

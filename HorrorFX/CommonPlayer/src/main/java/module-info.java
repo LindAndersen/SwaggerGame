@@ -1,3 +1,5 @@
 module CommonPlayer {
-    exports dk.sdu.smp4.commonplayer;
+    requires Common;
+    exports dk.sdu.smp4.commonplayer.services;
+    exports dk.sdu.smp4.commonplayer.data;
 }

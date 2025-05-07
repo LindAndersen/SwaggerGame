@@ -1,14 +1,19 @@
 package dk.sdu.smp4.resin;
 
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
-import dk.sdu.smp4.common.data.Entity;
-import dk.sdu.smp4.common.data.GameData;
+import dk.sdu.smp4.common.Services.GUI.PolygonColor;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 import dk.sdu.smp4.common.data.World;
 
-import java.util.Random;
+import java.util.Set;
 
-public class ResinPlugin implements IGamePluginService {
+public class ResinPlugin implements IEntityLoaderService {
+
     @Override
+    public void render(World world, int x, int y, int mapCode) {
+        world.addEntity(createResin(world.getTileSize(), x, y));
+    }
+
+    /*@Override
     public void start(GameData gameData, World world) {
         Random random = new Random();
         for (int i=0;i<12;i++)
@@ -18,24 +23,27 @@ public class ResinPlugin implements IGamePluginService {
 
             world.addEntity(createResin(x, y));
         }
+    }*/
+
+    @Override
+    public void stop(World world) {
+        world.getEntities(Resin.class).forEach(world::removeEntity);
+    }
+
+    private Resin createResin(int tilesize, int x, int y)
+    {
+        Resin resin = new Resin();
+        resin.setX(x*tilesize+tilesize/2);
+        resin.setY(y*tilesize+tilesize/2);
+
+        resin.setPolygonCoordinates(-3, -3, -3, 3, 3, 3, 3, -3);
+        resin.setPaint(PolygonColor.ORANGE);
+
+        return resin;
     }
 
     @Override
-    public void stop(GameData gameData, World world) {
-        for(Entity resin : world.getEntities(Resin.class))
-        {
-            world.removeEntity(resin);
-        }
-    }
-
-    private Resin createResin(int x, int y)
-    {
-        Resin resin = new Resin();
-        resin.setX(x);
-        resin.setY(y);
-
-        resin.setPolygonCoordinates(0,0);
-
-        return resin;
+    public Set<Integer> getMapCodes() {
+        return Set.of(8);
     }
 }

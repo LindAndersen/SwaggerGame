@@ -1,6 +1,6 @@
 import dk.sdu.smp4.QuestItemInteractionSystem;
 import dk.sdu.smp4.QuestItemPlugin;
-import dk.sdu.smp4.common.Services.GameLoop.IGamePluginService;
+import dk.sdu.smp4.common.Services.GameLoop.IEntityLoaderService;
 
 module QuestItem {
     uses dk.sdu.smp4.common.events.services.IEventBus;
@@ -9,7 +9,7 @@ module QuestItem {
     requires Common;
     requires CommonQuest;
     requires CommonEvents;
-    provides IGamePluginService with QuestItemPlugin;
+    provides IEntityLoaderService with QuestItemPlugin;
     provides dk.sdu.smp4.common.interactable.Services.IQuestInteractable with QuestItemInteractionSystem;
 
 

@@ -1,8 +1,7 @@
 package dk.sdu.smp4.common.data;
 
 public class HardEntity extends Entity{
-    double width;
-    double height;
+    int size;
 
     @Override
     public void collide(World world, Entity entity) {
@@ -10,34 +9,26 @@ public class HardEntity extends Entity{
         if (hitter.isSolid()) {
 
             // Check collision with sides (left/right)
-            if (hitter.getPreviousX() - hitter.getRadius() <= this.getX() + this.getWidth() / 2 || hitter.getPreviousX() + hitter.getRadius() >= this.getX() - this.getWidth() / 2) {
-                if (hitter.getPreviousY() - hitter.getRadius() <= this.getY() + this.getHeight() / 2 && hitter.getPreviousY() + hitter.getRadius() >= this.getY() - this.getHeight() / 2) {
+            if (hitter.getPreviousX() - hitter.getRadius() <= this.getX() + this.getSize() / 2 || hitter.getPreviousX() + hitter.getRadius() >= this.getX() - this.getSize() / 2) {
+                if (hitter.getPreviousY() - hitter.getRadius() <= this.getY() + this.getSize() / 2 && hitter.getPreviousY() + hitter.getRadius() >= this.getY() - this.getSize() / 2) {
                     hitter.setX(hitter.getPreviousX());
                 }
             }
 
             // Check collision with top/bottom
-            if (hitter.getPreviousY() - hitter.getRadius() <= this.getY() + this.getHeight() / 2 || hitter.getPreviousY() + hitter.getRadius() >= this.getY() - this.getHeight() / 2) {
-                if (hitter.getPreviousX() - hitter.getRadius() <= this.getX() + this.getWidth() / 2 && hitter.getPreviousX() + hitter.getRadius() >= this.getX() - this.getWidth() / 2) {
+            if (hitter.getPreviousY() - hitter.getRadius() <= this.getY() + this.getSize() / 2 || hitter.getPreviousY() + hitter.getRadius() >= this.getY() - this.getSize() / 2) {
+                if (hitter.getPreviousX() - hitter.getRadius() <= this.getX() + this.getSize() / 2 && hitter.getPreviousX() + hitter.getRadius() >= this.getX() - this.getSize() / 2) {
                     hitter.setY(hitter.getPreviousY());
                 }
             }
         }
     }
 
-    public double getHeight() {
-        return height;
+    public int getSize() {
+        return size;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public void setWidth(double width) {
-        this.width = width;
+    public void setSize(int size) {
+        this.size = size;
     }
 }

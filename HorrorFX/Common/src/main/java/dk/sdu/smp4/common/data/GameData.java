@@ -2,8 +2,8 @@ package dk.sdu.smp4.common.data;
 
 public class GameData {
 
-    private int displayWidth = 800;
-    private int displayHeight = 800;
+    private int displayWidth = 1920;
+    private int displayHeight = 1080;
     private final GameKeys keys = new GameKeys();
     private boolean isPaused = false;
 
@@ -37,7 +37,6 @@ public class GameData {
         isPaused = paused;
     }
 
-    // NEW METHODS
     public float getDelta() {
         return delta;
     }
