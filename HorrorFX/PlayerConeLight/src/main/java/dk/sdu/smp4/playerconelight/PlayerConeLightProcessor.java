@@ -23,14 +23,10 @@ public class PlayerConeLightProcessor implements IPlayerLightProcessor {
             coneLight.setRotation(player.getRotation());
             coneLight.setShouldRotateAlternative(true);
 
-            if (coneLight.isOn()) process(coneLight);
+            //Tick the light only if on and update gui
+            if (coneLight.isOn()) coneLight.tick();
+            getGUIManagerSPI().stream().findFirst().ifPresent(guiManager -> guiManager.getFlashlightBar().update(coneLight.getPercentLifeTime()));
         }
-    }
-
-    private void process(ConeLight coneLight)
-    {
-        coneLight.tick();
-        getGUIManagerSPI().stream().findFirst().ifPresent(guiManager -> guiManager.getFlashlightBar().update(coneLight.getPercentLifeTime()));
     }
 
     private Collection<? extends IGUIManager> getGUIManagerSPI() {

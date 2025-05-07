@@ -7,7 +7,6 @@ import java.util.Objects;
 
 public class EntityImageConverter {
     public static Image convertEntityImage(EntityImage entityImage, Class<?> ressourceClass) {
-        System.out.println(entityImage.getPath());
         return new Image(
                 Objects.requireNonNull(ressourceClass.getResourceAsStream(entityImage.getPath())),
                 entityImage.getRequestedWidth(),

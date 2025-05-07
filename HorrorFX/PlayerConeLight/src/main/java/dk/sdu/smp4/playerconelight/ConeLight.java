@@ -71,7 +71,7 @@ public class ConeLight extends CommonPlayerLight implements IToggleableLight {
         flashlightCurrentTime = Math.max(flashlightCurrentTime, 0);
         timeReference = now;
         if(flashlightCurrentTime <= 0 && isOn()){
-            toggle();
+            toggled = false;
             toggleLocked = true;
         }
     }
