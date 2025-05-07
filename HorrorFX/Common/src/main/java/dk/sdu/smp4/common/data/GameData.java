@@ -7,6 +7,8 @@ public class GameData {
     private final GameKeys keys = new GameKeys();
     private boolean isPaused = false;
 
+    private float delta; // NEW FIELD
+
     public GameKeys getKeys() {
         return keys;
     }
@@ -35,5 +37,11 @@ public class GameData {
         isPaused = paused;
     }
 
+    public float getDelta() {
+        return delta;
+    }
 
+    public void setDelta(float delta) {
+        this.delta = delta;
+    }
 }
