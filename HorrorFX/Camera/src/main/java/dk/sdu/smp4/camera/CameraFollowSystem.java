@@ -15,13 +15,44 @@ public class CameraFollowSystem implements ICameraProcessor {
     @Override
     public void updateTarget(Entity player, GameData gameData, World world) {
         Camera camera = Camera.getInstance();
-        double zoomX = gameData.getDisplayWidth()/ camera.getCameraSizeX();
-        double zoomY = gameData.getDisplayHeight()/ camera.getCameraSizeY();
-        double offsetX = -player.getX()+ camera.getCameraSizeX()/2;
-        double offsetY = -player.getY()+ camera.getCameraSizeY()/2;
+        double cameraWidth = camera.getCameraSizeX();
+        double cameraHeight = camera.getCameraSizeY();
+        double zoomX = gameData.getDisplayWidth() / cameraWidth;
+        double zoomY = gameData.getDisplayHeight() / cameraHeight;
+
+        // Default camera center based on player
+        double cameraX = player.getX() - cameraWidth / 2.0;
+        double cameraY = player.getY() - cameraHeight / 2.0;
+
+        // Clamp camera within world bounds
+        cameraX = Math.max(0, Math.min(cameraX, world.getMapWidth() - cameraWidth));
+        cameraY = Math.max(0, Math.min(cameraY, world.getMapHeight() - cameraHeight));
+
+        // Offset is negative of top-left corner of camera
+        double offsetX = -cameraX;
+        double offsetY = -cameraY;
+
+        camera.setZoomX(zoomX);
+        camera.setZoomY(zoomY);
+        camera.setOffsetX(offsetX);
+        camera.setOffsetY(offsetY);
 
         getIGUIManagerSPI().stream().findFirst().ifPresent(spi -> {spi.updateCamera(zoomX, zoomY, offsetX, offsetY);});
 
+    }
+
+    @Override
+    public double getPlayerAngle(Entity player, GameData gameData, World world, double mouseScreenX, double mouseScreenY)
+    {
+        Camera camera = Camera.getInstance();
+
+        double mouseWorldX = (mouseScreenX / camera.getZoomX()) - camera.getOffsetX();
+        double mouseWorldY = (mouseScreenY / camera.getZoomY()) - camera.getOffsetY();
+
+        double dx = mouseWorldX - player.getX();
+        double dy = mouseWorldY - player.getY();
+
+        return Math.toDegrees(Math.atan2(dy, dx));
     }
 
     private Collection<? extends IGUIManager> getIGUIManagerSPI() {

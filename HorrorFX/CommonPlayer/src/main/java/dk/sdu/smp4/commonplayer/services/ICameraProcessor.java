@@ -6,4 +6,5 @@ import dk.sdu.smp4.common.data.World;
 
 public interface ICameraProcessor {
     void updateTarget(Entity player, GameData gameData, World world);
+    double getPlayerAngle(Entity player, GameData gameData, World world, double mouseX, double mouseY);
 }

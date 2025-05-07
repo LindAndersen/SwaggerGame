@@ -11,13 +11,13 @@ import javafx.scene.shape.Shape;
 public class CollisionDetector implements IPostEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity entity1 : world.getEntities()){
+        for (Entity entity1 : world.getEntities(SoftEntity.class)){
             for(Entity entity2 : world.getEntities()){
                 if (entity1.getID().equals(entity2.getID())){
                     continue;
                 }
 
-                if (this.collides(entity1, entity2) && (entity1 instanceof SoftEntity || entity2 instanceof SoftEntity)) {
+                if (this.collides(entity1, entity2)) {
                     entity1.collide(world, entity2);
                     entity2.collide(world, entity1);
                 }

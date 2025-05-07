@@ -37,6 +37,11 @@ public class PlayerControlSystem implements IEntityProcessingService {
             //update mouse position
             if (gameData.getKeys().isMouseMoved()){
                 player.setRotation(Math.toDegrees(Math.atan2(GameKeys.mouseY- player.getY(), GameKeys.mouseX - player.getX())));
+                getCameraSPI().stream().findFirst().ifPresent(spi -> {
+                    double angle = spi.getPlayerAngle(player, gameData, world, GameKeys.mouseX, GameKeys.mouseY);
+                    player.setRotation(angle);
+                });
+
             }
             gameData.getKeys().setMouseMoved(false);
             // Update position
