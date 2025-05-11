@@ -25,6 +25,7 @@ public class PlayerConeLightProcessor implements IPlayerLightProcessor {
 
             //Tick the light only if on and update gui
             if (coneLight.isOn()) coneLight.tick();
+            else coneLight.setTimeReferenceNow();
             getGUIManagerSPI().stream().findFirst().ifPresent(guiManager -> guiManager.getFlashlightBar().update(coneLight.getPercentLifeTime()));
         }
     }

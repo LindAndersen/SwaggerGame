@@ -84,4 +84,9 @@ public class ConeLight extends CommonPlayerLight implements IToggleableLight {
     private Collection<? extends InventorySPI> getInventorySPIs() {
         return ServiceLoader.load(InventorySPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
+
+    public void setTimeReferenceNow()
+    {
+        timeReference = System.currentTimeMillis();
+    }
 }

@@ -2,8 +2,8 @@ package dk.sdu.smp4.common.data;
 
 public class GameData {
 
-    private int displayWidth = 1920;
-    private int displayHeight = 1080;
+    private int displayWidth = 1422;
+    private int displayHeight = 606;
     private final GameKeys keys = new GameKeys();
     private boolean isPaused = false;
 
