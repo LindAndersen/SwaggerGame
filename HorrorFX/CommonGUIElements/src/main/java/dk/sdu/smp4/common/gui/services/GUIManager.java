@@ -63,7 +63,6 @@ public class GUIManager {
         gameData.setDisplayWidth((int) screenBounds.getWidth());
         gameData.setDisplayHeight((int) screenBounds.getHeight());
         gameData.setHeightToWidthRatio(gameData.getDisplayHeight(), gameData.getDisplayWidth());
-        System.out.println(gameData.getHeightToWidthRatio());
         Scene scene = new Scene(root, gameData.getDisplayWidth(), gameData.getDisplayHeight());
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/style.css")).toExternalForm());
         stage.setScene(scene);
