@@ -8,16 +8,19 @@ import dk.sdu.smp4.common.events.services.IEventBus;
 import dk.sdu.smp4.common.gui.elements.*;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Group;
 
@@ -51,16 +54,22 @@ public class GUIManager {
         start();
         handleInputs();
         setupEventHandling();
-
         stage.show();
     }
 
     private void start()
     {
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+        gameData.setDisplayWidth((int) screenBounds.getWidth());
+        gameData.setDisplayHeight((int) screenBounds.getHeight());
+        gameData.setHeightToWidthRatio(gameData.getDisplayHeight(), gameData.getDisplayWidth());
         Scene scene = new Scene(root, gameData.getDisplayWidth(), gameData.getDisplayHeight());
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/style.css")).toExternalForm());
         stage.setScene(scene);
         stage.setTitle("HorrorFX");
+        stage.setFullScreen(true);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        stage.setFullScreenExitHint("");
 
         StartMenu startMenu = new StartMenu(
                 this::setupMainGame,
@@ -81,7 +90,7 @@ public class GUIManager {
         root.setAlignment(Pos.TOP_LEFT);
         root.getChildren().addAll(gameWorldGroup, textLayer);
 
-        for (Pane layer : List.of(backgroundLayer, polygonLayer, lightLayer, textLayer)) {
+        for (Pane layer : List.of(polygonLayer, lightLayer, textLayer)) {
             layer.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             layer.prefWidthProperty().bind(root.widthProperty());
             layer.prefHeightProperty().bind(root.heightProperty());

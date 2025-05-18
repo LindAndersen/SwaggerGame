@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
@@ -64,6 +65,8 @@ public class Renderer {
 
     private void render(AnimationTimer timer) {
         getMapGeneratorServices().stream().findFirst().ifPresent(generator -> generator.generate(world));
+        guiManager.getBackgroundLayer().setPrefSize(world.getMapWidth(), world.getMapHeight());
+
         noiseImage = generateNoiseImage(world.getMapWidth(), world.getMapHeight());
         lightMaskCanvas = new Canvas(world.getMapWidth(), world.getMapHeight());
         timer.start();
