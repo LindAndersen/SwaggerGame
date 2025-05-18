@@ -23,9 +23,8 @@ public class PlayerConeLightProcessor implements IPlayerLightProcessor {
             coneLight.setRotation(player.getRotation());
             coneLight.setShouldRotateAlternative(true);
 
-            //Tick the light only if on and update gui
-            if (coneLight.isOn()) coneLight.tick();
-            else coneLight.setTimeReferenceNow();
+            //Tick the light and update gui
+            coneLight.tick();
             getGUIManagerSPI().stream().findFirst().ifPresent(guiManager -> guiManager.getFlashlightBar().update(coneLight.getPercentLifeTime()));
         }
     }

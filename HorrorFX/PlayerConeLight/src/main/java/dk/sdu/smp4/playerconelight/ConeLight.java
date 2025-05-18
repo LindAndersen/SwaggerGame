@@ -67,10 +67,15 @@ public class ConeLight extends CommonPlayerLight implements IToggleableLight {
     {
         long now = System.currentTimeMillis();
         // time left - (current time - last time since change)
-        flashlightCurrentTime -= (now - timeReference);
-        flashlightCurrentTime = Math.max(flashlightCurrentTime, 0);
+        if (toggled)
+        {
+            flashlightCurrentTime -= (now - timeReference);
+            flashlightCurrentTime = Math.max(flashlightCurrentTime, 0);
+        }
+
         timeReference = now;
-        if(flashlightCurrentTime <= 0 && isOn()){
+
+        if(flashlightCurrentTime <= 0){
             toggled = false;
             toggleLocked = true;
         }
@@ -85,8 +90,4 @@ public class ConeLight extends CommonPlayerLight implements IToggleableLight {
         return ServiceLoader.load(InventorySPI.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 
-    public void setTimeReferenceNow()
-    {
-        timeReference = System.currentTimeMillis();
-    }
 }
