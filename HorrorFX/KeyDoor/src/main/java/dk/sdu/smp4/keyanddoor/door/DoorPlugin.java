@@ -10,8 +10,6 @@ import java.util.Set;
 
 public class DoorPlugin implements IEntityLoaderService {
 
-    private Door door, door2;
-
     @Override
     public void render(World world, int x, int y, int mapCode) {
         switch (mapCode){

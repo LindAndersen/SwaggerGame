@@ -23,6 +23,7 @@ public class WallPlugin implements IEntityLoaderService
      * @param y
      * @return
      */
+
     public Wall createWall(int tileSize, double x, double y){
 
         Wall wall = new Wall();
