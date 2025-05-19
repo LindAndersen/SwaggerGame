@@ -35,6 +35,8 @@ public class Renderer {
     private final Map<Entity, ImageView> images = new ConcurrentHashMap<>();
     private final Map<EntityImage, Image> imageCache = new HashMap<>();
     private long lastTime = System.nanoTime();
+    private int frames = 0;
+    private long frameTimer = System.currentTimeMillis();
 
     public Renderer(World world, GameData gameData, GUIManager guiManager) {
         this.world = world;
@@ -44,6 +46,8 @@ public class Renderer {
 
     public void start()
     {
+
+
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -55,6 +59,15 @@ public class Renderer {
                     update();
                     draw();
                     gameData.getKeys().update();
+                }
+
+                frames++;
+
+                // Check if one second has passed
+                if (System.currentTimeMillis() - frameTimer >= 1000) {
+                    System.out.println("FPS: " + frames);
+                    frames = 0;
+                    frameTimer += 1000;
                 }
             }
         };
