@@ -13,12 +13,24 @@ JAVA = "java"
 MAIN_MODULE = "Core"
 MAIN_CLASS = "dk.sdu.smp4.main.Main"
 
+system = platform.system().lower()
+arch = platform.machine().lower()
+
+# Normalize known architecture aliases
+if arch in ("arm64", "aarch64"):
+    arch = "aarch64"
+elif arch in ("x86_64", "amd64"):
+    arch = "x64"
+
+# Compose platform classifier used in JavaFX JARs
+javafx_platform = f"{'win' if system == 'windows' else 'mac'}-{arch}"  # mac-aarch64, win-x64, etc.
+
 REQUIRED_JARS = {
-    "javafx-base-21.0.2-win.jar",
+    f"javafx-base-21.0.2-{javafx_platform}.jar",
     "javafx-base-21.0.2.jar",
-    "javafx-controls-21.0.2-win.jar",
+    f"javafx-controls-21.0.2-{javafx_platform}.jar",
     "javafx-controls-21.0.2.jar",
-    "javafx-graphics-21.0.2-win.jar",
+    f"javafx-graphics-21.0.2-{javafx_platform}.jar",
     "javafx-graphics-21.0.2.jar",
     "Common-1.0-SNAPSHOT.jar",
     "CommonGUIElements-1.0-SNAPSHOT.jar",
@@ -32,6 +44,7 @@ REQUIRED_JARS = {
     "CommonEnemy-1.0-SNAPSHOT.jar",
     "CommonEvents-1.0-SNAPSHOT.jar"
 }
+
 
 MAX_COMBINATION_SIZE = 4
 
