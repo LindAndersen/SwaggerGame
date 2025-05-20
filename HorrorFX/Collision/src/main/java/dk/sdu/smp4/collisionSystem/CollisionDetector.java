@@ -6,6 +6,9 @@ import dk.sdu.smp4.common.data.Entity;
 import dk.sdu.smp4.common.data.GameData;
 import dk.sdu.smp4.common.data.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CollisionDetector implements IPostEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
@@ -16,7 +19,6 @@ public class CollisionDetector implements IPostEntityProcessingService {
                 }
 
                 if (this.collides(entity1, entity2)) {
-                    entity1.collide(world, entity2);
                     entity2.collide(world, entity1);
                 }
             }
