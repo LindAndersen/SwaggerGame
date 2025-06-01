@@ -5,24 +5,40 @@ public class HardEntity extends Entity{
 
     @Override
     public void collide(World world, Entity entity) {
-        SoftEntity hitter = (SoftEntity) entity;
-        if (hitter.isSolid()) {
+        if (!(entity instanceof SoftEntity hitter) || !hitter.isSolid()) return;
 
-            // Check collision with sides (left/right)
-            if (hitter.getPreviousX() - hitter.getRadius() <= this.getX() + this.getSize() / 2 || hitter.getPreviousX() + hitter.getRadius() >= this.getX() - this.getSize() / 2) {
-                if (hitter.getPreviousY() - hitter.getRadius() <= this.getY() + this.getSize() / 2 && hitter.getPreviousY() + hitter.getRadius() >= this.getY() - this.getSize() / 2) {
-                    hitter.setX(hitter.getPreviousX());
-                }
+        double halfSize = this.getSize() / 2;
+        double r = hitter.getRadius();
+
+        //AABB overlap check, axis-aligned bounding boxes
+        boolean collidesX = hitter.getX() + r >= this.getX() - halfSize &&
+                hitter.getX() - r <= this.getX() + halfSize;
+        boolean collidesY = hitter.getY() + r >= this.getY() - halfSize &&
+                hitter.getY() - r <= this.getY() + halfSize;
+
+        // Check if fully overlapping: bounce back completely
+        if (collidesX && collidesY) {
+            boolean prevInsideX = hitter.getPreviousX() + r >= this.getX() - halfSize &&
+                    hitter.getPreviousX() - r <= this.getX() + halfSize;
+            boolean prevInsideY = hitter.getPreviousY() + r >= this.getY() - halfSize &&
+                    hitter.getPreviousY() - r <= this.getY() + halfSize;
+
+            // Resolve axis independently to allow wallriding
+            if (!prevInsideX) {
+                hitter.setX(hitter.getPreviousX());
+            }
+            if (!prevInsideY) {
+                hitter.setY(hitter.getPreviousY());
             }
 
-            // Check collision with top/bottom
-            if (hitter.getPreviousY() - hitter.getRadius() <= this.getY() + this.getSize() / 2 || hitter.getPreviousY() + hitter.getRadius() >= this.getY() - this.getSize() / 2) {
-                if (hitter.getPreviousX() - hitter.getRadius() <= this.getX() + this.getSize() / 2 && hitter.getPreviousX() + hitter.getRadius() >= this.getX() - this.getSize() / 2) {
-                    hitter.setY(hitter.getPreviousY());
-                }
+            // If previous position was fully valid, but current is fully blocked, snap fully back
+            if (prevInsideX && prevInsideY) {
+                hitter.setX(hitter.getPreviousX());
+                hitter.setY(hitter.getPreviousY());
             }
         }
     }
+
 
     public int getSize() {
         return size;
