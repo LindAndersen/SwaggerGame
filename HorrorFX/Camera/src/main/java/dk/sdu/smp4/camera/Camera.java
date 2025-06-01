@@ -3,21 +3,23 @@ package dk.sdu.smp4.camera;
 import dk.sdu.smp4.common.data.GameData;
 
 public class Camera {
-    private final double cameraSizeX = 445;
-    private final double cameraSizeY = 250;
+    private double cameraSizeX;
+    private double cameraSizeY;
     private static Camera Instance;
     private double zoomX, zoomY;
     private double offsetX, offsetY;
 
-    public static Camera getInstance()
+    public static Camera getInstance(GameData gameData)
     {
         if (Instance == null) {
-            Instance = new Camera();
+            Instance = new Camera(385, gameData.getHeightToWidthRatio());
         }
         return Instance;
     }
 
-    private Camera() {
+    private Camera(double x, double ratio) {
+        cameraSizeX = x;
+        cameraSizeY = x * ratio;
     }
 
     public double getCameraSizeX() {

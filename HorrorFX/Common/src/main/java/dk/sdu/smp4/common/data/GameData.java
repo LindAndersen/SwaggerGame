@@ -2,8 +2,9 @@ package dk.sdu.smp4.common.data;
 
 public class GameData {
 
-    private int displayWidth = 1422;
-    private int displayHeight = 606;
+    private int displayWidth;
+    private int displayHeight;
+    private double heightToWidthRatio;
     private final GameKeys keys = new GameKeys();
     private boolean isPaused = false;
 
@@ -15,6 +16,14 @@ public class GameData {
 
     public void setDisplayWidth(int width) {
         this.displayWidth = width;
+    }
+
+    public void setHeightToWidthRatio(int height, int width) {
+        this.heightToWidthRatio = (double) height / width;
+    }
+
+    public double getHeightToWidthRatio() {
+        return heightToWidthRatio;
     }
 
     public int getDisplayWidth() {

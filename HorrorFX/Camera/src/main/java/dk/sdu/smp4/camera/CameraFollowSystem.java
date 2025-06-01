@@ -14,7 +14,7 @@ public class CameraFollowSystem implements ICameraProcessor {
 
     @Override
     public void updateTarget(Entity player, GameData gameData, World world) {
-        Camera camera = Camera.getInstance();
+        Camera camera = Camera.getInstance(gameData);
         double cameraWidth = camera.getCameraSizeX();
         double cameraHeight = camera.getCameraSizeY();
         double zoomX = gameData.getDisplayWidth() / cameraWidth;
@@ -44,7 +44,7 @@ public class CameraFollowSystem implements ICameraProcessor {
     @Override
     public double getPlayerAngle(Entity player, GameData gameData, World world, double mouseScreenX, double mouseScreenY)
     {
-        Camera camera = Camera.getInstance();
+        Camera camera = Camera.getInstance(gameData);
 
         double mouseWorldX = (mouseScreenX / camera.getZoomX()) - camera.getOffsetX();
         double mouseWorldY = (mouseScreenY / camera.getZoomY()) - camera.getOffsetY();
