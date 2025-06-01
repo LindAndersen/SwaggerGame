@@ -1,7 +1,7 @@
 package dk.sdu.smp4.common.data;
 
 public class HardEntity extends Entity{
-    int size;
+    private int size;
 
     @Override
     public void collide(World world, Entity entity) {

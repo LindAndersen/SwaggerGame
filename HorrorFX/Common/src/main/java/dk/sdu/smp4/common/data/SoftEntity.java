@@ -1,8 +1,8 @@
 package dk.sdu.smp4.common.data;
 
 public class SoftEntity extends Entity {
-    double previousX, previousY;
-    double radius;
+    private double previousX, previousY;
+    private double radius;
 
     public double getRadius() {
         return radius;
